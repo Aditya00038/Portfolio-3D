@@ -1,7 +1,180 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { useScroll, motion, useTransform } from 'framer-motion';
+import { useScroll, motion, useTransform, useSpring } from 'framer-motion';
 
 const pad = (n) => String(n).padStart(3, '0');
+
+// --- Dynamic Sci-Fi Web Audio Synthesizer ---
+class CinematicSynth {
+  constructor() {
+    this.ctx = null;
+    this.masterGain = null;
+    this.droneGain = null;
+    this.droneOscs = [];
+    this.droneFilter = null;
+    this.delayNode = null;
+    this.delayFeedback = null;
+    this.isInitialized = false;
+    this.isPlaying = false;
+  }
+
+  init() {
+    if (this.isInitialized) return;
+    try {
+      const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+      this.ctx = new AudioContextClass();
+      
+      this.masterGain = this.ctx.createGain();
+      this.masterGain.gain.setValueAtTime(0, this.ctx.currentTime);
+      this.masterGain.connect(this.ctx.destination);
+
+      this.delayNode = this.ctx.createDelay(1.0);
+      this.delayNode.delayTime.setValueAtTime(0.35, this.ctx.currentTime);
+      
+      this.delayFeedback = this.ctx.createGain();
+      this.delayFeedback.gain.setValueAtTime(0.45, this.ctx.currentTime);
+      
+      this.delayNode.connect(this.delayFeedback);
+      this.delayFeedback.connect(this.delayNode);
+      this.delayNode.connect(this.masterGain);
+
+      this.setupDrone();
+
+      this.masterGain.gain.linearRampToValueAtTime(0.8, this.ctx.currentTime + 1.5);
+      
+      this.isInitialized = true;
+      this.isPlaying = true;
+    } catch (e) {
+      console.error("Web Audio API is not supported or was blocked by the browser:", e);
+    }
+  }
+
+  setupDrone() {
+    this.droneFilter = this.ctx.createBiquadFilter();
+    this.droneFilter.type = 'lowpass';
+    this.droneFilter.frequency.setValueAtTime(140, this.ctx.currentTime);
+    this.droneFilter.Q.setValueAtTime(1.2, this.ctx.currentTime);
+    this.droneFilter.connect(this.masterGain);
+
+    this.droneGain = this.ctx.createGain();
+    this.droneGain.gain.setValueAtTime(0.04, this.ctx.currentTime);
+    this.droneGain.connect(this.droneFilter);
+
+    const frequencies = [55.0, 110.0, 110.4];
+    const types = ['sine', 'triangle', 'triangle'];
+    
+    frequencies.forEach((freq, idx) => {
+      const osc = this.ctx.createOscillator();
+      osc.type = types[idx];
+      osc.frequency.setValueAtTime(freq, this.ctx.currentTime);
+      
+      const subGain = this.ctx.createGain();
+      subGain.gain.setValueAtTime(idx === 0 ? 0.7 : 0.25, this.ctx.currentTime);
+      
+      osc.connect(subGain);
+      subGain.connect(this.droneGain);
+      osc.start();
+      this.droneOscs.push(osc);
+    });
+  }
+
+  modulateScroll(velocity) {
+    if (!this.isInitialized || !this.isPlaying) return;
+    
+    const normVelocity = Math.min(Math.max(velocity, 0), 4.0);
+    const targetFreq = 140 + normVelocity * 80;
+    this.droneFilter.frequency.setTargetAtTime(targetFreq, this.ctx.currentTime, 0.15);
+
+    const targetGain = 0.04 + normVelocity * 0.04;
+    this.droneGain.gain.setTargetAtTime(targetGain, this.ctx.currentTime, 0.2);
+  }
+
+  playChime(frequency) {
+    if (!this.isInitialized || !this.isPlaying) return;
+    
+    if (this.ctx.state === 'suspended') {
+      this.ctx.resume();
+    }
+
+    const osc = this.ctx.createOscillator();
+    const gainNode = this.ctx.createGain();
+    const filter = this.ctx.createBiquadFilter();
+
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(frequency, this.ctx.currentTime);
+
+    filter.type = 'bandpass';
+    filter.frequency.setValueAtTime(1200, this.ctx.currentTime);
+    filter.Q.setValueAtTime(2.0, this.ctx.currentTime);
+
+    gainNode.gain.setValueAtTime(0, this.ctx.currentTime);
+    gainNode.gain.linearRampToValueAtTime(0.018, this.ctx.currentTime + 0.015);
+    gainNode.gain.exponentialRampToValueAtTime(0.0001, this.ctx.currentTime + 0.8);
+
+    osc.connect(filter);
+    filter.connect(gainNode);
+    gainNode.connect(this.masterGain);
+    gainNode.connect(this.delayNode);
+
+    osc.start();
+    osc.stop(this.ctx.currentTime + 0.95);
+  }
+
+  mute() {
+    if (!this.isInitialized) return;
+    this.masterGain.gain.setTargetAtTime(0, this.ctx.currentTime, 0.15);
+    this.isPlaying = false;
+  }
+
+  unmute() {
+    this.init();
+    if (this.ctx && this.ctx.state === 'suspended') {
+      this.ctx.resume();
+    }
+    this.isPlaying = true;
+    this.masterGain.gain.setTargetAtTime(0.8, this.ctx.currentTime, 0.25);
+  }
+
+  destroy() {
+    if (!this.isInitialized) return;
+    try {
+      this.droneOscs.forEach(osc => osc.stop());
+      this.ctx.close();
+    } catch (e) {
+      console.error(e);
+    }
+  }
+}
+
+// --- ScrollWord Sub-Component for Rules of Hooks Compliance ---
+function ScrollWord({ word, index, totalWords, smoothProgress }) {
+  const start = 0.30 + (index / totalWords) * 0.24;
+  const end = start + 0.04;
+
+  const wordOpacity = useTransform(smoothProgress, [start, end], [0.12, 1]);
+  const wordBlur = useTransform(smoothProgress, [start, end], ["blur(6px)", "blur(0px)"]);
+  const wordColor = useTransform(smoothProgress, [start, end], ["#3f3f46", "#ffffff"]);
+  const wordY = useTransform(smoothProgress, [start, end], [6, 0]);
+  const wordGlow = useTransform(smoothProgress, [start, end], [
+    "0px 0px 0px rgba(255,255,255,0)", 
+    "0px 0px 10px rgba(255,255,255,0.3)"
+  ]);
+
+  return (
+    <motion.span
+      style={{
+        opacity: wordOpacity,
+        filter: wordBlur,
+        color: wordColor,
+        y: wordY,
+        textShadow: wordGlow,
+        display: "inline-block"
+      }}
+      className="mr-2 my-0.5 font-medium transition-shadow duration-300"
+    >
+      {word}
+    </motion.span>
+  );
+}
 
 export default function ScrollyCanvas() {
   const containerRef = useRef(null);
@@ -19,6 +192,27 @@ export default function ScrollyCanvas() {
     target: containerRef,
     offset: ["start start", "end end"]
   });
+
+  const synthRef = useRef(null);
+  const lastProgress = useRef(0);
+  const lastTime = useRef(Date.now());
+  const lastWordIndex = useRef(-1);
+  const headerChordTriggered = useRef(false);
+
+  const [isAudioEnabled, setIsAudioEnabled] = useState(false);
+  const [showTooltip, setShowTooltip] = useState(true);
+
+  // Smooth scroll animations with spring physics for high-end easing
+  const smoothProgress = useSpring(scrollYProgress, {
+    stiffness: 100,
+    damping: 30,
+    restDelta: 0.001
+  });
+
+  // Authentic paragraph content exactly matching user screenshot design layout
+  const bioText = "I am a passionate creative developer specializing in building immersive web experiences. With a strong foundation in modern web technologies, I bridge the gap between design and engineering to create products that are both beautiful and functional.";
+  const words = bioText.split(" ");
+  const totalWords = words.length;
 
   const totalFrames = 240;
   // Frame where the "2 fingers action" ends and scroll control begins.
@@ -175,25 +369,122 @@ export default function ScrollyCanvas() {
   const [showIntroText, setShowIntroText] = useState(true);
   const [showAboutText, setShowAboutText] = useState(false);
 
-  // 6. Manage visibility of text blocks based on scroll
+  // Initialize synth instance
+  useEffect(() => {
+    synthRef.current = new CinematicSynth();
+    return () => {
+      if (synthRef.current) {
+        synthRef.current.destroy();
+      }
+    };
+  }, []);
+
+  // 6. Manage visibility, audio, speed modulation, and note triggers based on scroll
   useEffect(() => {
     const unsubscribe = scrollYProgress.on("change", (latest) => {
-      // Hide intro text immediately when scroll starts
+      // Manage intro text visibility
       if (latest > 0.01) {
         setShowIntroText(false);
       } else {
         setShowIntroText(true);
       }
 
-      // Show about text when character moves left (around 15% scroll)
-      if (latest > 0.15 && latest < 0.85) {
+      // Manage about text visibility (character moves left, text appears)
+      if (latest > 0.15) {
         setShowAboutText(true);
       } else {
         setShowAboutText(false);
       }
+
+      // A. Dynamic audio speed modulation
+      const now = Date.now();
+      const dt = now - lastTime.current;
+      if (dt > 16) {
+        const dp = Math.abs(latest - lastProgress.current);
+        const velocity = (dp / dt) * 10000;
+        if (synthRef.current) {
+          synthRef.current.modulateScroll(velocity);
+        }
+        lastProgress.current = latest;
+        lastTime.current = now;
+      }
+
+      // Hide audio tooltip on scroll
+      if (latest > 0.05 && showTooltip) {
+        setShowTooltip(false);
+      }
+
+      // B. Play majestic pentatonic sweep chord on header completion
+      if (latest >= 0.32 && !headerChordTriggered.current) {
+        if (synthRef.current && isAudioEnabled) {
+          synthRef.current.playChime(440.00); // A4
+          setTimeout(() => synthRef.current && synthRef.current.playChime(523.25), 70); // C5
+          setTimeout(() => synthRef.current && synthRef.current.playChime(659.25), 140); // E5
+          setTimeout(() => synthRef.current && synthRef.current.playChime(783.99), 210); // G5
+        }
+        headerChordTriggered.current = true;
+      } else if (latest < 0.28 && headerChordTriggered.current) {
+        headerChordTriggered.current = false;
+      }
+
+      // C. Play pentatonic chimes synchronously as bio words light up
+      if (latest > 0.30 && latest < 0.58) {
+        const subProgress = (latest - 0.30) / 0.28; // Map text zone to [0, 1]
+        const wordIndex = Math.floor(subProgress * totalWords);
+        const clampedIndex = Math.max(0, Math.min(wordIndex, totalWords - 1));
+
+        if (clampedIndex !== lastWordIndex.current) {
+          const pentatonic = [
+            220.00, // A3
+            246.94, // B3
+            293.66, // D4
+            329.63, // E4
+            392.00, // G4
+            440.00, // A4
+            493.88, // B4
+            587.33, // D5
+            659.25, // E5
+            783.99, // G5
+            880.00  // A5
+          ];
+          const frequency = pentatonic[clampedIndex % pentatonic.length];
+          if (synthRef.current && isAudioEnabled) {
+            synthRef.current.playChime(frequency);
+          }
+          lastWordIndex.current = clampedIndex;
+        }
+      }
     });
+
     return () => unsubscribe();
-  }, [scrollYProgress]);
+  }, [scrollYProgress, isAudioEnabled, totalWords, showTooltip]);
+
+  // B. Ink-Fill motion values linked to smooth progress
+  const clipPercent = useTransform(smoothProgress, [0.18, 0.30], [100, 0]);
+  const clipPathStyle = useTransform(clipPercent, (v) => `inset(0 ${v}% 0 0)`);
+  const scannerLeft = useTransform(smoothProgress, [0.18, 0.30], ["0%", "100%"]);
+  const scannerOpacity = useTransform(smoothProgress, [0.17, 0.19, 0.29, 0.31], [0, 1, 1, 0]);
+
+  // Audio mute/unmute control
+  const toggleAudio = () => {
+    if (!synthRef.current) return;
+    if (isAudioEnabled) {
+      synthRef.current.mute();
+      setIsAudioEnabled(false);
+      window.audioContextActive = false;
+    } else {
+      synthRef.current.unmute();
+      setIsAudioEnabled(true);
+      window.audioContextActive = true;
+      setShowTooltip(false);
+      // Expose play chime player globally so other sections can easily reuse our synth
+      window.playCinematicChime = (freq) => {
+        if (synthRef.current && synthRef.current.isPlaying) {
+          synthRef.current.playChime(freq);
+        }
+      };
+    }
+  };
 
   return (
     <section ref={containerRef} className="relative w-full h-[500vh] bg-black">
@@ -232,32 +523,133 @@ export default function ScrollyCanvas() {
                 HI, I'M ADITYA
               </h2>
               <p className="text-xs md:text-sm text-gray-400 font-semibold tracking-[0.2em] uppercase leading-[2.2]">
-                A CREATIVE DEVELOPER FOCUSED ON CLEAN UI, SMART SOLUTIONS AND REAL WORLD PROJECTS
+                A CREATIVE DEVELOPER FOCUSED ON CLEAN UI,<br /> SMART SOLUTIONS AND REAL WORLD PROJECTS
               </p>
             </div>
           </motion.div>
         )}
 
-        {/* About Me Text - Appears when scrolling down and character moves left */}
+        {/* About Me Text - Left-aligned text on the right side of the screen matching user screenshot */}
         {showAboutText && (
           <motion.div
-            initial={{ opacity: 0, x: 50 }}
+            initial={{ opacity: 0, x: 40 }}
             animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: 50 }}
-            transition={{ duration: 0.5 }}
+            exit={{ opacity: 0, x: 40 }}
+            transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
             className="absolute inset-0 flex flex-col justify-center items-end p-8 md:p-16 lg:p-24 z-20 pointer-events-none"
           >
-            <div className="max-w-md text-right">
-              <h2 className="text-4xl md:text-6xl font-bold text-white mb-6 tracking-tight leading-none uppercase">
-                ABOUT ME
-              </h2>
-              <div className="w-12 h-1 bg-white/30 mb-6 ml-auto"></div>
-              <p className="text-sm md:text-base text-gray-300 font-medium tracking-wide leading-relaxed">
-                I am a passionate creative developer specializing in building immersive web experiences. With a strong foundation in modern web technologies, I bridge the gap between design and engineering to create products that are both beautiful and functional.
+            <div className="max-w-xl text-left pointer-events-auto flex flex-col items-start pr-0 md:pr-12 lg:pr-24">
+              
+              {/* Dual-layered outlined/filled Header */}
+              <div className="relative select-none mb-2">
+                {/* Outlined text */}
+                <h2 
+                  className="text-5xl md:text-7xl lg:text-8xl font-black tracking-tight leading-none uppercase"
+                  style={{
+                    fontFamily: "'Inter', sans-serif",
+                    color: "transparent",
+                    WebkitTextStroke: "1px rgba(255, 255, 255, 0.15)"
+                  }}
+                >
+                  ABOUT ME
+                </h2>
+
+                {/* Filled text overlaid with clip-path mask */}
+                <motion.h2 
+                  style={{ clipPath: clipPathStyle }}
+                  className="absolute inset-0 text-5xl md:text-7xl lg:text-8xl font-black tracking-tight leading-none uppercase text-white pointer-events-none"
+                  style={{
+                    fontFamily: "'Inter', sans-serif",
+                    position: "absolute",
+                    top: 0,
+                    left: 0,
+                    width: "100%",
+                    height: "100%",
+                    clipPath: clipPathStyle,
+                    color: "#ffffff",
+                    textShadow: "0 0 35px rgba(255, 255, 255, 0.45)"
+                  }}
+                >
+                  ABOUT ME
+                </motion.h2>
+
+                {/* Vertical neon scanner glow line */}
+                <motion.div 
+                  style={{
+                    left: scannerLeft,
+                    opacity: scannerOpacity
+                  }}
+                  className="absolute top-0 w-[2.5px] h-[90%] bg-white shadow-[0_0_15px_#fff,0_0_30px_#5227FF] pointer-events-none"
+                />
+              </div>
+
+              {/* Faint gray short horizontal underline below the header exactly as in the screenshot */}
+              <div className="w-16 h-[2px] bg-zinc-800 mt-2 mb-6" />
+
+              {/* Cinematic paragraph with word-by-word reveal */}
+              <p className="text-zinc-500 font-light tracking-wide text-base md:text-lg leading-relaxed md:leading-[1.8] max-w-lg">
+                {words.map((word, idx) => (
+                  <ScrollWord 
+                    key={idx}
+                    word={word}
+                    index={idx}
+                    totalWords={totalWords}
+                    smoothProgress={smoothProgress}
+                  />
+                ))}
               </p>
             </div>
           </motion.div>
         )}
+
+        {/* Floating Audio Interface Widget - Sticky at bottom right of the viewport */}
+        {showAboutText && (
+          <div className="absolute bottom-8 right-8 z-30 flex items-center gap-4 pointer-events-auto">
+            {showTooltip && (
+              <div className="hidden sm:block bg-zinc-900/85 backdrop-blur-md border border-zinc-800 text-xs px-3 py-2 rounded-lg text-zinc-300 shadow-xl animate-pulse">
+                🔊 Click to enable cinematic ambient soundtrack
+              </div>
+            )}
+
+            <button 
+              onClick={toggleAudio}
+              className="flex items-center gap-3 bg-zinc-950/80 hover:bg-zinc-900 border border-zinc-800/80 hover:border-zinc-700/80 backdrop-blur-md px-4 py-2.5 rounded-full cursor-pointer transition-all duration-300 shadow-2xl active:scale-95 group"
+              aria-label={isAudioEnabled ? "Mute soundtrack" : "Unmute soundtrack"}
+            >
+              {/* Equalizer animation bars */}
+              <div className="flex items-end gap-[3px] h-3.5 w-6 overflow-hidden">
+                <span 
+                  className={`w-[3px] rounded-full bg-[#5227FF] transition-all duration-300 ${isAudioEnabled ? 'animate-[bounce_0.8s_infinite_ease-in-out]' : 'h-1'}`}
+                  style={{ animationDelay: '0.1s', height: isAudioEnabled ? '100%' : '4px' }}
+                />
+                <span 
+                  className={`w-[3px] rounded-full bg-white transition-all duration-300 ${isAudioEnabled ? 'animate-[bounce_0.6s_infinite_ease-in-out]' : 'h-1.5'}`}
+                  style={{ animationDelay: '0.3s', height: isAudioEnabled ? '6px' : '6px' }}
+                />
+                <span 
+                  className={`w-[3px] rounded-full bg-[#5227FF] transition-all duration-300 ${isAudioEnabled ? 'animate-[bounce_0.9s_infinite_ease-in-out]' : 'h-1'}`}
+                  style={{ animationDelay: '0.2s', height: isAudioEnabled ? '100%' : '3px' }}
+                />
+                <span 
+                  className={`w-[3px] rounded-full bg-white transition-all duration-300 ${isAudioEnabled ? 'animate-[bounce_0.7s_infinite_ease-in-out]' : 'h-1.5'}`}
+                  style={{ animationDelay: '0.4s', height: isAudioEnabled ? '5px' : '5px' }}
+                />
+              </div>
+
+              <span className="text-[11px] font-bold tracking-[0.15em] uppercase text-zinc-300 group-hover:text-white transition-colors">
+                {isAudioEnabled ? "AUDIO ON" : "AUDIO MUTED"}
+              </span>
+            </button>
+          </div>
+        )}
+
+        {/* Global style inject for equalizer bounce */}
+        <style dangerouslySetInnerHTML={{__html: `
+          @keyframes bounce {
+            0%, 100% { height: 25%; }
+            50% { height: 100%; }
+          }
+        `}} />
       </div>
     </section>
   );
