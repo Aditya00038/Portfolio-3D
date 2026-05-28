@@ -4,6 +4,8 @@ import StaggeredMenu from './StaggeredMenu';
 const menuItems = [
   { label: 'Home', ariaLabel: 'Go to home page', link: '#home' },
   { label: 'Projects', ariaLabel: 'View our projects', link: '#projects' },
+  { label: 'Tools', ariaLabel: 'View tech stack and tools', link: '#tools' },
+  { label: 'Activity', ariaLabel: 'View coding contributions and stats', link: '#activity' },
   { label: 'Contact', ariaLabel: 'Get in touch', link: '#contact' }
 ];
 
@@ -14,10 +16,10 @@ const socialItems = [
 
 export default function Navbar() {
   return (
-    <div className="fixed top-0 left-0 w-full z-50 pointer-events-none">
+    <div className="fixed top-0 left-0 w-full z-[100] pointer-events-none">
       <div className="relative w-full h-full flex items-center justify-between px-8 md:px-16 lg:px-24 pt-8">
         {/* Left Side: Logo */}
-        <div className="pointer-events-auto z-50 flex items-center">
+        <div className="pointer-events-auto z-[100] flex items-center mix-blend-difference">
           <a 
             href="#" 
             onClick={(e) => {
@@ -36,8 +38,7 @@ export default function Navbar() {
           </a>
         </div>
 
-        {/* Right Side: StaggeredMenu */}
-        {/* We use an absolute container overlaid on the right so the StaggeredMenu is positioned correctly */}
+        {/* Right Side: Contact Button & StaggeredMenu */}
         <div className="absolute top-0 right-0 h-screen w-full pointer-events-none">
           <StaggeredMenu
             position="right"

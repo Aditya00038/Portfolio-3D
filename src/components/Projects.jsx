@@ -128,7 +128,7 @@ export default function Projects() {
       <div className="max-w-7xl mx-auto px-8 md:px-16 lg:px-24 flex flex-col items-center">
         
         {/* Outline to Solid Ink-Fill "PROJECTS" Header */}
-        <div className="relative select-none mb-24 text-center mt-12">
+        <div className="relative select-none mb-24 text-center mt-12" data-cursor="large">
           {/* Layer 1: Outlined Text */}
           <h2 
             className="text-6xl md:text-8xl lg:text-9xl font-black tracking-tight leading-none uppercase"

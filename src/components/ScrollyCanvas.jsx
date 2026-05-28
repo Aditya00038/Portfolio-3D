@@ -1,5 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { useScroll, motion, useTransform, useSpring } from 'framer-motion';
+import { motion, useScroll, useTransform, useSpring, useMotionTemplate } from 'framer-motion';
+import ScrollRevealParagraph from './ScrollRevealParagraph';
+import { LiquidMetalButton } from './ui/liquid-metal-button';
+import { AnimatedDock } from './ui/animated-dock';
+import { FaGithub, FaLinkedinIn, FaBehance, FaEnvelope } from 'react-icons/fa';
 
 const pad = (n) => String(n).padStart(3, '0');
 
@@ -145,36 +149,6 @@ class CinematicSynth {
   }
 }
 
-// --- ScrollWord Sub-Component for Rules of Hooks Compliance ---
-function ScrollWord({ word, index, totalWords, smoothProgress }) {
-  const start = 0.30 + (index / totalWords) * 0.24;
-  const end = start + 0.04;
-
-  const wordOpacity = useTransform(smoothProgress, [start, end], [0.12, 1]);
-  const wordBlur = useTransform(smoothProgress, [start, end], ["blur(6px)", "blur(0px)"]);
-  const wordColor = useTransform(smoothProgress, [start, end], ["#3f3f46", "#ffffff"]);
-  const wordY = useTransform(smoothProgress, [start, end], [6, 0]);
-  const wordGlow = useTransform(smoothProgress, [start, end], [
-    "0px 0px 0px rgba(255,255,255,0)", 
-    "0px 0px 10px rgba(255,255,255,0.3)"
-  ]);
-
-  return (
-    <motion.span
-      style={{
-        opacity: wordOpacity,
-        filter: wordBlur,
-        color: wordColor,
-        y: wordY,
-        textShadow: wordGlow,
-        display: "inline-block"
-      }}
-      className="mr-2 my-0.5 font-medium transition-shadow duration-300"
-    >
-      {word}
-    </motion.span>
-  );
-}
 
 export default function ScrollyCanvas() {
   const containerRef = useRef(null);
@@ -516,15 +490,24 @@ export default function ScrollyCanvas() {
             initial={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.3 }}
-            className="absolute inset-0 flex flex-col justify-end p-8 md:p-16 lg:p-24 pb-32 md:pb-48 lg:pb-64 z-20 pointer-events-none"
+            className="absolute inset-0 flex flex-col justify-center items-start p-8 md:p-16 lg:p-24 pt-32 md:pt-40 z-20 pointer-events-none"
           >
             <div className="max-w-xl">
-              <h2 className="text-6xl md:text-8xl lg:text-[7rem] font-bold text-white mb-6 tracking-tighter leading-none uppercase">
+              <h2 className="text-6xl md:text-8xl lg:text-[7rem] font-bold text-white mb-6 tracking-tighter leading-none uppercase" data-cursor="large">
                 HI, I'M ADITYA
               </h2>
               <p className="text-xs md:text-sm text-gray-400 font-semibold tracking-[0.2em] uppercase leading-[2.2]">
                 A CREATIVE DEVELOPER FOCUSED ON CLEAN UI,<br /> SMART SOLUTIONS AND REAL WORLD PROJECTS
               </p>
+              
+              <div className="mt-8 flex flex-col gap-4 pointer-events-auto items-start">
+                <a href="/resume.pdf" target="_blank" rel="noreferrer" className="block">
+                  <LiquidMetalButton label="View Resume" />
+                </a>
+                <div onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}>
+                  <LiquidMetalButton label="Contact Me" />
+                </div>
+              </div>
             </div>
           </motion.div>
         )}
@@ -541,7 +524,7 @@ export default function ScrollyCanvas() {
             <div className="max-w-xl text-left pointer-events-auto flex flex-col items-start pr-0 md:pr-12 lg:pr-24">
               
               {/* Dual-layered outlined/filled Header */}
-              <div className="relative select-none mb-2">
+              <div className="relative select-none mb-2" data-cursor="large">
                 {/* Outlined text */}
                 <h2 
                   className="text-5xl md:text-7xl lg:text-8xl font-black tracking-tight leading-none uppercase"
@@ -586,18 +569,42 @@ export default function ScrollyCanvas() {
               {/* Faint gray short horizontal underline below the header exactly as in the screenshot */}
               <div className="w-16 h-[2px] bg-zinc-800 mt-2 mb-6" />
 
-              {/* Cinematic paragraph with word-by-word reveal */}
-              <p className="text-zinc-500 font-light tracking-wide text-base md:text-lg leading-relaxed md:leading-[1.8] max-w-lg">
-                {words.map((word, idx) => (
-                  <ScrollWord 
-                    key={idx}
-                    word={word}
-                    index={idx}
-                    totalWords={totalWords}
-                    smoothProgress={smoothProgress}
-                  />
-                ))}
-              </p>
+              <ScrollRevealParagraph 
+                paragraph={bioText}
+                className="font-light tracking-wide text-base md:text-lg max-w-lg mb-8"
+              />
+
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 1.2, duration: 0.8, ease: "easeOut" }}
+                className="mt-4 pointer-events-auto"
+              >
+                <AnimatedDock
+                  items={[
+                    {
+                      link: "https://github.com",
+                      target: "_blank",
+                      Icon: <FaGithub size={22} />,
+                    },
+                    {
+                      link: "https://linkedin.com",
+                      target: "_blank",
+                      Icon: <FaLinkedinIn size={22} />,
+                    },
+                    {
+                      link: "https://behance.net",
+                      target: "_blank",
+                      Icon: <FaBehance size={22} />,
+                    },
+                    {
+                      link: "mailto:adityasuryawanshi038@gmail.com",
+                      target: "_blank",
+                      Icon: <FaEnvelope size={20} />,
+                    },
+                  ]}
+                />
+              </motion.div>
             </div>
           </motion.div>
         )}

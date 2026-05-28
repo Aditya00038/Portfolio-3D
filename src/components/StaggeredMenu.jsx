@@ -387,7 +387,7 @@ export const StaggeredMenu = ({
         )}
         <button
           ref={toggleBtnRef}
-          className={`sm-toggle hamburger ${open ? 'open' : ''}`}
+          className={`sm-toggle hamburger mix-blend-difference ${open ? 'open' : ''}`}
           aria-label={open ? 'Close menu' : 'Open menu'}
           aria-expanded={open}
           aria-controls="staggered-menu-panel"
