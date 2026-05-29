@@ -1,5 +1,8 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { FiMail, FiPhone, FiMapPin, FiSend, FiX } from 'react-icons/fi';
+import { PointerHighlight } from './ui/pointer-highlight';
+import { ShootingBorder } from './ui/shooting-border';
 
 export default function ContactFooter() {
   const [showContact, setShowContact] = useState(false);
@@ -14,6 +17,7 @@ export default function ContactFooter() {
 
   return (
     <section id="contact" className="w-full font-['Inter',sans-serif]">
+      <ShootingBorder />
       
       <AnimatePresence>
         {showContact && (
@@ -152,8 +156,8 @@ export default function ContactFooter() {
           <h2 className="text-3xl md:text-5xl lg:text-5xl font-medium leading-tight mb-8" data-cursor="large">
             Code, creativity, and curiosity — that’s the journey.
           </h2>
-          <p className="text-zinc-300 text-base md:text-lg mb-10">
-            Let’s connect, create, and build something meaningful together.
+          <p className="text-zinc-300 text-base md:text-lg mb-10 leading-relaxed">
+            Let’s <PointerHighlight><span className="text-white font-medium">connect</span></PointerHighlight>, create, and build something meaningful together.
           </p>
           <button 
             onClick={() => setShowContact(!showContact)}

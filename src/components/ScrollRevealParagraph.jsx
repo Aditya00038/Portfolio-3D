@@ -11,24 +11,24 @@ const KEY_PREFIX_LENGTH = 3;
 export default function ScrollRevealParagraph({
   paragraph,
   className = "",
+  globalProgress,
 }) {
-  const container = useRef(null);
-  const { scrollYProgress } = useScroll({
-    target: container,
-    offset: ["start 0.9", "start 0.25"],
-  });
+  // Map the global scroll progress to 0-1 for this paragraph
+  // Matched with the audio chime trigger window (0.30 to 0.58) for perfectly slow, synced filling
+  const localProgress = useTransform(globalProgress, [0.30, 0.58], [0, 1]);
+
 
   const words = paragraph.split(" ");
 
   return (
-    <p className={`text-lg leading-relaxed ${className}`} ref={container}>
+    <p className={`text-lg leading-relaxed ${className}`}>
       {words.map((word, i) => {
         const start = i / words.length;
         const end = start + 1 / words.length;
         return (
           <Word
             key={`word-${i}-${word.slice(0, KEY_PREFIX_LENGTH)}`}
-            progress={scrollYProgress}
+            progress={localProgress}
             range={[start, end]}
           >
             {word}

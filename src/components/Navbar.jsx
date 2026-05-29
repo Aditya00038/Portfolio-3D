@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import StaggeredMenu from './StaggeredMenu';
 
 const menuItems = [
@@ -10,13 +10,42 @@ const menuItems = [
 ];
 
 const socialItems = [
-  { label: 'GitHub', link: 'https://github.com' },
-  { label: 'LinkedIn', link: 'https://linkedin.com' }
+  { label: 'GitHub', link: 'https://github.com/Aditya00038'},
+  { label: 'LinkedIn', link: 'https://www.linkedin.com/in/aditya-suryawanshi-20b60930a/'}
 ];
 
 export default function Navbar() {
+  const [isHidden, setIsHidden] = useState(false);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          // Hide navbar when projects section is anywhere on screen
+          setIsHidden(entry.isIntersecting);
+        });
+      },
+      {
+        root: null,
+        rootMargin: '0px',
+        threshold: 0.05, // Trigger when 5% of projects section is visible
+      }
+    );
+
+    const projectsSection = document.getElementById('projects');
+    if (projectsSection) {
+      observer.observe(projectsSection);
+    }
+
+    return () => {
+      if (projectsSection) {
+        observer.unobserve(projectsSection);
+      }
+    };
+  }, []);
+
   return (
-    <div className="fixed top-0 left-0 w-full z-[100] pointer-events-none">
+    <div className={`fixed top-0 left-0 w-full z-[100] pointer-events-none transition-transform duration-700 ease-in-out ${isHidden ? '-translate-y-full opacity-0' : 'translate-y-0 opacity-100'}`}>
       <div className="relative w-full h-full flex items-center justify-between px-8 md:px-16 lg:px-24 pt-8">
         {/* Left Side: Logo */}
         <div className="pointer-events-auto z-[100] flex items-center mix-blend-difference">

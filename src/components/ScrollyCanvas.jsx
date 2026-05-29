@@ -3,6 +3,9 @@ import { motion, useScroll, useTransform, useSpring, useMotionTemplate } from 'f
 import ScrollRevealParagraph from './ScrollRevealParagraph';
 import { LiquidMetalButton } from './ui/liquid-metal-button';
 import { AnimatedDock } from './ui/animated-dock';
+import ShimmerButton from "./ui/shimmer-button";
+import ShimmerText from "./ui/shimmer-text";
+import ShineText from "./ui/shine-text";
 import { FaGithub, FaLinkedinIn, FaBehance, FaEnvelope } from 'react-icons/fa';
 
 const pad = (n) => String(n).padStart(3, '0');
@@ -26,17 +29,17 @@ class CinematicSynth {
     try {
       const AudioContextClass = window.AudioContext || window.webkitAudioContext;
       this.ctx = new AudioContextClass();
-      
+
       this.masterGain = this.ctx.createGain();
       this.masterGain.gain.setValueAtTime(0, this.ctx.currentTime);
       this.masterGain.connect(this.ctx.destination);
 
       this.delayNode = this.ctx.createDelay(1.0);
       this.delayNode.delayTime.setValueAtTime(0.35, this.ctx.currentTime);
-      
+
       this.delayFeedback = this.ctx.createGain();
       this.delayFeedback.gain.setValueAtTime(0.45, this.ctx.currentTime);
-      
+
       this.delayNode.connect(this.delayFeedback);
       this.delayFeedback.connect(this.delayNode);
       this.delayNode.connect(this.masterGain);
@@ -44,7 +47,7 @@ class CinematicSynth {
       this.setupDrone();
 
       this.masterGain.gain.linearRampToValueAtTime(0.8, this.ctx.currentTime + 1.5);
-      
+
       this.isInitialized = true;
       this.isPlaying = true;
     } catch (e) {
@@ -65,15 +68,15 @@ class CinematicSynth {
 
     const frequencies = [55.0, 110.0, 110.4];
     const types = ['sine', 'triangle', 'triangle'];
-    
+
     frequencies.forEach((freq, idx) => {
       const osc = this.ctx.createOscillator();
       osc.type = types[idx];
       osc.frequency.setValueAtTime(freq, this.ctx.currentTime);
-      
+
       const subGain = this.ctx.createGain();
       subGain.gain.setValueAtTime(idx === 0 ? 0.7 : 0.25, this.ctx.currentTime);
-      
+
       osc.connect(subGain);
       subGain.connect(this.droneGain);
       osc.start();
@@ -83,7 +86,7 @@ class CinematicSynth {
 
   modulateScroll(velocity) {
     if (!this.isInitialized || !this.isPlaying) return;
-    
+
     const normVelocity = Math.min(Math.max(velocity, 0), 4.0);
     const targetFreq = 140 + normVelocity * 80;
     this.droneFilter.frequency.setTargetAtTime(targetFreq, this.ctx.currentTime, 0.15);
@@ -94,7 +97,7 @@ class CinematicSynth {
 
   playChime(frequency) {
     if (!this.isInitialized || !this.isPlaying) return;
-    
+
     if (this.ctx.state === 'suspended') {
       this.ctx.resume();
     }
@@ -322,9 +325,10 @@ export default function ScrollyCanvas() {
     if (loading || !introDone) return;
 
     const unsubscribe = scrollYProgress.on("change", (latest) => {
-      // Map scroll progress to remaining frames
+      // Map scroll progress to remaining frames, increasing speed multiplier for faster sequence
+      const scrollMultiplier = 2.5;
       const remainingFrames = totalFrames - 1 - introEndFrame;
-      const targetFrame = introEndFrame + Math.floor(latest * remainingFrames);
+      const targetFrame = introEndFrame + Math.floor((latest * scrollMultiplier) * remainingFrames);
       const boundedFrame = Math.max(introEndFrame, Math.min(targetFrame, totalFrames - 1));
 
       if (frameIndexRef.current !== boundedFrame) {
@@ -496,13 +500,15 @@ export default function ScrollyCanvas() {
               <h2 className="text-6xl md:text-8xl lg:text-[7rem] font-bold text-white mb-6 tracking-tighter leading-none uppercase" data-cursor="large">
                 HI, I'M ADITYA
               </h2>
-              <p className="text-xs md:text-sm text-gray-400 font-semibold tracking-[0.2em] uppercase leading-[2.2]">
+              <ShineText className="block text-xs md:text-sm font-semibold tracking-[0.2em] uppercase leading-[2.2]">
                 A CREATIVE DEVELOPER FOCUSED ON CLEAN UI,<br /> SMART SOLUTIONS AND REAL WORLD PROJECTS
-              </p>
-              
+              </ShineText>
+
               <div className="mt-8 flex flex-col gap-4 pointer-events-auto items-start">
                 <a href="/resume.pdf" target="_blank" rel="noreferrer" className="block">
-                  <LiquidMetalButton label="View Resume" />
+                  <ShimmerButton>
+                    View Resume
+                  </ShimmerButton>
                 </a>
                 <div onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}>
                   <LiquidMetalButton label="Contact Me" />
@@ -522,11 +528,11 @@ export default function ScrollyCanvas() {
             className="absolute inset-0 flex flex-col justify-center items-end p-8 md:p-16 lg:p-24 z-20 pointer-events-none"
           >
             <div className="max-w-xl text-left pointer-events-auto flex flex-col items-start pr-0 md:pr-12 lg:pr-24">
-              
+
               {/* Dual-layered outlined/filled Header */}
               <div className="relative select-none mb-2" data-cursor="large">
                 {/* Outlined text */}
-                <h2 
+                <h2
                   className="text-5xl md:text-7xl lg:text-8xl font-black tracking-tight leading-none uppercase"
                   style={{
                     fontFamily: "'Inter', sans-serif",
@@ -538,7 +544,7 @@ export default function ScrollyCanvas() {
                 </h2>
 
                 {/* Filled text overlaid with clip-path mask */}
-                <motion.h2 
+                <motion.h2
                   style={{ clipPath: clipPathStyle }}
                   className="absolute inset-0 text-5xl md:text-7xl lg:text-8xl font-black tracking-tight leading-none uppercase text-white pointer-events-none"
                   style={{
@@ -557,7 +563,7 @@ export default function ScrollyCanvas() {
                 </motion.h2>
 
                 {/* Vertical neon scanner glow line */}
-                <motion.div 
+                <motion.div
                   style={{
                     left: scannerLeft,
                     opacity: scannerOpacity
@@ -569,8 +575,9 @@ export default function ScrollyCanvas() {
               {/* Faint gray short horizontal underline below the header exactly as in the screenshot */}
               <div className="w-16 h-[2px] bg-zinc-800 mt-2 mb-6" />
 
-              <ScrollRevealParagraph 
+              <ScrollRevealParagraph
                 paragraph={bioText}
+                globalProgress={scrollYProgress}
                 className="font-light tracking-wide text-base md:text-lg max-w-lg mb-8"
               />
 
@@ -618,26 +625,26 @@ export default function ScrollyCanvas() {
               </div>
             )}
 
-            <button 
+            <button
               onClick={toggleAudio}
               className="flex items-center gap-3 bg-zinc-950/80 hover:bg-zinc-900 border border-zinc-800/80 hover:border-zinc-700/80 backdrop-blur-md px-4 py-2.5 rounded-full cursor-pointer transition-all duration-300 shadow-2xl active:scale-95 group"
               aria-label={isAudioEnabled ? "Mute soundtrack" : "Unmute soundtrack"}
             >
               {/* Equalizer animation bars */}
               <div className="flex items-end gap-[3px] h-3.5 w-6 overflow-hidden">
-                <span 
+                <span
                   className={`w-[3px] rounded-full bg-[#5227FF] transition-all duration-300 ${isAudioEnabled ? 'animate-[bounce_0.8s_infinite_ease-in-out]' : 'h-1'}`}
                   style={{ animationDelay: '0.1s', height: isAudioEnabled ? '100%' : '4px' }}
                 />
-                <span 
+                <span
                   className={`w-[3px] rounded-full bg-white transition-all duration-300 ${isAudioEnabled ? 'animate-[bounce_0.6s_infinite_ease-in-out]' : 'h-1.5'}`}
                   style={{ animationDelay: '0.3s', height: isAudioEnabled ? '6px' : '6px' }}
                 />
-                <span 
+                <span
                   className={`w-[3px] rounded-full bg-[#5227FF] transition-all duration-300 ${isAudioEnabled ? 'animate-[bounce_0.9s_infinite_ease-in-out]' : 'h-1'}`}
                   style={{ animationDelay: '0.2s', height: isAudioEnabled ? '100%' : '3px' }}
                 />
-                <span 
+                <span
                   className={`w-[3px] rounded-full bg-white transition-all duration-300 ${isAudioEnabled ? 'animate-[bounce_0.7s_infinite_ease-in-out]' : 'h-1.5'}`}
                   style={{ animationDelay: '0.4s', height: isAudioEnabled ? '5px' : '5px' }}
                 />
@@ -651,7 +658,8 @@ export default function ScrollyCanvas() {
         )}
 
         {/* Global style inject for equalizer bounce */}
-        <style dangerouslySetInnerHTML={{__html: `
+        <style dangerouslySetInnerHTML={{
+          __html: `
           @keyframes bounce {
             0%, 100% { height: 25%; }
             50% { height: 100%; }
