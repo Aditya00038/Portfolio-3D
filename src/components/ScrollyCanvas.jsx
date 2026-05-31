@@ -1,12 +1,14 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { motion, useScroll, useTransform, useSpring, useMotionTemplate } from 'framer-motion';
 import ScrollRevealParagraph from './ScrollRevealParagraph';
 import { LiquidMetalButton } from './ui/liquid-metal-button';
 import { AnimatedDock } from './ui/animated-dock';
 import ShimmerButton from "./ui/shimmer-button";
+import KnowMoreButton from "./ui/know-more-button";
 import ShimmerText from "./ui/shimmer-text";
 import ShineText from "./ui/shine-text";
-import { FaGithub, FaLinkedinIn, FaBehance, FaEnvelope } from 'react-icons/fa';
+import { FaGithub, FaLinkedinIn, FaInstagram, FaEnvelope } from 'react-icons/fa';
 
 const pad = (n) => String(n).padStart(3, '0');
 
@@ -505,14 +507,18 @@ export default function ScrollyCanvas() {
               </ShineText>
 
               <div className="mt-8 flex flex-col gap-4 pointer-events-auto items-start">
-                <a href="/resume.pdf" target="_blank" rel="noreferrer" className="block">
+                <a href="/Aditya%20Resume.pdf" target="_blank" rel="noreferrer" className="block">
                   <ShimmerButton>
                     View Resume
                   </ShimmerButton>
                 </a>
-                <div onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}>
-                  <LiquidMetalButton label="Contact Me" />
-                </div>
+              </div>
+            </div>
+
+            {/* Contact Me Button at bottom right of hero */}
+            <div className="absolute bottom-8 right-8 pointer-events-auto">
+              <div onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}>
+                <LiquidMetalButton label="Contact Me" />
               </div>
             </div>
           </motion.div>
@@ -533,7 +539,7 @@ export default function ScrollyCanvas() {
               <div className="relative select-none mb-2" data-cursor="large">
                 {/* Outlined text */}
                 <h2
-                  className="text-5xl md:text-7xl lg:text-8xl font-black tracking-tight leading-none uppercase"
+                  className="text-5xl md:text-7xl lg:text-8xl font-black tracking-tight leading-none uppercase whitespace-nowrap"
                   style={{
                     fontFamily: "'Inter', sans-serif",
                     color: "transparent",
@@ -545,8 +551,7 @@ export default function ScrollyCanvas() {
 
                 {/* Filled text overlaid with clip-path mask */}
                 <motion.h2
-                  style={{ clipPath: clipPathStyle }}
-                  className="absolute inset-0 text-5xl md:text-7xl lg:text-8xl font-black tracking-tight leading-none uppercase text-white pointer-events-none"
+                  className="absolute inset-0 text-5xl md:text-7xl lg:text-8xl font-black tracking-tight leading-none uppercase text-white pointer-events-none whitespace-nowrap"
                   style={{
                     fontFamily: "'Inter', sans-serif",
                     position: "absolute",
@@ -585,8 +590,11 @@ export default function ScrollyCanvas() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 1.2, duration: 0.8, ease: "easeOut" }}
-                className="mt-4 pointer-events-auto"
+                className="mt-4 pointer-events-auto flex items-center gap-6"
               >
+                <Link to="/about" className="no-underline">
+                  <KnowMoreButton />
+                </Link>
                 <AnimatedDock
                   items={[
                     {
@@ -600,9 +608,9 @@ export default function ScrollyCanvas() {
                       Icon: <FaLinkedinIn size={22} />,
                     },
                     {
-                      link: "https://behance.net",
+                      link: "https://instagram.com",
                       target: "_blank",
-                      Icon: <FaBehance size={22} />,
+                      Icon: <FaInstagram size={22} />,
                     },
                     {
                       link: "mailto:adityasuryawanshi038@gmail.com",
@@ -615,56 +623,6 @@ export default function ScrollyCanvas() {
             </div>
           </motion.div>
         )}
-
-        {/* Floating Audio Interface Widget - Sticky at bottom right of the viewport */}
-        {showAboutText && (
-          <div className="absolute bottom-8 right-8 z-30 flex items-center gap-4 pointer-events-auto">
-            {showTooltip && (
-              <div className="hidden sm:block bg-zinc-900/85 backdrop-blur-md border border-zinc-800 text-xs px-3 py-2 rounded-lg text-zinc-300 shadow-xl animate-pulse">
-                🔊 Click to enable cinematic ambient soundtrack
-              </div>
-            )}
-
-            <button
-              onClick={toggleAudio}
-              className="flex items-center gap-3 bg-zinc-950/80 hover:bg-zinc-900 border border-zinc-800/80 hover:border-zinc-700/80 backdrop-blur-md px-4 py-2.5 rounded-full cursor-pointer transition-all duration-300 shadow-2xl active:scale-95 group"
-              aria-label={isAudioEnabled ? "Mute soundtrack" : "Unmute soundtrack"}
-            >
-              {/* Equalizer animation bars */}
-              <div className="flex items-end gap-[3px] h-3.5 w-6 overflow-hidden">
-                <span
-                  className={`w-[3px] rounded-full bg-[#5227FF] transition-all duration-300 ${isAudioEnabled ? 'animate-[bounce_0.8s_infinite_ease-in-out]' : 'h-1'}`}
-                  style={{ animationDelay: '0.1s', height: isAudioEnabled ? '100%' : '4px' }}
-                />
-                <span
-                  className={`w-[3px] rounded-full bg-white transition-all duration-300 ${isAudioEnabled ? 'animate-[bounce_0.6s_infinite_ease-in-out]' : 'h-1.5'}`}
-                  style={{ animationDelay: '0.3s', height: isAudioEnabled ? '6px' : '6px' }}
-                />
-                <span
-                  className={`w-[3px] rounded-full bg-[#5227FF] transition-all duration-300 ${isAudioEnabled ? 'animate-[bounce_0.9s_infinite_ease-in-out]' : 'h-1'}`}
-                  style={{ animationDelay: '0.2s', height: isAudioEnabled ? '100%' : '3px' }}
-                />
-                <span
-                  className={`w-[3px] rounded-full bg-white transition-all duration-300 ${isAudioEnabled ? 'animate-[bounce_0.7s_infinite_ease-in-out]' : 'h-1.5'}`}
-                  style={{ animationDelay: '0.4s', height: isAudioEnabled ? '5px' : '5px' }}
-                />
-              </div>
-
-              <span className="text-[11px] font-bold tracking-[0.15em] uppercase text-zinc-300 group-hover:text-white transition-colors">
-                {isAudioEnabled ? "AUDIO ON" : "AUDIO MUTED"}
-              </span>
-            </button>
-          </div>
-        )}
-
-        {/* Global style inject for equalizer bounce */}
-        <style dangerouslySetInnerHTML={{
-          __html: `
-          @keyframes bounce {
-            0%, 100% { height: 25%; }
-            50% { height: 100%; }
-          }
-        `}} />
       </div>
     </section>
   );

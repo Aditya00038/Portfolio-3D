@@ -18,7 +18,7 @@ export const FlowSection = ({
   <section
     data-flow-section
     aria-label={ariaLabel}
-    className={cx('relative min-h-screen w-full overflow-hidden', className)}
+    className={cx('relative min-h-screen w-full overflow-hidden bg-black', className)}
   >
     <div
       data-flow-inner

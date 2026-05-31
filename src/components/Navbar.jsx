@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
+import { motion } from 'motion/react';
 import StaggeredMenu from './StaggeredMenu';
 
 const menuItems = [
-  { label: 'Home', ariaLabel: 'Go to home page', link: '#home' },
-  { label: 'Projects', ariaLabel: 'View our projects', link: '#projects' },
-  { label: 'Tools', ariaLabel: 'View tech stack and tools', link: '#tools' },
-  { label: 'Activity', ariaLabel: 'View coding contributions and stats', link: '#activity' },
-  { label: 'Contact', ariaLabel: 'Get in touch', link: '#contact' }
+  { label: 'Home', ariaLabel: 'Go to home page', link: '/' },
+  { label: 'Projects', ariaLabel: 'View our projects', link: '/#projects' },
+  { label: 'Tools', ariaLabel: 'View tech stack and tools', link: '/#tools' },
+  { label: 'Activity', ariaLabel: 'View coding contributions and stats', link: '/#activity' },
+  { label: 'Contact', ariaLabel: 'Get in touch', link: '/#contact' }
 ];
 
 const socialItems = [
@@ -48,11 +50,10 @@ export default function Navbar() {
     <div className={`fixed top-0 left-0 w-full z-[100] pointer-events-none transition-transform duration-700 ease-in-out ${isHidden ? '-translate-y-full opacity-0' : 'translate-y-0 opacity-100'}`}>
       <div className="relative w-full h-full flex items-center justify-between px-8 md:px-16 lg:px-24 pt-8">
         {/* Left Side: Logo */}
-        <div className="pointer-events-auto z-[100] flex items-center mix-blend-difference">
-          <a 
-            href="#" 
-            onClick={(e) => {
-              e.preventDefault();
+        <motion.div layoutId="navbar-logo" className="pointer-events-auto z-[100] flex items-center mix-blend-difference">
+          <Link 
+            to="/"
+            onClick={() => {
               window.scrollTo({ top: 0, behavior: 'smooth' });
             }}
             className="no-underline outline-none"
@@ -64,8 +65,8 @@ export default function Navbar() {
             >
               Aditya.
             </h1>
-          </a>
-        </div>
+          </Link>
+        </motion.div>
 
         {/* Right Side: Contact Button & StaggeredMenu */}
         <div className="absolute top-0 right-0 h-screen w-full pointer-events-none">
