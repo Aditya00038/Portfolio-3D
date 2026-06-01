@@ -2,6 +2,17 @@
 @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600;700;900&display=swap');
 @import "tailwindcss";
 
+:root {
+  --background: 0 0% 0%;
+  --foreground: 240 10% 98%;
+  --muted: 240 3.7% 15.9%;
+  --muted-foreground: rgba(255, 255, 255, 0.12); /* Subtle silver grid lines */
+  --primary: 0 0% 98%;
+  --primary-foreground: 240 5.9% 10%;
+  --border: 240 3.7% 15.9%;
+  --ring: 240 4.9% 83.9%;
+}
+
 body {
   margin: 0;
   background-color: #000;
@@ -9,10 +20,8 @@ body {
   font-family: 'Inter', system-ui, -apple-system, sans-serif;
 }
 
-@media (pointer: fine) {
-  * {
-    cursor: none !important;
-  }
+.custom-cursor-active, .custom-cursor-active * {
+  cursor: none !important;
 }
 @keyframes spin {
   0% { transform: rotate(0deg); }
@@ -64,4 +73,11 @@ body {
 
 @keyframes splash {
   to { stroke-dasharray: 2 60; stroke-dashoffset: -60; }
+}
+
+.bg-grid {
+  background-size: 40px 40px;
+  background-image: 
+    linear-gradient(to right, rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
 }

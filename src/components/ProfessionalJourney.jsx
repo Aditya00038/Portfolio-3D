@@ -3,49 +3,44 @@ import { motion, AnimatePresence } from 'framer-motion';
 
 const experienceData = [
   {
-    id: 1,
-    company: 'Emplorium / IONIK',
-    role: 'Co-Founder & Product Designer',
-    type: 'Full-time',
-    date: 'May 2023 → Present',
-    location: 'Remote (London / Global)',
-    iconBg: 'bg-[#5227FF]',
+    id: 2,
+    company: 'GirlScript Summer of Code 2025',
+    role: 'Open Source Contributor',
+    type: 'Open Source',
+    date: 'Oct 2025 → Nov 2025',
+    location: 'Remote',
+    iconBg: 'bg-transparent', // Transparent background, no border
     icon: (
-      <svg className="w-6 h-6 text-white" viewBox="0 0 24 24" fill="currentColor">
-        <path d="M4 6h16v2H4zm0 5h16v2H4zm0 5h16v2H4z" />
-      </svg>
+      // Maximized to fill the full container area clearly (w-full h-full)
+      <img src="/Experience/gssoc-logo.png" className="w-full h-full object-contain" alt="GSSoC" />
     ),
     bullets: [
-      'Led 0→1 product vision for an AI CRM and customer engagement platform',
-      'Built complete design system from foundation to production',
-      'Shipped platform from concept to live product with measurable adoption'
-    ]
+      'Contributed to open-source projects by resolving issues, submitting pull requests, and collaborating with developers in a large-scale community-driven coding program.'
+    ],
+    certificateUrl: '/certificates/image.png' // Linked to the newly uploaded certificate image
   },
   {
-    id: 2,
-    company: 'EleeN',
-    role: 'Lead Product Designer',
-    type: 'Part-time',
-    date: 'Aug 2023 → Present',
-    location: 'Remote (Saudi Arabia)',
-    iconBg: 'bg-emerald-950',
+    id: 1,
+    company: 'Teachnook × BTech Walleh',
+    role: 'Web Development Intern',
+    type: 'Internship',
+    date: 'Nov 2024',
+    location: 'Remote',
+    iconBg: 'bg-transparent', // Transparent background, no border
     icon: (
-      <svg className="w-6 h-6 text-emerald-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M12 2a10 10 0 1 0 10 10H12V2z" />
-        <path d="M12 12 2.1 7.1" />
-        <path d="m12 12 7.1-7.1" />
-      </svg>
+      // Kept at original, smaller size (w-10 h-10 on mobile, w-11 h-11 on desktop)
+      <img src="/Experience/teachnook-logo.png" className="w-10 h-10 md:w-11 md:h-11 object-contain rounded-xl" alt="Teachnook" />
     ),
     bullets: [
-      'Directed end-to-end UX/UI design for regional e-commerce experiences',
-      'Optimized user flows and improved overall accessibility standards',
-      'Collaborated closely with cross-functional teams to ensure high-fidelity implementation'
-    ]
+      'Completed a Web Development Internship Program focused on modern web technologies, responsive design, and practical project development.'
+    ],
+    certificateUrl: '/certificates/teachnook.pdf'
   }
 ];
 
 export default function ProfessionalJourney() {
-  const [expandedId, setExpandedId] = useState(1);
+  // Set expandedId default state to 2 so GSSoC journey starts expanded by default, instead of Teachnook
+  const [expandedId, setExpandedId] = useState(2);
 
   return (
     <div className="w-full max-w-4xl mx-auto mb-32 px-4 md:px-0 font-sans">
@@ -64,13 +59,14 @@ export default function ProfessionalJourney() {
                 isExpanded ? 'bg-[#141416]' : 'hover:bg-[#141416]/50'
               }`}
             >
-              <button
+              {/* Clickable Header Container (Not a nested button to remain syntactically valid HTML) */}
+              <div
                 onClick={() => setExpandedId(isExpanded ? null : item.id)}
-                className="w-full flex items-start text-left p-5 md:p-6 gap-4 md:gap-6 focus:outline-none"
+                className="w-full flex items-start text-left p-5 md:p-6 gap-4 md:gap-6 cursor-pointer select-none"
               >
-                {/* Icon */}
+                {/* Icon Container (Holds the w-16/72px bounding area) */}
                 <div
-                  className={`w-12 h-12 md:w-14 md:h-14 rounded-2xl flex-shrink-0 flex items-center justify-center ${item.iconBg}`}
+                  className={`w-16 h-16 md:w-[72px] md:h-[72px] rounded-2xl flex-shrink-0 flex items-center justify-center ${item.iconBg}`}
                 >
                   {item.icon}
                 </div>
@@ -118,6 +114,7 @@ export default function ProfessionalJourney() {
                         exit={{ height: 0, opacity: 0 }}
                         transition={{ duration: 0.3, ease: 'easeInOut' }}
                         className="overflow-hidden"
+                        onClick={(e) => e.stopPropagation()} // Stop click events on content body from collapsing accordion
                       >
                         <div className="pt-6 pb-2">
                           <ul className="list-disc pl-5 text-zinc-400 space-y-3 text-[0.95rem] leading-relaxed">
@@ -125,12 +122,32 @@ export default function ProfessionalJourney() {
                               <li key={i} className="pl-1 marker:text-zinc-600">{bullet}</li>
                             ))}
                           </ul>
+
+                          {item.certificateUrl && (
+                            <div className="mt-5">
+                              <a
+                                href={item.certificateUrl}
+                                target="_blank"
+                                rel="noreferrer"
+                                className="inline-flex items-center gap-2 px-4 py-2.5 text-xs font-semibold uppercase tracking-wider text-zinc-300 hover:text-white border border-white/10 hover:border-white/20 bg-zinc-900/40 hover:bg-zinc-800/60 rounded-xl transition-all duration-300 shadow-md hover:shadow-lg cursor-pointer"
+                              >
+                                <svg className="w-4 h-4 text-zinc-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                                  <polyline points="14 2 14 8 20 8" />
+                                  <line x1="16" y1="13" x2="8" y2="13" />
+                                  <line x1="16" y1="17" x2="8" y2="17" />
+                                  <polyline points="10 9 9 9 8 9" />
+                                </svg>
+                                View Certificate
+                              </a>
+                            </div>
+                          )}
                         </div>
                       </motion.div>
                     )}
                   </AnimatePresence>
                 </div>
-              </button>
+              </div>
             </div>
           );
         })}

@@ -15,11 +15,16 @@ export default function CustomCursor() {
   const smoothY = useSpring(cursorY, springConfig);
 
   useEffect(() => {
-    // Only run on devices that likely have a fine pointer (mouse)
-    if (window.matchMedia('(pointer: coarse)').matches) return;
+    // Only disable custom cursor on touch-only devices with NO fine pointer at all (e.g. mobile phones)
+    if (window.matchMedia('(pointer: coarse)').matches && !window.matchMedia('(any-pointer: fine)').matches) {
+      return;
+    }
 
     const moveMouse = (e) => {
-      if (!isVisible) setIsVisible(true);
+      if (!isVisible) {
+        setIsVisible(true);
+        document.body.classList.add('custom-cursor-active');
+      }
 
       // Center the cursor exactly on the pointer tip
       cursorX.set(e.clientX);
@@ -29,7 +34,7 @@ export default function CustomCursor() {
       const target = e.target;
       
       // Determine cursor state based on explicit class or data attribute
-      const isLargeCursor = target.closest('.massive-text, [data-cursor="large"]');
+      const isLargeCursor = target && target.closest ? target.closest('.massive-text, [data-cursor="large"]') : null;
       
       if (isLargeCursor) {
         setCursorState('large');
@@ -38,8 +43,15 @@ export default function CustomCursor() {
       }
     };
 
-    const handleMouseLeave = () => setIsVisible(false);
-    const handleMouseEnter = () => setIsVisible(true);
+    const handleMouseLeave = () => {
+      setIsVisible(false);
+      document.body.classList.remove('custom-cursor-active');
+    };
+    
+    const handleMouseEnter = () => {
+      setIsVisible(true);
+      document.body.classList.add('custom-cursor-active');
+    };
 
     window.addEventListener('mousemove', moveMouse);
     document.addEventListener('mouseleave', handleMouseLeave);
@@ -49,6 +61,7 @@ export default function CustomCursor() {
       window.removeEventListener('mousemove', moveMouse);
       document.removeEventListener('mouseleave', handleMouseLeave);
       document.removeEventListener('mouseenter', handleMouseEnter);
+      document.body.classList.remove('custom-cursor-active');
     };
   }, [cursorX, cursorY, isVisible]);
 
