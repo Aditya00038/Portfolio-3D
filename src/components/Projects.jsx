@@ -7,7 +7,7 @@ const PROJECTS_DATA = [
     id: 1,
     num: "01",
     category: "CIVIC TECH · PLATFORM",
-    title: "Parivartan",
+    title: "Parivartan: Transforming Civic Issues into Action",
     subtitle: "Smart Civic Platform",
     description: "Parivartan is a smart civic engagement and workforce management platform designed to improve communication, transparency, and coordination between citizens, municipal authorities, and field workers through a centralized digital ecosystem.",
     github: "https://github.com",
@@ -88,7 +88,7 @@ export default function Projects() {
             <div className="w-full h-full lg:max-h-[85vh] p-8 md:p-12 lg:p-16 flex flex-col lg:flex-row gap-8 lg:gap-12 relative overflow-hidden my-auto mx-auto max-w-7xl">
               
               {/* Left Column (Content) */}
-              <div className="flex-1 flex flex-col justify-between z-10 lg:w-1/2">
+              <div className="w-full lg:w-[40%] shrink-0 flex flex-col justify-between relative z-20">
                 <div className="flex flex-col gap-6">
                   {/* Abstract Icon Placeholder */}
                   <div className="w-14 h-14 bg-white rounded-2xl flex p-2.5 items-center justify-center overflow-hidden shadow-lg">
@@ -111,8 +111,8 @@ export default function Projects() {
                   </h3>
 
                   {/* Title */}
-                  <h2 className="text-3xl md:text-5xl lg:text-[3.25rem] font-bold leading-[1.15] text-zinc-100 max-w-xl">
-                    {project.title}: {project.description.split(' ').slice(0, 8).join(' ')}...
+                  <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold leading-[1.15] text-zinc-100 max-w-xl">
+                    {project.title}
                   </h2>
                 </div>
 
@@ -128,16 +128,16 @@ export default function Projects() {
               </div>
 
               {/* Right Column (Image Gallery) */}
-              <div className="lg:w-1/2 w-full h-[300px] lg:h-full mt-8 lg:mt-0 flex items-center justify-end relative">
+              <div className="flex-1 w-full h-[400px] lg:min-h-[550px] mt-8 lg:mt-0 flex items-center justify-end relative z-0">
                 {/* Scrollable container for the images */}
-                <div className="w-full lg:w-[120%] h-full lg:h-[95%] rounded-[2rem] overflow-y-auto overflow-x-hidden snap-y snap-mandatory flex flex-col bg-[#222] border border-zinc-800 shadow-2xl relative lg:absolute lg:right-[-5%] lg:top-[2.5%] pointer-events-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:'none'] [scrollbar-width:'none']">
+                <div className="w-full h-full overflow-y-auto overflow-x-hidden snap-y snap-mandatory flex flex-col relative pointer-events-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:'none'] [scrollbar-width:'none']">
                    {project.images && project.images.length > 0 ? (
                      project.images.map((img, i) => (
                        <img 
                          key={i} 
                          src={img} 
                          alt={`${project.title} screenshot ${i+1}`} 
-                         className="w-full h-full flex-shrink-0 object-cover object-left-top snap-center" 
+                         className="w-full h-full flex-shrink-0 object-contain object-center lg:object-right snap-center" 
                        />
                      ))
                    ) : (
