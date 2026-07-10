@@ -9,15 +9,14 @@ const experienceData = [
     type: 'Open Source',
     date: 'Oct 2025 → Nov 2025',
     location: 'Remote',
-    iconBg: 'bg-transparent', // Transparent background, no border
+    iconBg: 'bg-transparent',
     icon: (
-      // Maximized to fill the full container area clearly (w-full h-full)
       <img src="/Experience/gssoc-logo.png" className="w-full h-full object-contain" alt="GSSoC" />
     ),
     bullets: [
       'Contributed to open-source projects by resolving issues, submitting pull requests, and collaborating with developers in a large-scale community-driven coding program.'
     ],
-    certificateUrl: '/certificates/image.png' // Linked to the newly uploaded certificate image
+    certificateUrl: '/certificates/image.png'
   },
   {
     id: 1,
@@ -26,9 +25,8 @@ const experienceData = [
     type: 'Internship',
     date: 'Nov 2024',
     location: 'Remote',
-    iconBg: 'bg-transparent', // Transparent background, no border
+    iconBg: 'bg-transparent',
     icon: (
-      // Kept at original, smaller size (w-10 h-10 on mobile, w-11 h-11 on desktop)
       <img src="/Experience/teachnook-logo.png" className="w-10 h-10 md:w-11 md:h-11 object-contain rounded-xl" alt="Teachnook" />
     ),
     bullets: [
@@ -39,12 +37,14 @@ const experienceData = [
 ];
 
 export default function ProfessionalJourney() {
-  // Set expandedId default state to 2 so GSSoC journey starts expanded by default, instead of Teachnook
   const [expandedId, setExpandedId] = useState(2);
 
   return (
     <div className="w-full max-w-4xl mx-auto mb-32 px-4 md:px-0 font-sans">
-      <h2 className="text-4xl md:text-[2.5rem] font-bold tracking-tight text-white mb-10" style={{ letterSpacing: '-0.03em' }}>
+      <h2 
+        className="text-4xl md:text-[2.5rem] font-bold tracking-tight text-white mb-10" 
+        style={{ letterSpacing: '-0.03em' }}
+      >
         Experience
       </h2>
 
@@ -59,12 +59,12 @@ export default function ProfessionalJourney() {
                 isExpanded ? 'bg-[#141416]' : 'hover:bg-[#141416]/50'
               }`}
             >
-              {/* Clickable Header Container (Not a nested button to remain syntactically valid HTML) */}
+              {/* Clickable Header Container */}
               <div
                 onClick={() => setExpandedId(isExpanded ? null : item.id)}
                 className="w-full flex items-start text-left p-5 md:p-6 gap-4 md:gap-6 cursor-pointer select-none"
               >
-                {/* Icon Container (Holds the w-16/72px bounding area) */}
+                {/* Icon Container */}
                 <div
                   className={`w-16 h-16 md:w-[72px] md:h-[72px] rounded-2xl flex-shrink-0 flex items-center justify-center ${item.iconBg}`}
                 >
@@ -114,7 +114,7 @@ export default function ProfessionalJourney() {
                         exit={{ height: 0, opacity: 0 }}
                         transition={{ duration: 0.3, ease: 'easeInOut' }}
                         className="overflow-hidden"
-                        onClick={(e) => e.stopPropagation()} // Stop click events on content body from collapsing accordion
+                        onClick={(e) => e.stopPropagation()}
                       >
                         <div className="pt-6 pb-2">
                           <ul className="list-disc pl-5 text-zinc-400 space-y-3 text-[0.95rem] leading-relaxed">

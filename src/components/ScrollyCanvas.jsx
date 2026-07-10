@@ -212,7 +212,7 @@ export default function ScrollyCanvas() {
       setProgress(Math.round((loadedCount / totalFrames) * 100));
       setLoading(false); // First frame loaded, hide loading screen instantly
       drawFrame(0);      // Draw the first frame immediately
-      
+
       // Start background preloading of remaining frames
       preloadRemaining();
     };
@@ -231,7 +231,7 @@ export default function ScrollyCanvas() {
         const index = nextIndexToLoad++;
         const img = new Image();
         img.src = `/sequence/frame_${pad(index)}_delay-0.041s.webp`;
-        
+
         img.onload = () => {
           imagesRef.current[index] = img;
           loadedCount++;
@@ -242,7 +242,7 @@ export default function ScrollyCanvas() {
           }
           loadNext();
         };
-        
+
         img.onerror = (e) => {
           console.error(`Failed to load image frame ${index}`, e);
           loadedCount++;
@@ -265,7 +265,7 @@ export default function ScrollyCanvas() {
     if (!ctx) return;
 
     let img = imagesRef.current[frameIndex];
-    
+
     // Robust fallback: if target frame isn't loaded yet, find the nearest loaded frame
     if (!img || !img.complete || img.naturalWidth === 0) {
       // Search backward

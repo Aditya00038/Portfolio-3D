@@ -52,7 +52,7 @@ const createDayData = (currentDate, contributionData) => {
   const mm = String(currentDate.getMonth() + 1).padStart(2, '0');
   const dd = String(currentDate.getDate()).padStart(2, '0');
   const dateString = `${yyyy}-${mm}-${dd}`;
-  
+
   const existingData = contributionData.find((d) => d.date === dateString);
   return {
     date: dateString,
@@ -74,7 +74,7 @@ const calculateMonthHeaders = (endDate) => {
   const headers = [];
   const startDate = new Date(endDate);
   startDate.setFullYear(endDate.getFullYear() - 1);
-  
+
   const firstSunday = new Date(startDate);
   firstSunday.setDate(startDate.getDate() - startDate.getDay());
 
@@ -235,7 +235,7 @@ export default function ContributionGraph({
                 {Array.from({ length: WEEKS_IN_YEAR }, (_, w) => {
                   const dayData = yearData[w * DAYS_IN_WEEK + dayIndex];
                   const cellKey = `${dayData?.date ?? "empty"}-${w}-${dayIndex}`;
-                  
+
                   if (!dayData?.date) {
                     return (
                       <td className="h-[12px] w-[12px] p-0" key={cellKey}>
@@ -252,9 +252,8 @@ export default function ContributionGraph({
                       onMouseLeave={handleDayLeave}
                     >
                       <div
-                        className={`h-[12px] w-[12px] rounded-[2px] transition-all duration-200 ${
-                          CONTRIBUTION_COLORS[dayData.level]
-                        } hover:ring-2 hover:ring-[#4493f8] hover:scale-110 z-10 relative`}
+                        className={`h-[12px] w-[12px] rounded-[2px] transition-all duration-200 ${CONTRIBUTION_COLORS[dayData.level]
+                          } hover:ring-2 hover:ring-[#4493f8] hover:scale-110 z-10 relative`}
                       />
                     </td>
                   );
