@@ -34,9 +34,12 @@ export default function CustomCursor() {
       const target = e.target;
       
       // Determine cursor state based on explicit class or data attribute
+      const isHiddenCursor = target && target.closest ? target.closest('[data-cursor="hidden"]') : null;
       const isLargeCursor = target && target.closest ? target.closest('.massive-text, [data-cursor="large"]') : null;
       
-      if (isLargeCursor) {
+      if (isHiddenCursor) {
+        setCursorState('hidden');
+      } else if (isLargeCursor) {
         setCursorState('large');
       } else {
         setCursorState('default');
@@ -71,13 +74,22 @@ export default function CustomCursor() {
       width: 20,
       height: 20,
       x: "-50%",
-      y: "-50%"
+      y: "-50%",
+      opacity: 1
     },
     large: {
       width: 160,
       height: 160,
       x: "-50%",
-      y: "-50%"
+      y: "-50%",
+      opacity: 1
+    },
+    hidden: {
+      width: 0,
+      height: 0,
+      x: "-50%",
+      y: "-50%",
+      opacity: 0
     }
   };
 

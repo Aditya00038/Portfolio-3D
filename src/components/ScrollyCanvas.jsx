@@ -199,49 +199,93 @@ export default function ScrollyCanvas() {
   // Set to 65 as requested for the end of the waving animation.
   const introEndFrame = 65;
 
-  // 1. Preload all 240 frames
+  // 1. Preload first frame immediately, then preload others sequentially in background
   useEffect(() => {
     let loadedCount = 0;
-    const tempImages = [];
 
-    const handleImageLoad = () => {
+    // Preload frame 0 immediately to show the page instantly
+    const img0 = new Image();
+    img0.src = `/sequence/frame_${pad(0)}_delay-0.041s.webp`;
+    img0.onload = () => {
+      imagesRef.current[0] = img0;
       loadedCount++;
-      const currentProgress = Math.round((loadedCount / totalFrames) * 100);
-      setProgress(currentProgress);
-
-      if (loadedCount === totalFrames) {
-        imagesRef.current = tempImages;
-        setLoading(false);
-      }
+      setProgress(Math.round((loadedCount / totalFrames) * 100));
+      setLoading(false); // First frame loaded, hide loading screen instantly
+      drawFrame(0);      // Draw the first frame immediately
+      
+      // Start background preloading of remaining frames
+      preloadRemaining();
+    };
+    img0.onerror = (e) => {
+      console.error("Failed to load first frame", e);
+      setLoading(false); // Fallback: still show page
+      preloadRemaining();
     };
 
-    const handleImageError = (e) => {
-      console.error("Failed to load image frame", e);
-      loadedCount++;
-      if (loadedCount === totalFrames) {
-        imagesRef.current = tempImages;
-        setLoading(false);
+    const preloadRemaining = () => {
+      let nextIndexToLoad = 1;
+      const concurrency = 4; // limit concurrent image requests to avoid blocking connection pool
+
+      const loadNext = () => {
+        if (nextIndexToLoad >= totalFrames) return;
+        const index = nextIndexToLoad++;
+        const img = new Image();
+        img.src = `/sequence/frame_${pad(index)}_delay-0.041s.webp`;
+        
+        img.onload = () => {
+          imagesRef.current[index] = img;
+          loadedCount++;
+          setProgress(Math.round((loadedCount / totalFrames) * 100));
+          // If we are currently on a frame that fallback-rendered, update it now that it's loaded
+          if (frameIndexRef.current === index) {
+            drawFrame(index);
+          }
+          loadNext();
+        };
+        
+        img.onerror = (e) => {
+          console.error(`Failed to load image frame ${index}`, e);
+          loadedCount++;
+          loadNext();
+        };
+      };
+
+      // Launch initial concurrent workers
+      for (let c = 0; c < concurrency; c++) {
+        loadNext();
       }
     };
-
-    for (let i = 0; i < totalFrames; i++) {
-      const img = new Image();
-      // Updated to match delay-0.041s
-      img.src = `/sequence/frame_${pad(i)}_delay-0.041s.png`;
-      img.onload = handleImageLoad;
-      img.onerror = handleImageError;
-      tempImages.push(img);
-    }
   }, []);
 
-  // 2. High-performance canvas drawing
+  // 2. High-performance canvas drawing with fallback for unloaded frames
   const drawFrame = (frameIndex) => {
     const canvas = canvasRef.current;
     if (!canvas) return;
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
-    const img = imagesRef.current[frameIndex];
+    let img = imagesRef.current[frameIndex];
+    
+    // Robust fallback: if target frame isn't loaded yet, find the nearest loaded frame
+    if (!img || !img.complete || img.naturalWidth === 0) {
+      // Search backward
+      for (let i = frameIndex - 1; i >= 0; i--) {
+        if (imagesRef.current[i] && imagesRef.current[i].complete && imagesRef.current[i].naturalWidth > 0) {
+          img = imagesRef.current[i];
+          break;
+        }
+      }
+    }
+    if (!img || !img.complete || img.naturalWidth === 0) {
+      // Search forward if no backward frame was found
+      for (let i = frameIndex + 1; i < totalFrames; i++) {
+        if (imagesRef.current[i] && imagesRef.current[i].complete && imagesRef.current[i].naturalWidth > 0) {
+          img = imagesRef.current[i];
+          break;
+        }
+      }
+    }
+
     if (!img) return;
 
     const devicePixelRatio = window.devicePixelRatio || 1;
@@ -262,8 +306,9 @@ export default function ScrollyCanvas() {
     const ih = img.height;
 
     // Calculate the "cover" scale, then decrease it (e.g., to 75%) to make the character smaller
+    // Keep exactly as original logic
     const baseScale = Math.max(w / iw, h / ih);
-    const scale = baseScale * 0.75; // Increased slightly as requested
+    const scale = baseScale * 0.75;
 
     const nw = iw * scale;
     const nh = ih * scale;
