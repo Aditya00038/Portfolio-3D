@@ -8,7 +8,7 @@ import ShimmerButton from "./ui/shimmer-button";
 import KnowMoreButton from "./ui/know-more-button";
 import ShimmerText from "./ui/shimmer-text";
 import ShineText from "./ui/shine-text";
-import TechCloud from "./TechCloud";
+import CassettePlayer from "./CassettePlayer";
 import { FaGithub, FaLinkedinIn, FaInstagram, FaEnvelope } from 'react-icons/fa';
 
 const pad = (n) => String(n).padStart(3, '0');
@@ -560,28 +560,36 @@ export default function ScrollyCanvas() {
                 A CREATIVE DEVELOPER FOCUSED ON CLEAN UI,<br /> SMART SOLUTIONS AND REAL WORLD PROJECTS
               </ShineText>
 
-              <div className="mt-8 flex flex-col gap-4 pointer-events-auto items-start">
+              <div className="mt-8 flex flex-wrap gap-4 pointer-events-auto items-center">
                 <a href="/Aditya%20Resume.pdf" target="_blank" rel="noreferrer" className="block">
                   <ShimmerButton>
                     View Resume
                   </ShimmerButton>
                 </a>
-              </div>
-            </div>
-
-            {/* Interactive Floating Tech Cloud above Contact Me button */}
-            <div className="absolute bottom-[96px] right-8 pointer-events-auto hidden lg:block z-30">
-              <TechCloud />
-            </div>
-
-            {/* Contact Me Button at bottom right of hero */}
-            <div className="absolute bottom-8 right-8 pointer-events-auto">
-              <div onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}>
-                <LiquidMetalButton label="Contact Me" />
+                <div 
+                  onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })} 
+                  className="cursor-pointer"
+                >
+                  <LiquidMetalButton label="Contact Me" />
+                </div>
               </div>
             </div>
           </motion.div>
         )}
+
+        {/* Keep CassettePlayer permanently mounted to ensure uninterrupted audio playback when scrolling */}
+        <motion.div
+          initial={{ opacity: 0, scale: 0.95 }}
+          animate={{ 
+            opacity: showIntroText ? 1 : 0,
+            scale: showIntroText ? 1 : 0.9,
+            pointerEvents: showIntroText ? "auto" : "none"
+          }}
+          transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+          className="absolute top-1/2 -translate-y-1/2 right-12 md:right-24 z-30 hidden lg:block"
+        >
+          <CassettePlayer />
+        </motion.div>
 
         {/* About Me Text - Left-aligned text on the right side of the screen matching user screenshot */}
         {showAboutText && (
