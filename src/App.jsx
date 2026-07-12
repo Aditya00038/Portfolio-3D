@@ -8,12 +8,14 @@ import CustomCursor from './components/CustomCursor'
 
 import Home from './pages/Home'
 import About from './pages/About'
+import ScrollToTop from './components/ScrollToTop'
 
 function App() {
   const [isLoading, setIsLoading] = useState(true)
 
   return (
     <BrowserRouter>
+      <ScrollToTop />
       <CustomCursor />
       
       <AnimatePresence>

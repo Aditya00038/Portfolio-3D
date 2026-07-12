@@ -29,7 +29,7 @@ export default function TechStack() {
   return (
     <section 
       id="tools"
-      className="w-full py-28 bg-[#ececed] text-zinc-900 flex flex-col items-center justify-center rounded-t-[2rem] md:rounded-t-[3rem] relative overflow-hidden"
+      className="w-full py-28 bg-[#ececed] text-zinc-900 flex flex-col items-center justify-center rounded-[1rem] md:rounded-[1.5rem] relative overflow-hidden"
     >
       {/* Subtle grid background for premium texture */}
       <div className="absolute inset-0 bg-[linear-gradient(to_right,#dfdfdf_1px,transparent_1px),linear-gradient(to_bottom,#dfdfdf_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_50%,#000_70%,transparent_100%)] opacity-40" />

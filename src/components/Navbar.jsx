@@ -17,65 +17,34 @@ const socialItems = [
 ];
 
 export default function Navbar() {
-  const [isHidden, setIsHidden] = useState(false);
   const [isLightBg, setIsLightBg] = useState(false);
 
-  // Observer 1: Hide Navbar when Projects section is active
+  // Pixel-based scroll listener: Toggles logo and menu colors to black exactly when the light-gray Tools section covers the navbar area (y <= 80px)
   useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          setIsHidden(entry.isIntersecting);
-        });
-      },
-      {
-        root: null,
-        rootMargin: '0px',
-        threshold: 0.05,
-      }
-    );
-
-    const projectsSection = document.getElementById('projects');
-    if (projectsSection) {
-      observer.observe(projectsSection);
-    }
-
-    return () => {
-      if (projectsSection) {
-        observer.unobserve(projectsSection);
+    const handleScroll = () => {
+      const toolsSection = document.getElementById('tools');
+      if (!toolsSection) return;
+      const rect = toolsSection.getBoundingClientRect();
+      
+      // If the top of the tools section has crossed the navbar (80px) and its bottom is still below the navbar
+      if (rect.top <= 80 && rect.bottom >= 80) {
+        setIsLightBg(true);
+      } else {
+        setIsLightBg(false);
       }
     };
-  }, []);
 
-  // Observer 2: Toggle logo and menu colors to black when scrolling over the light-gray Tools section
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          setIsLightBg(entry.isIntersecting);
-        });
-      },
-      {
-        root: null,
-        rootMargin: '-80px 0px 0px 0px', // Trigger color change as soon as navbar header overlaps it
-        threshold: 0.1,
-      }
-    );
-
-    const toolsSection = document.getElementById('tools');
-    if (toolsSection) {
-      observer.observe(toolsSection);
-    }
+    window.addEventListener('scroll', handleScroll);
+    // Call once initially to set the correct state on mount
+    handleScroll();
 
     return () => {
-      if (toolsSection) {
-        observer.unobserve(toolsSection);
-      }
+      window.removeEventListener('scroll', handleScroll);
     };
   }, []);
 
   return (
-    <div className={`fixed top-0 left-0 w-full z-[100] pointer-events-none transition-transform duration-700 ease-in-out ${isHidden ? '-translate-y-full opacity-0' : 'translate-y-0 opacity-100'}`}>
+    <div className="fixed top-0 left-0 w-full z-[100] pointer-events-none translate-y-0 opacity-100 transition-all duration-300">
       <div className="relative w-full h-full flex items-center justify-between px-8 md:px-16 lg:px-24 pt-8">
         {/* Left Side: Logo (Changes color dynamically based on background theme) */}
         <motion.div layoutId="navbar-logo" className="pointer-events-auto z-[100] flex items-center">

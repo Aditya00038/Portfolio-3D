@@ -33,7 +33,7 @@ export default function Contributions() {
   return (
     <section
       id="activity"
-      className="relative w-full py-24 bg-[#010409] text-white overflow-hidden rounded-b-[2rem] md:rounded-b-[3rem] border-t border-white/5 font-sans"
+      className="relative w-full py-24 bg-[#010409] text-white overflow-hidden rounded-b-[1rem] md:rounded-b-[1.5rem] border-t border-white/5 font-sans"
     >
       <div className="max-w-6xl mx-auto px-6 md:px-12 lg:px-20">
 
