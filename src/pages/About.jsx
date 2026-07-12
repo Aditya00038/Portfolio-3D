@@ -1,7 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import MinimalBackground from '../components/ui/minimal-background';
-import GeometricBlurMesh from '../components/ui/geometric-blur-mesh';
 import BentoGrid from '../components/BentoGrid';
 import Footer from '../components/Footer';
 
@@ -41,42 +40,55 @@ export default function About() {
 
       {/* Content layer: left-aligned reading container layered over the background */}
       <div className="w-full min-h-screen flex flex-col justify-start items-center pt-20 md:pt-24 pb-12 px-6 md:px-12 relative z-20 overflow-y-auto">
+        
+        {/* Main wrapper holding the 2 columns */}
         <motion.div
           variants={containerVariants}
           initial="hidden"
           animate="visible"
-          className="max-w-[950px] w-full flex flex-col items-start"
+          className="max-w-[950px] w-full flex flex-col md:flex-row gap-10 md:gap-16 items-center md:items-start justify-between mb-16"
         >
-          {/* Geometric WebGL Mesh Animation */}
-          <motion.div 
-            variants={itemVariants} 
-            className="relative w-[150px] h-[100px] mb-4 select-none overflow-hidden rounded-xl flex items-center justify-start"
-          >
-            <GeometricBlurMesh />
-          </motion.div>
+          {/* Left Column: Text description */}
+          <div className="flex-1 w-full flex flex-col items-start">
+            {/* Philosophical Paragraph Blocks with Loose Line Heights */}
+            <motion.div 
+              variants={itemVariants}
+              className="space-y-4 text-zinc-400 text-[1.05rem] md:text-[1.15rem] leading-[1.75] md:leading-[1.85] font-light"
+              style={{ fontFamily: "ui-sans-serif, system-ui, -apple-system, Inter, sans-serif" }}
+            >
+              <p>
+                I'm Aditya Suryawanshi — a Computer Engineering student at MIT Academy of Engineering, Pune.
+              </p>
+              <p>
+                I don't just write code. I think about the person on the other side — what they need, what slows them down, and how software can quietly make that better.
+              </p>
+              <p>
+                Web apps, AI, backend systems — I work across the stack, but the thread that connects it all is a simple question: does this actually help someone?
+              </p>
+              <p>
+                I'm hands-on by nature. I learn by doing, grow by collaborating, and find the most satisfaction when an idea I once sketched out is finally running in production.
+              </p>
+            </motion.div>
+          </div>
 
-          {/* Philosophical Paragraph Blocks with Loose Line Heights */}
+          {/* Right Column: Profile Image (Beach photo me.jpeg) */}
           <motion.div 
             variants={itemVariants}
-            className="space-y-4 text-zinc-400 text-[1.05rem] md:text-[1.15rem] leading-[1.75] md:leading-[1.85] font-light"
-            style={{ fontFamily: "ui-sans-serif, system-ui, -apple-system, Inter, sans-serif" }}
+            className="w-full max-w-[280px] md:max-w-none md:w-[280px] lg:w-[320px] flex-shrink-0 relative group"
           >
-            <p>
-              I'm Aditya Suryawanshi — a Computer Engineering student at MIT Academy of Engineering, Pune.
-            </p>
-            <p>
-              I don't just write code. I think about the person on the other side — what they need, what slows them down, and how software can quietly make that better.
-            </p>
-            <p>
-              Web apps, AI, backend systems — I work across the stack, but the thread that connects it all is a simple question: does this actually help someone?
-            </p>
-            <p>
-              I'm hands-on by nature. I learn by doing, grow by collaborating, and find the most satisfaction when an idea I once sketched out is finally running in production.
-            </p>
+            {/* Subtle glow border behind the image */}
+            <div className="absolute inset-0 bg-gradient-to-tr from-indigo-500/20 to-purple-500/20 rounded-[1.5rem] blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
+            
+            <img 
+              src="/extra_images/me.png" 
+              alt="Aditya Suryawanshi" 
+              className="w-full h-auto max-h-[420px] object-cover rounded-2xl md:rounded-[1.5rem] border border-zinc-800/80 shadow-2xl relative z-10 transition-transform duration-500 ease-out hover:scale-[1.02]"
+              draggable={false}
+            />
           </motion.div>
         </motion.div>
 
-        {/* The new obvious feeling bento grid */}
+        {/* Bento Grid */}
         <BentoGrid />
       </div>
       
