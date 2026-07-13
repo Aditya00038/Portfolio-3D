@@ -1,6 +1,5 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import MinimalBackground from '../components/ui/minimal-background';
 import BentoGrid from '../components/BentoGrid';
 import Footer from '../components/Footer';
 
@@ -32,24 +31,19 @@ export default function About() {
   };
 
   return (
-    <div className="w-full bg-[#0a0a0a] min-h-screen text-white relative overflow-hidden">
-      {/* Background layer */}
-      <div className="fixed inset-0 z-0">
-        <MinimalBackground className="w-full h-full opacity-60" />
-      </div>
-
-      {/* Content layer: left-aligned reading container layered over the background */}
-      <div className="w-full min-h-screen flex flex-col justify-start items-center pt-20 md:pt-24 pb-12 px-6 md:px-12 relative z-20 overflow-y-auto">
+    <div className="w-full bg-black min-h-screen text-white relative overflow-hidden">
+      {/* Content layer: vertically and horizontally centered with top clearance for fixed navbar */}
+      <div className="w-full min-h-screen flex flex-col justify-center items-center pt-32 md:pt-36 pb-20 px-6 md:px-12 relative z-20 overflow-y-auto">
         
-        {/* Main wrapper holding the 2 columns */}
+        {/* Main wrapper holding the 2 columns (centered vertically relative to each other) */}
         <motion.div
           variants={containerVariants}
           initial="hidden"
           animate="visible"
-          className="max-w-[950px] w-full flex flex-col md:flex-row gap-10 md:gap-16 items-center md:items-start justify-between mb-16"
+          className="max-w-[950px] w-full flex flex-col md:flex-row gap-10 md:gap-16 items-center justify-between mb-16"
         >
           {/* Left Column: Text description */}
-          <div className="flex-1 w-full flex flex-col items-start">
+          <div className="flex-1 w-full flex flex-col items-start justify-center">
             {/* Philosophical Paragraph Blocks with Loose Line Heights */}
             <motion.div 
               variants={itemVariants}
@@ -71,7 +65,7 @@ export default function About() {
             </motion.div>
           </div>
 
-          {/* Right Column: Profile Image (Beach photo me.jpeg) */}
+          {/* Right Column: Profile Image (Beach photo me.png) */}
           <motion.div 
             variants={itemVariants}
             className="w-full max-w-[280px] md:max-w-none md:w-[280px] lg:w-[320px] flex-shrink-0 relative group"

@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Clock, Languages, Gamepad2, MapPin, User, Code2 } from 'lucide-react';
+import { Clock, Languages, Gamepad2 } from 'lucide-react';
+import { FaReact, FaNodeJs } from 'react-icons/fa';
+import { SiTailwindcss, SiPython, SiMysql, SiMongodb } from 'react-icons/si';
 
 const TypewriterText = ({ words }) => {
   const [index, setIndex] = useState(0);
@@ -43,7 +45,6 @@ const TypewriterText = ({ words }) => {
 export default function BentoGrid() {
   const [time, setTime] = useState(new Date());
   const [weather, setWeather] = useState({ temp: 26, description: "Light rain shower" });
-  const [quote, setQuote] = useState({ text: "Make it feel obvious.", author: "Aditya" });
 
   useEffect(() => {
     const timer = setInterval(() => setTime(new Date()), 1000);
@@ -72,26 +73,6 @@ export default function BentoGrid() {
       }
     };
     fetchWeather();
-  }, []);
-
-  // Fetch daily quote
-  useEffect(() => {
-    const dailyQuotes = [
-      { text: "Build solutions, not excuses.", author: "Daily Reminder" },
-      { text: "Think deeply. Build simply.", author: "Daily Reminder" },
-      { text: "The best way to learn is to build.", author: "Daily Reminder" },
-      { text: "Code with purpose. Build with passion.", author: "Daily Reminder" },
-      { text: "Great products solve real problems.", author: "Daily Reminder" },
-      { text: "Stay curious. Keep building.", author: "Daily Reminder" },
-      { text: "Innovation starts with action.", author: "Daily Reminder" },
-      { text: "Make it work. Make it right. Make it fast.", author: "Kent Beck" },
-      { text: "Turning ideas into impact.", author: "Daily Reminder" },
-      { text: "Small improvements compound over time.", author: "Daily Reminder" }
-    ];
-    
-    // Pick a quote based on the day of the year so it changes exactly once every day
-    const dayOfYear = Math.floor((new Date() - new Date(new Date().getFullYear(), 0, 0)) / (1000 * 60 * 60 * 24));
-    setQuote(dailyQuotes[dayOfYear % dailyQuotes.length]);
   }, []);
 
   // Format time for Pune (UTC+5:30)
@@ -141,7 +122,7 @@ export default function BentoGrid() {
         viewport={{ once: true, margin: "-100px" }}
         className="grid grid-cols-1 md:grid-cols-3 gap-4"
       >
-        {/* Local Time */}
+        {/* Col 1, Row 1: Local Time */}
         <motion.div variants={itemVariants} className="bg-[#161616] rounded-3xl p-5 flex flex-col justify-between h-[170px] border border-white/5 relative overflow-hidden group">
           <div className="flex items-center text-zinc-500 gap-2 mb-4 text-sm font-medium">
             <Clock size={16} />
@@ -157,7 +138,31 @@ export default function BentoGrid() {
           </div>
         </motion.div>
 
-        {/* Languages (Middle) */}
+        {/* Col 2-3, Row 1 & 2: Now Playing Call of Duty (Gaming on Right, row-span-2) */}
+        <motion.div variants={itemVariants} className="md:col-span-2 md:row-span-2 bg-[#161616] rounded-3xl p-6 h-[356px] border border-white/5 relative overflow-hidden group">
+          {/* Background video covering the box */}
+          <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
+            <video 
+              src="/videos/cod-portfolio.mp4"
+              autoPlay
+              muted
+              loop
+              playsInline
+              className="absolute inset-0 w-full h-full object-cover opacity-90 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent pointer-events-none" />
+          </div>
+          
+          <div className="relative z-10 h-full flex flex-col justify-end pointer-events-none">
+            <div className="flex items-center text-zinc-300 gap-2 mb-1 text-sm font-medium">
+              <Gamepad2 size={16} />
+              <span>Last Played 1 year ago</span>
+            </div>
+            <h3 className="text-2xl font-bold text-white tracking-tight">Call of Duty: Modern Warfare 2</h3>
+          </div>
+        </motion.div>
+
+        {/* Col 1, Row 2: Languages (Positioned below Local Time) */}
         <motion.div variants={itemVariants} className="bg-[#161616] rounded-3xl p-5 flex flex-col h-[170px] border border-white/5 relative overflow-hidden group">
           <div className="flex items-center text-zinc-500 gap-2 mb-4 text-sm font-medium">
             <Languages size={16} />
@@ -179,63 +184,9 @@ export default function BentoGrid() {
           </div>
         </motion.div>
 
-        {/* Quote of the Day (Top Right) */}
-        <motion.div variants={itemVariants} className="bg-[#161616] rounded-3xl p-6 h-[170px] border border-white/5 relative overflow-hidden group flex flex-col justify-between">
-          <div className="flex items-center text-zinc-500 gap-2 text-xs font-semibold tracking-wider uppercase">
-            Quote of the Day
-          </div>
-          <div className="flex-1 flex flex-col justify-center mt-2">
-            <p className="text-zinc-200 text-sm italic mb-2 line-clamp-3">"{quote.text}"</p>
-            <span className="text-emerald-400 text-xs font-medium">— {quote.author}</span>
-          </div>
-        </motion.div>
-
-        {/* Location (Bottom Left) */}
-        <motion.div variants={itemVariants} className="bg-[#161616] rounded-3xl p-5 h-[170px] border border-white/5 relative overflow-hidden group flex flex-col justify-end">
-          <div className="absolute inset-0 z-0">
-            <img 
-              src="/extra_images/place.png" 
-              alt="Pune Location" 
-              className="w-full h-full object-cover opacity-60 group-hover:opacity-80 transition-all duration-700 group-hover:scale-105"
-              onError={(e) => {
-                e.target.onerror = null;
-                e.target.src = "https://images.unsplash.com/photo-1570168007204-dfb528c6958f?q=80&w=1000&auto=format&fit=crop";
-              }}
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent" />
-          </div>
-          
-          <div className="relative z-10 flex flex-col">
-            <span className="text-lg font-bold text-white tracking-wide">Pune, India</span>
-            <span className="text-[13px] text-zinc-400 mt-1 font-medium">{weather.temp}° {weather.description}</span>
-          </div>
-        </motion.div>
-
-        {/* Now Playing */}
-        <motion.div variants={itemVariants} className="md:col-span-2 bg-[#161616] rounded-3xl p-6 h-[170px] border border-white/5 relative overflow-hidden group">
-          {/* Background video covering the box */}
-          <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
-            <iframe 
-              src="https://www.youtube.com/embed/xzuHWKdrBzg?autoplay=1&mute=1&loop=1&playlist=xzuHWKdrBzg&controls=0&showinfo=0&rel=0&modestbranding=1&playsinline=1"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-              allowFullScreen
-              className="absolute top-1/2 left-1/2 w-[120%] h-[300%] md:w-[150%] -translate-x-1/2 -translate-y-1/2 opacity-30 group-hover:opacity-50 transition-opacity duration-700 pointer-events-none mix-blend-luminosity"
-              style={{ border: 0 }}
-            ></iframe>
-            <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent pointer-events-none" />
-          </div>
-          
-          <div className="relative z-10 h-full flex flex-col justify-end pointer-events-none">
-            <div className="flex items-center text-zinc-300 gap-2 mb-1 text-sm font-medium">
-              <Gamepad2 size={16} />
-              <span>Now Playing</span>
-            </div>
-            <h3 className="text-2xl font-bold text-white tracking-tight">Valorant</h3>
-            <span className="text-zinc-500 text-sm">PC</span>
-          </div>
-        </motion.div>
-
       </motion.div>
     </div>
   );
 }
+
+

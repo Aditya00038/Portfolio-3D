@@ -5,9 +5,8 @@ import StaggeredMenu from './StaggeredMenu';
 
 const menuItems = [
   { label: 'Home', ariaLabel: 'Go to home page', link: '/' },
+  { label: 'About', ariaLabel: 'About Aditya', link: '/about' },
   { label: 'Projects', ariaLabel: 'View our projects', link: '/#projects' },
-  { label: 'Tools', ariaLabel: 'View tech stack and tools', link: '/#tools' },
-  { label: 'Activity', ariaLabel: 'View coding contributions and stats', link: '/#activity' },
   { label: 'Contact', ariaLabel: 'Get in touch', link: '/#contact' }
 ];
 
