@@ -27,7 +27,7 @@ const TOOLS = [
 
 export default function TechStack() {
   return (
-    <section 
+    <section
       id="tools"
       className="w-full py-28 bg-[#ececed] text-zinc-900 flex flex-col items-center justify-center rounded-[1rem] md:rounded-[1.5rem] relative overflow-hidden"
     >
@@ -35,31 +35,31 @@ export default function TechStack() {
       <div className="absolute inset-0 bg-[linear-gradient(to_right,#dfdfdf_1px,transparent_1px),linear-gradient(to_bottom,#dfdfdf_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_50%,#000_70%,transparent_100%)] opacity-40" />
 
       <div className="max-w-4xl mx-auto text-center flex flex-col items-center gap-8 px-6 relative z-10 w-full">
-        
+
         {/* Headline Row 1 */}
-        <h2 
+        <h2
           className="text-4xl md:text-6xl lg:text-7xl font-bold tracking-tight text-zinc-900 leading-none select-none"
           style={{ letterSpacing: "-0.04em" }}
         >
           Tools & technologies
         </h2>
-        
+
         {/* Row of iOS-style rounded tool tiles with static layout & simple hover states */}
         <div className="flex flex-wrap justify-center items-center gap-4 my-6 w-full py-2">
           {TOOLS.map((tool, idx) => (
-            <div 
-              key={idx} 
+            <div
+              key={idx}
               className="relative group cursor-pointer select-none"
             >
               {/* Tile - White rounded-2xl square */}
-              <div 
+              <div
                 className="w-14 h-14 md:w-16 md:h-16 bg-white border border-zinc-200/80 rounded-2xl flex items-center justify-center shadow-[0_8px_20px_rgba(0,0,0,0.03),0_1px_3px_rgba(0,0,0,0.01)] hover:scale-115 hover:-translate-y-1.5 hover:shadow-[0_16px_32px_rgba(0,0,0,0.06)] transition-all duration-300 ease-out relative z-10"
               >
                 {tool.icon}
               </div>
 
               {/* Floating Tooltip - White background with premium styling */}
-              <div 
+              <div
                 className="absolute top-[115%] left-1/2 -translate-x-1/2 bg-white text-zinc-800 text-[10px] md:text-xs font-sans font-semibold px-2.5 py-1.5 rounded-md shadow-lg border border-zinc-200 pointer-events-none opacity-0 scale-95 translate-y-1 group-hover:opacity-100 group-hover:scale-100 group-hover:translate-y-0 transition-all duration-200 z-30 whitespace-nowrap"
               >
                 {tool.name}
@@ -69,13 +69,13 @@ export default function TechStack() {
         </div>
 
         {/* Headline Row 2 */}
-        <h2 
+        <h2
           className="text-4xl md:text-6xl lg:text-7xl font-bold tracking-tight text-zinc-900 leading-none select-none"
           style={{ letterSpacing: "-0.04em" }}
         >
           I work with.
         </h2>
-        
+
         <p className="text-xs md:text-sm text-zinc-500 font-mono uppercase tracking-[0.2em] mt-4 select-none">
           Optimized for performance, responsiveness, and clean aesthetics
         </p>

@@ -2,6 +2,32 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import BentoGrid from '../components/BentoGrid';
 import Footer from '../components/Footer';
+import PhotoStack from '../components/ui/PhotoStack';
+import HorizontalGallery from '../components/HorizontalGallery';
+
+const photosList = [
+  {
+    id: 'photo-1',
+    src: '/extra_images/me.png',
+    alt: 'Aditya Suryawanshi - Beach Portrait',
+    name: 'Aditya Suryawanshi',
+    role: 'Computer Engineering Student'
+  },
+  {
+    id: 'photo-2',
+    src: 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=600&auto=format&fit=crop',
+    alt: 'MIT Academy of Engineering, Pune',
+    name: 'Engineering & Code',
+    role: 'MIT AOE, Pune'
+  },
+  {
+    id: 'photo-3',
+    src: 'https://images.unsplash.com/photo-1498050108023-c5249f4df085?q=80&w=600&auto=format&fit=crop',
+    alt: 'Full Stack Web Developer',
+    name: 'Full Stack Systems',
+    role: 'React, Node, Python'
+  }
+];
 
 export default function About() {
   // Staggered motion container variant
@@ -33,7 +59,7 @@ export default function About() {
   return (
     <div className="w-full bg-black min-h-screen text-white relative overflow-hidden">
       {/* Content layer: vertically and horizontally centered with top clearance for fixed navbar */}
-      <div className="w-full min-h-screen flex flex-col justify-center items-center pt-32 md:pt-36 pb-20 px-6 md:px-12 relative z-20 overflow-y-auto">
+      <div className="w-full flex flex-col justify-center items-center pt-32 md:pt-36 pb-12 px-6 md:px-12 relative z-20">
         
         {/* Main wrapper holding the 2 columns (centered vertically relative to each other) */}
         <motion.div
@@ -65,19 +91,17 @@ export default function About() {
             </motion.div>
           </div>
 
-          {/* Right Column: Profile Image (Beach photo me.png) */}
+          {/* Right Column: Interactive Widescreen Photo Stack */}
           <motion.div 
             variants={itemVariants}
-            className="w-full max-w-[280px] md:max-w-none md:w-[280px] lg:w-[320px] flex-shrink-0 relative group"
+            className="w-[280px] lg:w-[320px] h-[370px] md:h-[400px] lg:h-[420px] flex-shrink-0 relative group self-center md:self-auto"
           >
-            {/* Subtle glow border behind the image */}
+            {/* Subtle glow border behind the stack */}
             <div className="absolute inset-0 bg-gradient-to-tr from-indigo-500/20 to-purple-500/20 rounded-[1.5rem] blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
             
-            <img 
-              src="/extra_images/me.png" 
-              alt="Aditya Suryawanshi" 
-              className="w-full h-auto max-h-[420px] object-cover rounded-2xl md:rounded-[1.5rem] border border-zinc-800/80 shadow-2xl relative z-10 transition-transform duration-500 ease-out hover:scale-[1.02]"
-              draggable={false}
+            <PhotoStack 
+              photos={photosList} 
+              className="w-full h-full relative z-10" 
             />
           </motion.div>
         </motion.div>
@@ -85,6 +109,9 @@ export default function About() {
         {/* Bento Grid */}
         <BentoGrid />
       </div>
+
+      {/* Horizontal Pinning Scroll Gallery (Full screen width edge-to-edge!) */}
+      <HorizontalGallery />
       
       <Footer />
     </div>
