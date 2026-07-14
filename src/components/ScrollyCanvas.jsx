@@ -545,13 +545,6 @@ export default function ScrollyCanvas() {
             className="absolute inset-0 flex flex-col justify-center items-start p-8 md:p-16 lg:p-24 pt-32 md:pt-40 z-20 pointer-events-none"
           >
             <div className="max-w-xl">
-              {/* Available for Work Badge (Pulsing Cyan Signal Dot) */}
-              <div className="flex items-center gap-2.5 mb-6">
-                <span className="w-2 h-2 bg-[#00f2fe] rounded-full shadow-[0_0_8px_#00f2fe] signal-dot" />
-                <span className="text-[10px] font-bold tracking-[0.25em] text-[#a1a1aa] uppercase select-none">
-                  Available for Work
-                </span>
-              </div>
 
               <h2 className="text-6xl md:text-8xl lg:text-[7rem] font-bold text-white mb-6 tracking-tighter leading-none uppercase" data-cursor="large">
                 HI, I'M ADITYA
@@ -685,18 +678,7 @@ export default function ScrollyCanvas() {
             </div>
           </motion.div>
         )}
-        {/* Custom CSS Inject for available-for-work signal dot */}
-        <style dangerouslySetInnerHTML={{
-          __html: `
-          @keyframes signalPulse {
-            0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(0, 242, 254, 0.7); opacity: 0.8; }
-            50% { transform: scale(1.15); box-shadow: 0 0 0 8px rgba(0, 242, 254, 0); opacity: 1; }
-            100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(0, 242, 254, 0); opacity: 0.8; }
-          }
-          .signal-dot {
-            animation: signalPulse 2.5s infinite ease-in-out;
-          }
-        `}} />
+
       </div>
     </section>
   );
