@@ -9,31 +9,34 @@ import CustomCursor from './components/CustomCursor'
 import Home from './pages/Home'
 import About from './pages/About'
 import ScrollToTop from './components/ScrollToTop'
+import { AudioProvider } from './context/AudioContext'
 
 function App() {
   const [isLoading, setIsLoading] = useState(true)
 
   return (
     <BrowserRouter>
-      <ScrollToTop />
-      <CustomCursor />
-      
-      <AnimatePresence>
-        {isLoading && (
-          <LoadingScreen key="loading" onComplete={() => setIsLoading(false)} />
-        )}
-      </AnimatePresence>
+      <AudioProvider>
+        <ScrollToTop />
+        <CustomCursor />
+        
+        <AnimatePresence>
+          {isLoading && (
+            <LoadingScreen key="loading" onComplete={() => setIsLoading(false)} />
+          )}
+        </AnimatePresence>
 
-      <SmoothScroll>
-        <div className="w-full bg-black min-h-screen">
-          {!isLoading && <Navbar />}
-          
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/about" element={<About />} />
-          </Routes>
-        </div>
-      </SmoothScroll>
+        <SmoothScroll>
+          <div className="w-full bg-black min-h-screen">
+            {!isLoading && <Navbar />}
+            
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/about" element={<About />} />
+            </Routes>
+          </div>
+        </SmoothScroll>
+      </AudioProvider>
     </BrowserRouter>
   )
 }

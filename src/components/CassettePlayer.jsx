@@ -1,39 +1,23 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
-
-const playlist = [
-  { id: 0, title: 'Badfinger_BabyBlue.wav', url: '/extra_images/baby-blue-remastered-2010-128-ytshorts.savetube.me.mp3', duration: 197 },
-  { id: 1, title: 'Chiptune_Melody.wav', url: null, duration: 120 },
-  { id: 2, title: 'Retro_Synthwave.wav', url: null, duration: 180 }
-];
+import { useAudio } from '../context/AudioContext';
 
 export default function CassettePlayer() {
-  const [activeBtn, setActiveBtn] = useState('stop'); // stop, play, pause
-  const [timer, setTimer] = useState(0);
-  const [currentTrack, setCurrentTrack] = useState(playlist[0]);
-  const [showDropdown, setShowDropdown] = useState(false);
-
-  const audioRef = useRef(null);
-  const synthIntervalRef = useRef(null);
-  const currentTrackRef = useRef(currentTrack);
-
-  // Keep ref synchronized to avoid stale closures in event listeners
-  useEffect(() => {
-    currentTrackRef.current = currentTrack;
-  }, [currentTrack]);
-
-  // Clean up audio and intervals on unmount
-  useEffect(() => {
-    return () => {
-      if (audioRef.current) {
-        audioRef.current.pause();
-        audioRef.current = null;
-      }
-      if (synthIntervalRef.current) {
-        clearInterval(synthIntervalRef.current);
-      }
-    };
-  }, []);
+  const {
+    playlist,
+    activeBtn,
+    timer,
+    currentTrack,
+    showDropdown,
+    setShowDropdown,
+    handlePlay,
+    handlePause,
+    handleStop,
+    handleRewind,
+    handleFastForward,
+    selectTrack,
+    playClickFeedback
+  } = useAudio();
 
   // Click outside to close dropdown
   useEffect(() => {
@@ -44,179 +28,15 @@ export default function CassettePlayer() {
     };
     document.addEventListener('click', handleOutsideClick);
     return () => document.removeEventListener('click', handleOutsideClick);
-  }, [showDropdown]);
+  }, [showDropdown, setShowDropdown]);
 
-  // Lazy instantiate the Audio object inside a user-gesture function to bypass browser blocks
-  const getAudio = () => {
-    if (!audioRef.current) {
-      const audio = new Audio(playlist[0].url);
-      audio.loop = true;
-
-      audio.addEventListener('timeupdate', () => {
-        if (currentTrackRef.current.id === 0) {
-          setTimer(Math.floor(audio.currentTime));
-        }
-      });
-
-      audio.addEventListener('ended', () => {
-        if (currentTrackRef.current.id === 0) {
-          setActiveBtn('stop');
-          setTimer(0);
-        }
-      });
-
-      audioRef.current = audio;
-    }
-    return audioRef.current;
-  };
-
-  const handlePlay = () => {
-    if (activeBtn === 'play') return;
-    setActiveBtn('play');
-
-    if (currentTrack.url) {
-      const audio = getAudio();
-      audio.play().catch(err => {
-        console.warn("Playback blocked by browser auto-play policy:", err);
-      });
-    } else {
-      // Pause local MP3 if running
-      if (audioRef.current) {
-        audioRef.current.pause();
-      }
-
-      // Start chiptune sequencer interval
-      if (synthIntervalRef.current) clearInterval(synthIntervalRef.current);
-      
-      synthIntervalRef.current = setInterval(() => {
-        setTimer((prev) => {
-          const nextVal = prev + 1;
-          if (nextVal >= currentTrack.duration) {
-            handleStop();
-            return 0;
-          }
-          playChiptuneNote(nextVal);
-          return nextVal;
-        });
-      }, 1000);
-      
-      playChiptuneNote(timer);
-    }
-  };
-
-  const handlePause = () => {
-    if (activeBtn !== 'play') return;
-    setActiveBtn('pause');
-    
-    if (currentTrack.url) {
-      audioRef.current?.pause();
-    } else {
-      if (synthIntervalRef.current) {
-        clearInterval(synthIntervalRef.current);
-        synthIntervalRef.current = null;
-      }
-    }
-  };
-
-  const handleStop = () => {
-    setActiveBtn('stop');
-    setTimer(0);
-
-    if (audioRef.current) {
-      audioRef.current.pause();
-      if (currentTrack.id === 0) {
-        audioRef.current.currentTime = 0;
-      }
-    }
-
-    if (synthIntervalRef.current) {
-      clearInterval(synthIntervalRef.current);
-      synthIntervalRef.current = null;
-    }
-  };
-
-  const handleRewind = () => {
-    playClickFeedback();
-    if (currentTrack.url) {
-      const audio = getAudio();
-      audio.currentTime = Math.max(0, audio.currentTime - 10);
-    } else {
-      setTimer((prev) => Math.max(0, prev - 10));
-    }
-  };
-
-  const handleFastForward = () => {
-    playClickFeedback();
-    if (currentTrack.url) {
-      const audio = getAudio();
-      audio.currentTime = Math.min(currentTrack.duration, audio.currentTime + 10);
-    } else {
-      setTimer((prev) => Math.min(currentTrack.duration, prev + 10));
-    }
-  };
-
-  const selectTrack = (track) => {
-    playClickFeedback();
-    handleStop();
-    setCurrentTrack(track);
-    setShowDropdown(false);
-  };
+  const progressPercent = currentTrack.duration ? (timer / currentTrack.duration) * 100 : 0;
 
   const formatTime = (secs) => {
     const m = Math.floor(secs / 60).toString().padStart(2, '0');
     const s = (secs % 60).toString().padStart(2, '0');
     return `${m}:${s}`;
   };
-
-  // High-fidelity mechanical click sound feedback
-  const playClickFeedback = () => {
-    try {
-      const clickCtx = new (window.AudioContext || window.webkitAudioContext)();
-      const osc = clickCtx.createOscillator();
-      const gain = clickCtx.createGain();
-      
-      osc.type = 'sine';
-      osc.frequency.setValueAtTime(2500, clickCtx.currentTime);
-      osc.frequency.exponentialRampToValueAtTime(150, clickCtx.currentTime + 0.015);
-      
-      gain.gain.setValueAtTime(0.12, clickCtx.currentTime);
-      gain.gain.exponentialRampToValueAtTime(0.001, clickCtx.currentTime + 0.015);
-      
-      osc.connect(gain);
-      gain.connect(clickCtx.destination);
-      osc.start();
-      osc.stop(clickCtx.currentTime + 0.02);
-    } catch (e) { }
-  };
-
-  // Chiptune synth melody sequencer (plays for tracks with no URL)
-  const playChiptuneNote = (tick) => {
-    try {
-      const synthCtx = new (window.AudioContext || window.webkitAudioContext)();
-      const osc = synthCtx.createOscillator();
-      const gain = synthCtx.createGain();
-      
-      osc.type = 'triangle';
-      
-      const notesTrack1 = [261.63, 329.63, 392.00, 523.25, 440.00, 349.23, 392.00, 329.63]; // C Major
-      const notesTrack2 = [220.00, 261.63, 329.63, 440.00, 392.00, 329.63, 293.66, 329.63]; // A Minor
-      
-      const noteArray = currentTrack.id === 1 ? notesTrack1 : notesTrack2;
-      const freq = noteArray[tick % noteArray.length];
-      
-      osc.frequency.setValueAtTime(freq, synthCtx.currentTime);
-      
-      gain.gain.setValueAtTime(0.06, synthCtx.currentTime);
-      gain.gain.exponentialRampToValueAtTime(0.001, synthCtx.currentTime + 0.35);
-      
-      osc.connect(gain);
-      gain.connect(synthCtx.destination);
-      osc.start();
-      osc.stop(synthCtx.currentTime + 0.4);
-    } catch (e) { }
-  };
-
-  const progressPercent = currentTrack.duration ? (timer / currentTrack.duration) * 100 : 0;
 
   return (
     <StyledWrapper>

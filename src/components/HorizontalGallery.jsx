@@ -33,16 +33,15 @@ export default function HorizontalGallery() {
     };
   }, []);
 
-  // Set list of extra images, repeating to create a nice long horizontal row of 8 cards
-  const images = [
-    '/extra_images/full_radio.png',
-    '/extra_images/me.png',
-    '/extra_images/place.png',
-    '/extra_images/radio-tape.png',
-    '/extra_images/full_radio.png',
-    '/extra_images/me.png',
-    '/extra_images/place.png',
-    '/extra_images/radio-tape.png'
+  // Set list of gallery files (images and videos) from the Gallery folder
+  const mediaItems = [
+    '/Gallery/me.png',
+    '/Gallery/place4.mp4',
+    '/Gallery/me2.png',
+    '/Gallery/place.png',
+    '/Gallery/place5.mp4',
+    '/Gallery/me3.png',
+    '/Gallery/place2.png'
   ];
 
   return (
@@ -63,21 +62,35 @@ export default function HorizontalGallery() {
             ref={triggerRef} 
             className="horiz-gallery-strip flex flex-nowrap will-change-transform relative pl-12 pr-[15vw]"
           >
-            {images.map((src, idx) => (
-              <div 
-                key={idx} 
-                className="project-wrap w-[75vw] md:w-[33vw] px-4 md:px-6 flex-shrink-0 box-content"
-              >
-                <div className="overflow-hidden rounded-2xl md:rounded-[1.5rem] border border-zinc-800/80 shadow-2xl relative">
-                  <img 
-                    src={src} 
-                    alt={`Showcase item ${idx + 1}`} 
-                    className="w-full aspect-square object-cover select-none" 
-                    draggable={false}
-                  />
+            {mediaItems.map((src, idx) => {
+              const isVideo = src.endsWith('.mp4') || src.endsWith('.webm');
+              return (
+                <div 
+                  key={idx} 
+                  className="project-wrap w-[75vw] md:w-[33vw] px-4 md:px-6 flex-shrink-0 box-content"
+                >
+                  <div className="overflow-hidden rounded-2xl md:rounded-[1.5rem] border border-zinc-800/80 shadow-2xl relative">
+                    {isVideo ? (
+                      <video
+                        src={src}
+                        autoPlay
+                        loop
+                        muted
+                        playsInline
+                        className="w-full aspect-square object-cover select-none"
+                      />
+                    ) : (
+                      <img 
+                        src={src} 
+                        alt={`Showcase item ${idx + 1}`} 
+                        className="w-full aspect-square object-cover select-none" 
+                        draggable={false}
+                      />
+                    )}
+                  </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
       </div>
