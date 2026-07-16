@@ -3,6 +3,36 @@ import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { PROJECTS_DATA } from '../data/projectsData';
 
+const getProjectTheme = (id) => {
+  switch (id) {
+    case 1: // Parivartan (Civic Tech)
+      return {
+        badgeBg: 'bg-[#a7f3d0]',
+        badgeText: 'text-[#064e3b]'
+      };
+    case 2: // DhanSathi (Fintech)
+      return {
+        badgeBg: 'bg-[#93c5fd]',
+        badgeText: 'text-[#1a365d]'
+      };
+    case 3: // Glyvora (Health Tech)
+      return {
+        badgeBg: 'bg-[#fbcfe8]',
+        badgeText: 'text-[#701a75]'
+      };
+    case 4: // ChemStock (Lab Tech / Inventory)
+      return {
+        badgeBg: 'bg-[#8cd19d]',
+        badgeText: 'text-[#1f5c35]'
+      };
+    default:
+      return {
+        badgeBg: 'bg-zinc-800',
+        badgeText: 'text-zinc-200'
+      };
+  }
+};
+
 function ProjectCard({ project }) {
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
   const [isHovered, setIsHovered] = useState(false);
@@ -15,15 +45,19 @@ function ProjectCard({ project }) {
     });
   };
 
+  const domainPills = project.domain ? project.domain.split(' · ').map(d => d.toUpperCase()) : [];
+  const tagPills = project.tags ? project.tags.map(t => t.toUpperCase()) : [];
+  const pills = [...domainPills, ...tagPills];
+
   return (
     <Link 
       to={`/project/${project.id}`} 
       className="flex flex-col w-full group no-underline"
     >
-      {/* 3D Tilt Image Panel */}
+      {/* Image Panel */}
       <div className="w-full relative z-20">
         <div
-          className="project-card-container relative w-full rounded-[2.5rem] md:rounded-[3rem] cursor-pointer overflow-hidden bg-zinc-950 border border-zinc-800/40 shadow-2xl"
+          className="relative w-full rounded-[2.5rem] md:rounded-[3rem] cursor-pointer overflow-hidden bg-zinc-950 border border-zinc-800/40 shadow-2xl"
           data-cursor="hidden"
           onMouseMove={handleMouseMove}
           onMouseEnter={() => setIsHovered(true)}
@@ -37,35 +71,13 @@ function ProjectCard({ project }) {
             draggable={false}
           />
 
-          {/* 5x5 CSS 3D Tracker Overlay */}
-          <div className="absolute inset-0 z-30 grid grid-cols-5 grid-rows-5 pointer-events-auto">
-            {[...Array(25)].map((_, i) => (
-              <div
-                key={i}
-                className={`project-card-tracker tr-${i + 1} z-20`}
-              />
-            ))}
-
-            {/* The actual image element that tilts and matches container dimensions */}
-            <img
-              src={project.image}
-              alt={`${project.title} screenshot`}
-              className="project-card-inner absolute inset-0 w-full h-full object-cover rounded-[2.5rem] md:rounded-[3rem] pointer-events-none z-10 transition-transform duration-500 group-hover:scale-[1.02]"
-              draggable={false}
-            />
-          </div>
-
-          {/* Project Tags (Bottom Left of Image Card) */}
-          <div className="absolute bottom-6 left-6 z-40 flex flex-wrap gap-2 pointer-events-none">
-            {project.tags.map((tag, idx) => (
-              <span 
-                key={idx} 
-                className="bg-black/85 backdrop-blur-md text-white text-[10px] md:text-xs font-bold tracking-widest px-3.5 py-1.5 rounded-lg border border-white/10 uppercase"
-              >
-                {tag}
-              </span>
-            ))}
-          </div>
+          {/* The actual image element that matches container dimensions */}
+          <img
+            src={project.image}
+            alt={`${project.title} screenshot`}
+            className="absolute inset-0 w-full h-full object-cover rounded-[2.5rem] md:rounded-[3rem] pointer-events-none z-10 transition-transform duration-500 group-hover:scale-[1.02]"
+            draggable={false}
+          />
 
           {/* Floating 'VIEW' follow-badge */}
           {isHovered && (
@@ -85,14 +97,29 @@ function ProjectCard({ project }) {
       </div>
 
       {/* Text Info Below Image */}
-      <div className="flex flex-col text-left mt-6 font-sans">
-        <div className="flex justify-between items-center text-zinc-500 text-xs font-mono uppercase tracking-wider mb-2">
-          <span>{project.num} — {project.category}</span>
-          <span>{project.domain}</span>
-        </div>
-        <h3 className="text-xl md:text-2xl font-bold text-white group-hover:text-[#3ba2f6] transition-colors duration-300">
+      <div className="flex flex-col text-left mt-5 font-sans">
+        <h3 className="text-xl md:text-2xl font-bold text-white group-hover:text-[#3ba2f6] transition-colors duration-300 mb-3.5">
           {project.title}
         </h3>
+        
+        {/* Rounded Badges with Project Theme Colors */}
+        <div className="flex flex-wrap gap-2.5 items-center">
+          {/* Subtle Project Number Badge */}
+          <span className="text-xs font-mono text-zinc-500 bg-zinc-900/60 border border-zinc-800/80 px-2.5 py-1 rounded-md uppercase tracking-wider">
+            {project.num}
+          </span>
+          {pills.map((pill, idx) => {
+            const theme = getProjectTheme(project.id);
+            return (
+              <span 
+                key={idx} 
+                className={`text-[10px] md:text-xs ${theme.badgeBg} ${theme.badgeText} px-3.5 py-1.5 rounded-lg font-bold tracking-wider uppercase transition-transform duration-300 hover:scale-[1.03] cursor-default`}
+              >
+                {pill}
+              </span>
+            );
+          })}
+        </div>
       </div>
     </Link>
   );
@@ -104,59 +131,7 @@ export default function Projects() {
       id="projects"
       className="w-full bg-black text-white py-24 relative overflow-hidden rounded-[2.5rem] md:rounded-[3.5rem]"
     >
-      {/* Local CSS injection for 3D card tilt grid hover selectors */}
-      <style>{`
-        .project-card-container {
-          perspective: 1200px;
-        }
-        
-        .project-card-inner {
-          /* Smooth, elastic rotation transitions between trackers */
-          transition: transform 600ms cubic-bezier(0.1, 0.8, 0.3, 1);
-          transform-style: preserve-3d;
-        }
-        
-        .project-card-tracker {
-          width: 100%;
-          height: 100%;
-        }
-        
-        .project-card-tracker:hover ~ .project-card-inner {
-          /* Snippy but smooth tracking transition */
-          transition: transform 300ms cubic-bezier(0.1, 0.8, 0.3, 1);
-        }
-        
-        /* 5x5 Tilt Rotations */
-        .tr-1:hover ~ .project-card-inner { transform: rotateX(12deg) rotateY(-8deg); }
-        .tr-2:hover ~ .project-card-inner { transform: rotateX(12deg) rotateY(-4deg); }
-        .tr-3:hover ~ .project-card-inner { transform: rotateX(12deg) rotateY(0deg); }
-        .tr-4:hover ~ .project-card-inner { transform: rotateX(12deg) rotateY(4deg); }
-        .tr-5:hover ~ .project-card-inner { transform: rotateX(12deg) rotateY(8deg); }
-        
-        .tr-6:hover ~ .project-card-inner { transform: rotateX(6deg) rotateY(-8deg); }
-        .tr-7:hover ~ .project-card-inner { transform: rotateX(6deg) rotateY(-4deg); }
-        .tr-8:hover ~ .project-card-inner { transform: rotateX(6deg) rotateY(0deg); }
-        .tr-9:hover ~ .project-card-inner { transform: rotateX(6deg) rotateY(4deg); }
-        .tr-10:hover ~ .project-card-inner { transform: rotateX(6deg) rotateY(8deg); }
-        
-        .tr-11:hover ~ .project-card-inner { transform: rotateX(0deg) rotateY(-8deg); }
-        .tr-12:hover ~ .project-card-inner { transform: rotateX(0deg) rotateY(-4deg); }
-        .tr-13:hover ~ .project-card-inner { transform: rotateX(0deg) rotateY(0deg); }
-        .tr-14:hover ~ .project-card-inner { transform: rotateX(0deg) rotateY(4deg); }
-        .tr-15:hover ~ .project-card-inner { transform: rotateX(0deg) rotateY(8deg); }
-        
-        .tr-16:hover ~ .project-card-inner { transform: rotateX(-6deg) rotateY(-8deg); }
-        .tr-17:hover ~ .project-card-inner { transform: rotateX(-6deg) rotateY(-4deg); }
-        .tr-18:hover ~ .project-card-inner { transform: rotateX(-6deg) rotateY(0deg); }
-        .tr-19:hover ~ .project-card-inner { transform: rotateX(-6deg) rotateY(4deg); }
-        .tr-20:hover ~ .project-card-inner { transform: rotateX(-6deg) rotateY(8deg); }
-        
-        .tr-21:hover ~ .project-card-inner { transform: rotateX(-12deg) rotateY(-8deg); }
-        .tr-22:hover ~ .project-card-inner { transform: rotateX(-12deg) rotateY(-4deg); }
-        .tr-23:hover ~ .project-card-inner { transform: rotateX(-12deg) rotateY(0deg); }
-        .tr-24:hover ~ .project-card-inner { transform: rotateX(-12deg) rotateY(4deg); }
-        .tr-25:hover ~ .project-card-inner { transform: rotateX(-12deg) rotateY(8deg); }
-      `}</style>
+
 
       <div className="w-full px-6 md:px-12 lg:px-16">
 
@@ -170,11 +145,28 @@ export default function Projects() {
           </h2>
         </div>
 
-        {/* 2-Column Grid of Projects */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-20">
+        {/* Responsive Masonry Grid of Projects */}
+        {/* On mobile: single column keeping standard 1-2-3-4 sequential order */}
+        <div className="md:hidden flex flex-col gap-y-20">
           {PROJECTS_DATA.map((project) => (
             <ProjectCard key={project.id} project={project} />
           ))}
+        </div>
+
+        {/* On desktop: two independent columns to prevent height alignment gaps */}
+        <div className="hidden md:flex md:flex-row gap-x-12">
+          {/* Left Column */}
+          <div className="flex flex-col gap-y-20 w-1/2">
+            {PROJECTS_DATA.filter((_, idx) => idx % 2 === 0).map((project) => (
+              <ProjectCard key={project.id} project={project} />
+            ))}
+          </div>
+          {/* Right Column */}
+          <div className="flex flex-col gap-y-20 w-1/2">
+            {PROJECTS_DATA.filter((_, idx) => idx % 2 === 1).map((project) => (
+              <ProjectCard key={project.id} project={project} />
+            ))}
+          </div>
         </div>
 
       </div>

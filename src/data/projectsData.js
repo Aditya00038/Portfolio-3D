@@ -37,5 +37,18 @@ export const PROJECTS_DATA = [
     tags: ["UX AUDIT", "MOBILE DEV"],
     tech: ["React Native", "Python", "Firebase", "Scikit-Learn"],
     longDescription: "Glyvora leverages data analytics to monitor metabolic trends and suggest personalized meal choices. By connecting blood glucose updates with nutritional logs, the platform identifies glycemic trends to guide users toward healthier dietary habits."
+  },
+  {
+    id: 4,
+    num: "04",
+    category: "LAB TECH · INVENTORY",
+    title: "ChemStock — Chemical Inventory Management System",
+    description: "Designed and developed an automated laboratory inventory tracking portal that monitors chemical storage locations, tracks expiration dates, and maintains safety compliance records.",
+    github: "https://github.com/Aditya00038/Portfolio-3D",
+    image: "/project_thumbnails/ChemStock.png",
+    domain: "Lab Tech · Inventory",
+    tags: ["PRODUCT DESIGN", "MVP", "B2B PLATFORM"],
+    tech: ["React", "Express", "Node.js", "PostgreSQL"],
+    longDescription: "ChemStock is a specialized inventory management platform tailored for chemical storage and research laboratory compliance. It integrates real-time inventory tracking, chemical compatibility checks, dynamic shelf-life expiration alerts, and simplified Safety Data Sheet (SDS) logging to enhance lab safety and operational efficiency."
   }
 ];
