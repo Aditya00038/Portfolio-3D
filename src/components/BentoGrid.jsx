@@ -163,24 +163,66 @@ export default function BentoGrid() {
         </motion.div>
 
         {/* Col 1, Row 2: Languages (Positioned below Local Time) */}
-        <motion.div variants={itemVariants} className="bg-[#161616] rounded-3xl p-5 flex flex-col h-[170px] border border-white/5 relative overflow-hidden group">
-          <div className="flex items-center text-zinc-500 gap-2 mb-4 text-sm font-medium">
-            <Languages size={16} />
-            <span>I speak</span>
+        <motion.div 
+          variants={itemVariants} 
+          className="bg-[#161616] rounded-3xl p-5 flex flex-col h-[170px] border border-white/5 relative overflow-hidden group select-none"
+        >
+          <div className="flex items-center text-zinc-400 gap-2 mb-4 text-sm font-bold">
+            <Languages size={16} className="text-zinc-400" />
+            <span>Languages</span>
           </div>
-          <div className="flex flex-col gap-2 mt-auto w-full">
-            <div className="flex justify-between items-center w-full">
-              <span className="text-zinc-200 font-medium">Marathi</span>
-              <span className="text-zinc-600 text-sm">Native</span>
-            </div>
-            <div className="flex justify-between items-center w-full">
-              <span className="text-zinc-200 font-medium">Hindi</span>
-              <span className="text-zinc-600 text-sm">Fluent</span>
-            </div>
-            <div className="flex justify-between items-center w-full">
-              <span className="text-zinc-200 font-medium">English</span>
-              <span className="text-zinc-600 text-sm">Fluent</span>
-            </div>
+          
+          {/* Scattered Interactive Pills exactly matching the user's design style */}
+          <div className="relative w-full h-full">
+            <motion.div 
+              initial={{ rotate: -6 }}
+              whileHover={{ scale: 1.08, rotate: 0, zIndex: 10 }}
+              transition={{ type: "spring", stiffness: 300, damping: 15 }}
+              className="absolute bg-white text-zinc-950 border border-zinc-200/60 shadow-[0_4px_12px_rgba(0,0,0,0.04)] px-3 py-1.5 rounded-full text-xs font-semibold cursor-pointer"
+              style={{ top: '2%', left: '4%' }}
+            >
+              Marathi
+            </motion.div>
+            
+            <motion.div 
+              initial={{ rotate: 5 }}
+              whileHover={{ scale: 1.08, rotate: 0, zIndex: 10 }}
+              transition={{ type: "spring", stiffness: 300, damping: 15 }}
+              className="absolute bg-white text-zinc-950 border border-zinc-200/60 shadow-[0_4px_12px_rgba(0,0,0,0.04)] px-3 py-1.5 rounded-full text-xs font-semibold cursor-pointer"
+              style={{ top: '0%', right: '4%' }}
+            >
+              English
+            </motion.div>
+            
+            <motion.div 
+              initial={{ rotate: -3 }}
+              whileHover={{ scale: 1.08, rotate: 0, zIndex: 10 }}
+              transition={{ type: "spring", stiffness: 300, damping: 15 }}
+              className="absolute bg-white text-zinc-950 border border-zinc-200/60 shadow-[0_4px_12px_rgba(0,0,0,0.04)] px-3.5 py-1.5 rounded-full text-xs font-semibold cursor-pointer"
+              style={{ top: '28%', left: '34%' }}
+            >
+              Hindi
+            </motion.div>
+            
+            <motion.div 
+              initial={{ rotate: 4 }}
+              whileHover={{ scale: 1.08, rotate: 0, zIndex: 10 }}
+              transition={{ type: "spring", stiffness: 300, damping: 15 }}
+              className="absolute bg-white text-zinc-500 border border-zinc-200/60 shadow-[0_4px_12px_rgba(0,0,0,0.04)] px-3 py-1 rounded-full text-[10px] font-bold tracking-wide uppercase cursor-pointer"
+              style={{ bottom: '10%', left: '6%' }}
+            >
+              Native
+            </motion.div>
+            
+            <motion.div 
+              initial={{ rotate: -5 }}
+              whileHover={{ scale: 1.08, rotate: 0, zIndex: 10 }}
+              transition={{ type: "spring", stiffness: 300, damping: 15 }}
+              className="absolute bg-white text-zinc-500 border border-zinc-200/60 shadow-[0_4px_12px_rgba(0,0,0,0.04)] px-3 py-1 rounded-full text-[10px] font-bold tracking-wide uppercase cursor-pointer"
+              style={{ bottom: '12%', right: '6%' }}
+            >
+              Fluent
+            </motion.div>
           </div>
         </motion.div>
 

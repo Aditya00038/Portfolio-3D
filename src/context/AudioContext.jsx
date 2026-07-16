@@ -4,7 +4,7 @@ const AudioContext = createContext(null);
 
 export const playlist = [
   { id: 0, title: 'Aria Math (Minecraft)', url: '/Musics/Aria Math from Minecraft.mp3', duration: 310 },
-  { id: 1, title: 'GTA IV Theme Song', url: '/Musics/GTA IV - Theme Song .webm', duration: 141 },
+  { id: 1, title: 'GTA IV Theme Song', url: '/Musics/GTA IV - Theme Song .webm', duration: 170 },
   { id: 2, title: 'GTA V Soundtrack', url: '/Musics/GTA V - Welcome to Los Santos Soundtrack.webm', duration: 180 }
 ];
 
@@ -22,8 +22,9 @@ export function AudioProvider({ children }) {
     currentTrackRef.current = currentTrack;
   }, [currentTrack]);
 
-  // Clean up audio on unmount
+  // Clean up audio on unmount and initialize on mount
   useEffect(() => {
+    getAudio();
     return () => {
       if (audioRef.current) {
         audioRef.current.pause();
@@ -36,6 +37,7 @@ export function AudioProvider({ children }) {
     if (!audioRef.current) {
       const audio = new Audio(currentTrackRef.current.url);
       audio.loop = false;
+      audio.preload = 'metadata';
 
       audio.addEventListener('timeupdate', () => {
         setTimer(Math.floor(audio.currentTime));
@@ -43,6 +45,21 @@ export function AudioProvider({ children }) {
 
       audio.addEventListener('ended', () => {
         playNext();
+      });
+
+      audio.addEventListener('loadedmetadata', () => {
+        if (audio.duration && !isNaN(audio.duration)) {
+          setCurrentTrack(prev => {
+            // Check if the current audio src matches the track's url to prevent race conditions
+            if (decodeURIComponent(audio.src).endsWith(prev.url)) {
+              return {
+                ...prev,
+                duration: Math.floor(audio.duration)
+              };
+            }
+            return prev;
+          });
+        }
       });
 
       audioRef.current = audio;

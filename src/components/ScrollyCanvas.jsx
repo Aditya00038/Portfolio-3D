@@ -559,12 +559,12 @@ export default function ScrollyCanvas() {
                     View Resume
                   </ShimmerButton>
                 </a>
-                <div 
-                  onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })} 
+                <Link 
+                  to="/#contact" 
                   className="cursor-pointer"
                 >
                   <LiquidMetalButton label="Contact Me" />
-                </div>
+                </Link>
               </div>
             </div>
           </motion.div>

@@ -1,6 +1,7 @@
 import React, { useCallback, useLayoutEffect, useRef, useState } from 'react';
 import { gsap } from 'gsap';
 import './StaggeredMenu.css';
+import { Link } from 'react-router-dom';
 
 export const StaggeredMenu = ({
   position = 'right',
@@ -407,21 +408,35 @@ export const StaggeredMenu = ({
             {items && items.length ? (
               items.map((it, idx) => (
                 <li className="sm-panel-itemWrap" key={it.label + idx}>
-                  <a 
-                    className="sm-panel-item" 
-                    href={it.link} 
-                    aria-label={it.ariaLabel} 
-                    data-index={idx + 1}
-                    onClick={(e) => {
-                      if (it.link === '#home') {
-                        e.preventDefault();
-                        window.scrollTo({ top: 0, behavior: 'smooth' });
-                      }
-                      closeMenu();
-                    }}
-                  >
-                    <span className="sm-panel-itemLabel">{it.label}</span>
-                  </a>
+                  {it.link.startsWith('/') ? (
+                    <Link
+                      className="sm-panel-item"
+                      to={it.link}
+                      aria-label={it.ariaLabel}
+                      data-index={idx + 1}
+                      onClick={() => {
+                        closeMenu();
+                      }}
+                    >
+                      <span className="sm-panel-itemLabel">{it.label}</span>
+                    </Link>
+                  ) : (
+                    <a
+                      className="sm-panel-item"
+                      href={it.link}
+                      aria-label={it.ariaLabel}
+                      data-index={idx + 1}
+                      onClick={(e) => {
+                        if (it.link === '#home') {
+                          e.preventDefault();
+                          window.scrollTo({ top: 0, behavior: 'smooth' });
+                        }
+                        closeMenu();
+                      }}
+                    >
+                      <span className="sm-panel-itemLabel">{it.label}</span>
+                    </a>
+                  )}
                 </li>
               ))
             ) : (

@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { FiArrowRight, FiMail } from 'react-icons/fi';
 import { FaGithub, FaLinkedinIn, FaInstagram } from 'react-icons/fa';
 import styled from 'styled-components';
-import { subscribeToLikes, incrementLikes } from '../firebase';
+import { useLocation } from 'react-router-dom';
 
 export default function Footer() {
   const [showContact, setShowContact] = useState(false);
@@ -13,6 +13,20 @@ export default function Footer() {
     email: '',
     message: ''
   });
+  
+  const location = useLocation();
+
+  useEffect(() => {
+    if (location.hash === '#contact') {
+      setShowContact(true);
+      setTimeout(() => {
+        const element = document.getElementById('contact-form-section');
+        if (element) {
+          element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      }, 150);
+    }
+  }, [location.hash]);
 
   // Pune, India Live Ticking Clock Standard Hook
   useEffect(() => {
@@ -49,6 +63,9 @@ export default function Footer() {
       message: ''
     });
     setShowContact(false);
+    if (window.location.hash === '#contact') {
+      window.history.pushState(null, '', window.location.pathname);
+    }
   };
 
   // Toggle contact drawer and visually redirect the user by smooth scrolling directly to the form
@@ -63,85 +80,14 @@ export default function Footer() {
           element.scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
       }, 120); // slight delay to let Framer Motion mount the drawer
+    } else {
+      if (window.location.hash === '#contact') {
+        window.history.pushState(null, '', window.location.pathname);
+      }
     }
   };
 
-  // Mechanical switch clicking sound feedback for Like button
-  const playLikeClickSound = () => {
-    try {
-      const clickCtx = new (window.AudioContext || window.webkitAudioContext)();
-      const osc = clickCtx.createOscillator();
-      const gain = clickCtx.createGain();
-      
-      osc.type = 'sine';
-      osc.frequency.setValueAtTime(2200, clickCtx.currentTime);
-      osc.frequency.exponentialRampToValueAtTime(100, clickCtx.currentTime + 0.015);
-      
-      gain.gain.setValueAtTime(0.1, clickCtx.currentTime);
-      gain.gain.exponentialRampToValueAtTime(0.001, clickCtx.currentTime + 0.015);
-      
-      osc.connect(gain);
-      gain.connect(clickCtx.destination);
-      osc.start();
-      osc.stop(clickCtx.currentTime + 0.02);
-    } catch (e) { }
-  };
 
-  // Like Button component linked to real-time Firebase counts
-  const LikeButton = () => {
-    const [liked, setLiked] = useState(false);
-    const [likesCount, setLikesCount] = useState(38);
-    const [isAnimating, setIsAnimating] = useState(false);
-
-    useEffect(() => {
-      // Load user's past liked state from localStorage
-      const hasLiked = localStorage.getItem('aditya_portfolio_has_liked') === 'true';
-      setLiked(hasLiked);
-
-      // Subscribe to live database count (falls back to local storage automatically if Firebase is unconfigured)
-      const unsubscribe = subscribeToLikes((count) => {
-        setLikesCount(count);
-      });
-
-      return () => unsubscribe();
-    }, []);
-
-    const handleToggle = () => {
-      playLikeClickSound();
-      
-      const nextLiked = !liked;
-      setLiked(nextLiked);
-      localStorage.setItem('aditya_portfolio_has_liked', nextLiked ? 'true' : 'false');
-      
-      // Trigger animation on liking
-      if (nextLiked) {
-        setIsAnimating(true);
-        setTimeout(() => setIsAnimating(false), 250);
-      }
-      
-      // Update global count in database
-      incrementLikes(nextLiked);
-    };
-
-    // Calculate display sliding values dynamically
-    const valOne = liked ? likesCount - 1 : likesCount;
-    const valTwo = liked ? likesCount : likesCount + 1;
-
-    return (
-      <LikeWrapper>
-        <div className={`like-button ${liked ? 'liked' : ''} ${isAnimating ? 'animating' : ''}`} onClick={handleToggle}>
-          <label className="like">
-            <svg className="like-icon" fillRule="nonzero" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-              <path d="m11.645 20.91-.007-.003-.022-.012a15.247 15.247 0 0 1-.383-.218 25.18 25.18 0 0 1-4.244-3.17C4.688 15.36 2.25 12.174 2.25 8.25 2.25 5.322 4.714 3 7.688 3A5.5 5.5 0 0 1 12 5.052 5.5 5.5 0 0 1 16.313 3c2.973 0 5.437 2.322 5.437 5.25 0 3.925-2.438 7.111-4.739 9.256a25.175 25.175 0 0 1-4.244 3.17 15.247 15.247 0 0 1-.383.219l-.022.012-.007.004-.003.001a.752.752 0 0 1-.704 0l-.003-.001Z" />
-            </svg>
-            <span className="like-text">Likes</span>
-          </label>
-          <span className="like-count one">{valOne}</span>
-          <span className="like-count two">{valTwo}</span>
-        </div>
-      </LikeWrapper>
-    );
-  };
 
   return (
     <footer className="w-full bg-black px-4 md:px-8 pt-16 md:pt-24 font-['Inter',sans-serif] relative z-30">
@@ -198,7 +144,7 @@ export default function Footer() {
               </div>
             </div>
 
-            {/* Social Card (Houses LikeButton) */}
+            {/* Social Card */}
             <div className="bg-[#18181b] rounded-[2rem] p-8 md:p-12 flex flex-col justify-between">
               <p className="text-xs text-zinc-500 tracking-widest font-bold uppercase mb-8">Social</p>
               <div className="flex flex-row items-center justify-between gap-4 flex-wrap">
@@ -208,9 +154,6 @@ export default function Footer() {
                   <a href="https://instagram.com/aditya._.suryawanshi" target="_blank" rel="noreferrer" className="hover:text-white transition-colors"><FaInstagram className="w-6 h-6" /></a>
                   <a href="mailto:adityasuryawanshi038@gmail.com" className="hover:text-white transition-colors"><FiMail className="w-6 h-6" /></a>
                 </div>
-                
-                {/* Like Button component rendering here */}
-                <LikeButton />
               </div>
             </div>
 
@@ -396,96 +339,4 @@ export default function Footer() {
   );
 }
 
-const LikeWrapper = styled.div`
-  #heart {
-    display: none;
-  }
 
-  .like-button {
-    position: relative;
-    cursor: pointer;
-    display: flex;
-    height: 48px;
-    width: 136px;
-    border-radius: 16px;
-    border: none;
-    background-color: #1d1d1d;
-    overflow: hidden;
-    box-shadow:
-      inset -2px -2px 5px rgba(255, 255, 255, 0.2),
-      inset 2px 2px 5px rgba(0, 0, 0, 0.1),
-      4px 4px 10px rgba(0, 0, 0, 0.4),
-      -2px -2px 8px rgba(255, 255, 255, 0.1);
-    user-select: none;
-  }
-
-  .like {
-    width: 70%;
-    height: 100%;
-    display: flex;
-    cursor: pointer;
-    align-items: center;
-    justify-content: space-evenly;
-  }
-
-  .like-icon {
-    fill: #505050;
-    height: 28px;
-    width: 28px;
-  }
-
-  .like-text {
-    color: #fcfcfc;
-    font-size: 16px;
-    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-  }
-
-  .like-count {
-    position: absolute;
-    right: 0;
-    width: 30%;
-    height: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    color: #717070;
-    font-size: 16px;
-    border-left: 2px solid #4e4e4e;
-    transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1), color 0.35s ease;
-  }
-
-  .like-count.one {
-    transform: translateY(0);
-  }
-
-  .like-count.two {
-    transform: translateY(48px);
-  }
-
-  .liked .like-icon {
-    fill: #fc4e4e;
-    transition: fill 0.2s ease-out;
-  }
-
-  .animating .like-icon {
-    animation: enlarge 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275) 1;
-  }
-
-  .liked .like-count.two {
-    transform: translateY(0);
-    color: #fcfcfc;
-  }
-
-  .liked .like-count.one {
-    transform: translateY(-48px);
-  }
-
-  @keyframes enlarge {
-    0% {
-      transform: scale(0.5);
-    }
-    100% {
-      transform: scale(1.2);
-    }
-  }
-`;

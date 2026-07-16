@@ -4,10 +4,10 @@ import { AnimatePresence } from 'motion/react'
 import LoadingScreen from './components/LoadingScreen'
 import Navbar from './components/Navbar'
 import SmoothScroll from './components/SmoothScroll'
-import CustomCursor from './components/CustomCursor'
 
 import Home from './pages/Home'
 import About from './pages/About'
+import ProjectDetails from './pages/ProjectDetails'
 import ScrollToTop from './components/ScrollToTop'
 import { AudioProvider } from './context/AudioContext'
 
@@ -18,7 +18,6 @@ function App() {
     <BrowserRouter>
       <AudioProvider>
         <ScrollToTop />
-        <CustomCursor />
         
         <AnimatePresence>
           {isLoading && (
@@ -33,6 +32,7 @@ function App() {
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/about" element={<About />} />
+              <Route path="/project/:id" element={<ProjectDetails />} />
             </Routes>
           </div>
         </SmoothScroll>
