@@ -19,7 +19,7 @@ export const PROJECTS_DATA = [
     title: "DhanSathi — Smart Savings Platform",
     description: "An AI-powered personal financial tracker that helps users build healthy savings habits through goal-oriented saving structures and predictive expense analytics.",
     github: "https://github.com/Aditya00038/Portfolio-3D",
-    image: "/project_thumbnails/DhanSathi.jpeg",
+    image: "/project_thumbnails/dhansathi.jpeg",
     domain: "Fintech · AI Platform",
     tags: ["USABILITY TESTER", "USER RESEARCH"],
     tech: ["React", "Redux", "FastAPI", "Python"],
