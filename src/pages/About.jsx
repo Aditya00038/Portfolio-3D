@@ -60,7 +60,7 @@ export default function About() {
     <div className="w-full bg-black min-h-screen text-white relative overflow-hidden">
       {/* Content layer: vertically and horizontally centered with top clearance for fixed navbar */}
       <div className="w-full flex flex-col justify-center items-center pt-32 md:pt-36 pb-12 px-6 md:px-12 relative z-20">
-        
+
         {/* Main wrapper holding the 2 columns (centered vertically relative to each other) */}
         <motion.div
           variants={containerVariants}
@@ -71,7 +71,7 @@ export default function About() {
           {/* Left Column: Text description */}
           <div className="flex-1 w-full flex flex-col items-start justify-center">
             {/* Philosophical Paragraph Blocks with Loose Line Heights */}
-            <motion.div 
+            <motion.div
               variants={itemVariants}
               className="space-y-4 text-zinc-400 text-[1.05rem] md:text-[1.15rem] leading-[1.75] md:leading-[1.85] font-light"
               style={{ fontFamily: "ui-sans-serif, system-ui, -apple-system, Inter, sans-serif" }}
@@ -92,16 +92,16 @@ export default function About() {
           </div>
 
           {/* Right Column: Interactive Widescreen Photo Stack */}
-          <motion.div 
+          <motion.div
             variants={itemVariants}
             className="w-[280px] lg:w-[320px] h-[370px] md:h-[400px] lg:h-[420px] flex-shrink-0 relative group self-center md:self-auto"
           >
             {/* Subtle glow border behind the stack */}
             <div className="absolute inset-0 bg-gradient-to-tr from-indigo-500/20 to-purple-500/20 rounded-[1.5rem] blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
-            
-            <PhotoStack 
-              photos={photosList} 
-              className="w-full h-full relative z-10" 
+
+            <PhotoStack
+              photos={photosList}
+              className="w-full h-full relative z-10"
             />
           </motion.div>
         </motion.div>
@@ -112,7 +112,7 @@ export default function About() {
 
       {/* Horizontal Pinning Scroll Gallery (Full screen width edge-to-edge!) */}
       <HorizontalGallery />
-      
+
       <Footer />
     </div>
   );

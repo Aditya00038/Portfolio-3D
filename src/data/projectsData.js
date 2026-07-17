@@ -43,12 +43,25 @@ export const PROJECTS_DATA = [
     num: "04",
     category: "LAB TECH · INVENTORY",
     title: "ChemStock — Chemical Inventory Management System",
-    description: "Designed and developed an automated laboratory inventory tracking portal that monitors chemical storage locations, tracks expiration dates, and maintains safety compliance records.",
+    description: "Production-grade chemistry inventory and audit management system designed for real laboratory workflows.",
     github: "https://github.com/Aditya00038/Portfolio-3D",
+    livePreview: "https://github.com/Aditya00038/Portfolio-3D",
     image: "/project_thumbnails/ChemStock.png",
     domain: "Lab Tech · Inventory",
     tags: ["PRODUCT DESIGN", "MVP", "B2B PLATFORM"],
-    tech: ["React", "Express", "Node.js", "PostgreSQL"],
-    longDescription: "ChemStock is a specialized inventory management platform tailored for chemical storage and research laboratory compliance. It integrates real-time inventory tracking, chemical compatibility checks, dynamic shelf-life expiration alerts, and simplified Safety Data Sheet (SDS) logging to enhance lab safety and operational efficiency."
+    tech: ["Next.js", "TypeScript", "Firebase", "Tailwind", "PubChem API", "PWA"],
+    problem: "Most academic laboratories still manage chemicals and equipment through manual registers or spreadsheets, leading to poor stock visibility, missing audit trails, inefficient reporting, and operational confusion.",
+    solution: "ChemStock digitizes laboratory workflows through role-based access, real-time inventory tracking, audit logs, equipment management, reporting systems, and controlled administrative workflows.",
+    features: [
+      "Firebase Authentication & RBAC",
+      "Chemical Inventory Management",
+      "Equipment Checkout & Return System",
+      "Audit Logs & Activity Tracking",
+      "Low Stock Alerts",
+      "PubChem API Integration",
+      "Offline-ready PWA support"
+    ],
+    engineeringDecisions: "Used Firebase Authentication and Firestore for real-time data handling and simplified role-based workflows. Implemented RBAC to prevent accidental modifications and separate administrative access. Integrated PubChem API to provide structured chemical information directly inside workflows.",
+    impact: "ChemStock replaced manual laboratory inventory workflows with structured digital operations including audit trails, stock tracking, and equipment management for real users inside a college chemistry laboratory."
   }
 ];

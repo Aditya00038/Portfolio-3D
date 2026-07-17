@@ -13,7 +13,7 @@ export default function Footer() {
     email: '',
     message: ''
   });
-  
+
   const location = useLocation();
 
   useEffect(() => {
@@ -173,15 +173,10 @@ export default function Footer() {
             >
               <div className="w-full max-w-6xl mx-auto flex flex-col pt-4">
 
-                {/* Heading */}
-                <h2 className="text-2xl md:text-4xl lg:text-[2.6rem] font-bold text-white mb-16 tracking-tight leading-tight select-none">
-                  Open for freelance projects & full-time roles
-                </h2>
+                <div className="w-full mb-16 flex justify-center">
 
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 md:gap-20 mb-16">
-
-                  {/* Left Column: Contact Form */}
-                  <form onSubmit={handleSubmit} className="flex flex-col gap-6 w-full">
+                  {/* Contact Form */}
+                  <form onSubmit={handleSubmit} className="flex flex-col gap-6 w-full max-w-xl">
 
                     <div className="flex flex-col gap-2">
                       <label className="text-xs text-zinc-500 font-bold uppercase tracking-wider">Name</label>
@@ -230,55 +225,6 @@ export default function Footer() {
                     </button>
 
                   </form>
-
-                  {/* Right Column: Dynamic Social Rows */}
-                  <div className="flex flex-col justify-center gap-6">
-
-                    {/* LinkedIn */}
-                    <a href="https://linkedin.com/in/aditya00038" target="_blank" rel="noreferrer" className="flex items-center gap-4 group">
-                      <div className="w-12 h-12 rounded-full border border-zinc-800/80 flex items-center justify-center text-zinc-400 group-hover:text-white group-hover:border-zinc-600 transition-colors">
-                        <FaLinkedinIn className="w-5 h-5" />
-                      </div>
-                      <div>
-                        <p className="text-sm font-semibold text-white">LinkedIn</p>
-                        <p className="text-xs text-zinc-500 mt-0.5">@ADITYASURYAWANSHI</p>
-                      </div>
-                    </a>
-
-                    {/* GitHub */}
-                    <a href="https://github.com/Aditya00038" target="_blank" rel="noreferrer" className="flex items-center gap-4 group">
-                      <div className="w-12 h-12 rounded-full border border-zinc-800/80 flex items-center justify-center text-zinc-400 group-hover:text-white group-hover:border-zinc-600 transition-colors">
-                        <FaGithub className="w-5 h-5" />
-                      </div>
-                      <div>
-                        <p className="text-sm font-semibold text-white">GitHub</p>
-                        <p className="text-xs text-zinc-500 mt-0.5">@ADITYA00038</p>
-                      </div>
-                    </a>
-
-                    {/* Gmail */}
-                    <a href="mailto:adityasuryawanshi038@gmail.com" className="flex items-center gap-4 group">
-                      <div className="w-12 h-12 rounded-full border border-zinc-800/80 flex items-center justify-center text-zinc-400 group-hover:text-white group-hover:border-zinc-600 transition-colors">
-                        <FiMail className="w-5 h-5" />
-                      </div>
-                      <div>
-                        <p className="text-sm font-semibold text-white">Gmail</p>
-                        <p className="text-xs text-zinc-500 mt-0.5">adityasuryawanshi038@gmail.com</p>
-                      </div>
-                    </a>
-
-                    {/* Instagram */}
-                    <a href="https://instagram.com/aditya._.suryawanshi" target="_blank" rel="noreferrer" className="flex items-center gap-4 group">
-                      <div className="w-12 h-12 rounded-full border border-zinc-800/80 flex items-center justify-center text-zinc-400 group-hover:text-white group-hover:border-zinc-600 transition-colors">
-                        <FaInstagram className="w-5 h-5" />
-                      </div>
-                      <div>
-                        <p className="text-sm font-semibold text-white">Instagram</p>
-                        <p className="text-xs text-zinc-500 mt-0.5">@ADITYA._.SURYAWANSHI</p>
-                      </div>
-                    </a>
-
-                  </div>
 
                 </div>
 

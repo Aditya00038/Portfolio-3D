@@ -26,10 +26,10 @@ export default function ProjectDetails() {
       <div className="absolute bottom-0 right-1/4 w-[500px] h-[500px] bg-purple-500/10 rounded-full blur-3xl pointer-events-none" />
 
       <div className="max-w-6xl mx-auto px-6 md:px-12 lg:px-20 relative z-10">
-        
+
         {/* Back Button */}
-        <Link 
-          to="/" 
+        <Link
+          to="/"
           className="inline-flex items-center gap-2 text-zinc-400 hover:text-white transition-colors duration-300 font-semibold text-sm mb-12 group cursor-pointer"
         >
           <FiArrowLeft className="transform group-hover:-translate-x-1 transition-transform" />
@@ -39,7 +39,7 @@ export default function ProjectDetails() {
         {/* Header Block */}
         <div className="flex flex-col text-left mb-12">
           <span className="text-xs md:text-sm font-mono text-zinc-500 uppercase tracking-widest mb-3">
-            {project.num} — {project.category}
+            {project.category}
           </span>
           <h1 className="text-4xl md:text-6xl font-sans font-black tracking-tight leading-tight mb-6">
             {project.title}
@@ -48,22 +48,22 @@ export default function ProjectDetails() {
         </div>
 
         {/* Large Mockup Image Showcase */}
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
           className="w-full relative rounded-3xl overflow-hidden border border-zinc-800 shadow-[0_20px_50px_rgba(0,0,0,0.8)] bg-zinc-950 mb-16"
         >
-          <img 
-            src={project.image} 
-            alt={project.title} 
+          <img
+            src={project.image}
+            alt={project.title}
             className="w-full h-auto block rounded-3xl"
           />
         </motion.div>
 
         {/* Project Meta and Description Bento */}
         <div className="grid grid-cols-1 lg:grid-cols-[1fr_2fr] gap-12 lg:gap-20 items-start">
-          
+
           {/* Side Info Box */}
           <div className="flex flex-col gap-8 text-left bg-zinc-900/40 border border-zinc-800/60 p-8 rounded-3xl backdrop-blur-md">
             <div>
@@ -75,8 +75,8 @@ export default function ProjectDetails() {
               <h4 className="text-xs text-zinc-500 font-mono tracking-wider uppercase mb-3">Tech Stack</h4>
               <div className="flex flex-wrap gap-2">
                 {project.tech.map((t, idx) => (
-                  <span 
-                    key={idx} 
+                  <span
+                    key={idx}
                     className="bg-zinc-800/80 text-zinc-300 border border-zinc-700/50 px-3 py-1 rounded-md text-xs font-medium cursor-default"
                   >
                     {t}
@@ -89,8 +89,8 @@ export default function ProjectDetails() {
               <h4 className="text-xs text-zinc-500 font-mono tracking-wider uppercase mb-3">Roles / Attributes</h4>
               <div className="flex flex-wrap gap-2">
                 {project.tags.map((tag, idx) => (
-                  <span 
-                    key={idx} 
+                  <span
+                    key={idx}
                     className="bg-blue-500/10 text-blue-400 border border-blue-500/20 px-3 py-1 rounded-md text-[10px] font-bold tracking-widest uppercase cursor-default"
                   >
                     {tag}
@@ -99,17 +99,44 @@ export default function ProjectDetails() {
               </div>
             </div>
 
-            <div className="pt-4 border-t border-zinc-800">
-              <a 
-                href={project.github}
-                target="_blank"
-                rel="noreferrer"
-                className="w-full inline-flex items-center justify-center gap-2 bg-white hover:bg-zinc-200 text-black font-semibold px-6 py-3.5 rounded-xl transition-all shadow-lg text-sm"
-              >
-                <FiGithub size={16} />
-                <span>Source Code</span>
-                <FiExternalLink size={14} className="opacity-60" />
-              </a>
+            <div className="pt-4 border-t border-zinc-800 flex flex-col gap-3">
+              {project.livePreview ? (
+                <>
+                  <a
+                    href={project.livePreview}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="w-full inline-flex items-center justify-center gap-2 bg-white hover:bg-zinc-200 text-black font-semibold px-6 py-3.5 rounded-xl transition-all shadow-lg text-sm"
+                  >
+                    <FiExternalLink size={16} />
+                    <span>Live Preview</span>
+                  </a>
+                  {project.github && (
+                    <a
+                      href={project.github}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="w-full inline-flex items-center justify-center gap-2 bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 text-white font-semibold px-6 py-3.5 rounded-xl transition-all shadow-lg text-sm"
+                    >
+                      <FiGithub size={16} />
+                      <span>Source Code</span>
+                    </a>
+                  )}
+                </>
+              ) : (
+                project.github && (
+                  <a
+                    href={project.github}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="w-full inline-flex items-center justify-center gap-2 bg-white hover:bg-zinc-200 text-black font-semibold px-6 py-3.5 rounded-xl transition-all shadow-lg text-sm"
+                  >
+                    <FiGithub size={16} />
+                    <span>Source Code</span>
+                    <FiExternalLink size={14} className="opacity-60" />
+                  </a>
+                )
+              )}
             </div>
           </div>
 
@@ -119,11 +146,48 @@ export default function ProjectDetails() {
             <p className="text-zinc-400 text-lg leading-relaxed mb-8">
               {project.description}
             </p>
-            
-            <h3 className="text-2xl font-bold text-white mb-6">The Story & Implementation</h3>
-            <p className="text-zinc-400 text-base leading-relaxed whitespace-pre-line mb-8">
-              {project.longDescription}
-            </p>
+
+            {project.problem ? (
+              <>
+                <h3 className="text-2xl font-bold text-white mb-4 mt-6">The Problem</h3>
+                <p className="text-zinc-400 text-base leading-relaxed mb-8">
+                  {project.problem}
+                </p>
+
+                <h3 className="text-2xl font-bold text-white mb-4">The Solution</h3>
+                <p className="text-zinc-400 text-base leading-relaxed mb-8">
+                  {project.solution}
+                </p>
+
+                {project.features && (
+                  <>
+                    <h3 className="text-2xl font-bold text-white mb-4">Key Features</h3>
+                    <ul className="list-disc list-inside text-zinc-400 text-base leading-relaxed mb-8 space-y-2">
+                      {project.features.map((feat, idx) => (
+                        <li key={idx} className="pl-2">{feat}</li>
+                      ))}
+                    </ul>
+                  </>
+                )}
+
+                <h3 className="text-2xl font-bold text-white mb-4">Engineering Decisions</h3>
+                <p className="text-zinc-400 text-base leading-relaxed mb-8">
+                  {project.engineeringDecisions}
+                </p>
+
+                <h3 className="text-2xl font-bold text-white mb-4">Impact</h3>
+                <p className="text-zinc-400 text-base leading-relaxed mb-8">
+                  {project.impact}
+                </p>
+              </>
+            ) : (
+              <>
+                <h3 className="text-2xl font-bold text-white mb-6">The Story & Implementation</h3>
+                <p className="text-zinc-400 text-base leading-relaxed whitespace-pre-line mb-8">
+                  {project.longDescription}
+                </p>
+              </>
+            )}
           </div>
 
         </div>

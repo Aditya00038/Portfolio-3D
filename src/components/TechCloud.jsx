@@ -103,7 +103,7 @@ export default function TechCloud() {
     const updatePhysics = () => {
       const elapsed = (Date.now() - start) / 1000; // in seconds
 
-      setItems(prevItems => 
+      setItems(prevItems =>
         prevItems.map((item, idx) => {
           // If being dragged, let Framer Motion handle it completely
           if (idx === draggingIndex) return item;
@@ -129,7 +129,7 @@ export default function TechCloud() {
             if (distance < repulsionRadius) {
               const force = (repulsionRadius - distance) / repulsionRadius;
               const pushStrength = 55; // push strength in px
-              
+
               targetX += (dx / distance) * force * pushStrength;
               targetY += (dy / distance) * force * pushStrength;
             }
@@ -140,7 +140,7 @@ export default function TechCloud() {
           const limitMaxX = width - itemSize - 20; // 440px
           const limitMinY = 20;
           const limitMaxY = height - itemSize - 20; // 420px
-          
+
           const clampedX = Math.max(limitMinX, Math.min(limitMaxX, targetX));
           const clampedY = Math.max(limitMinY, Math.min(limitMaxY, targetY));
 
@@ -224,7 +224,7 @@ export default function TechCloud() {
         {/* Dynamic Nodes */}
         {items.map((item, idx) => {
           const isDragging = idx === draggingIndex;
-          
+
           return (
             <motion.div
               key={item.name}

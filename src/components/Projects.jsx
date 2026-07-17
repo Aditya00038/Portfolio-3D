@@ -7,28 +7,28 @@ const getProjectTheme = (id) => {
   switch (id) {
     case 1: // Parivartan (Civic Tech)
       return {
-        badgeBg: 'bg-[#a7f3d0]',
-        badgeText: 'text-[#064e3b]'
+        badgeBg: 'bg-[#7D00E9]',
+        badgeText: 'text-white'
       };
     case 2: // DhanSathi (Fintech)
       return {
-        badgeBg: 'bg-[#93c5fd]',
-        badgeText: 'text-[#1a365d]'
+        badgeBg: 'bg-[#ff6b00]',
+        badgeText: 'text-white'
       };
     case 3: // Glyvora (Health Tech)
       return {
-        badgeBg: 'bg-[#fbcfe8]',
-        badgeText: 'text-[#701a75]'
+        badgeBg: 'bg-white',
+        badgeText: 'text-black'
       };
     case 4: // ChemStock (Lab Tech / Inventory)
       return {
-        badgeBg: 'bg-[#8cd19d]',
-        badgeText: 'text-[#1f5c35]'
+        badgeBg: 'bg-zinc-800/60',
+        badgeText: 'text-zinc-300'
       };
     default:
       return {
-        badgeBg: 'bg-zinc-800',
-        badgeText: 'text-zinc-200'
+        badgeBg: 'bg-zinc-850',
+        badgeText: 'text-zinc-300'
       };
   }
 };
@@ -50,8 +50,8 @@ function ProjectCard({ project }) {
   const pills = [...domainPills, ...tagPills];
 
   return (
-    <Link 
-      to={`/project/${project.id}`} 
+    <Link
+      to={`/project/${project.id}`}
       className="flex flex-col w-full group no-underline"
     >
       {/* Image Panel */}
@@ -83,7 +83,7 @@ function ProjectCard({ project }) {
           {isHovered && (
             <motion.div
               style={{ left: mousePos.x, top: mousePos.y }}
-              className="absolute pointer-events-none -translate-x-1/2 -translate-y-1/2 bg-white text-black px-6 py-2.5 rounded-full text-xs font-mono font-black tracking-wider uppercase shadow-2xl z-40"
+              className="absolute pointer-events-none -translate-x-1/2 -translate-y-1/2 bg-black/70 text-white backdrop-blur-md border border-white/20 px-6 py-2.5 rounded-full text-xs font-mono font-black tracking-wider uppercase shadow-2xl z-40"
               initial={{ scale: 0, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0, opacity: 0 }}
@@ -98,21 +98,17 @@ function ProjectCard({ project }) {
 
       {/* Text Info Below Image */}
       <div className="flex flex-col text-left mt-5 font-sans">
-        <h3 className="text-xl md:text-2xl font-bold text-white group-hover:text-[#3ba2f6] transition-colors duration-300 mb-3.5">
+        <h3 className="text-xl md:text-2xl font-bold text-white mb-3.5">
           {project.title}
         </h3>
-        
+
         {/* Rounded Badges with Project Theme Colors */}
         <div className="flex flex-wrap gap-2.5 items-center">
-          {/* Subtle Project Number Badge */}
-          <span className="text-xs font-mono text-zinc-500 bg-zinc-900/60 border border-zinc-800/80 px-2.5 py-1 rounded-md uppercase tracking-wider">
-            {project.num}
-          </span>
           {pills.map((pill, idx) => {
             const theme = getProjectTheme(project.id);
             return (
-              <span 
-                key={idx} 
+              <span
+                key={idx}
                 className={`text-[10px] md:text-xs ${theme.badgeBg} ${theme.badgeText} px-3.5 py-1.5 rounded-lg font-bold tracking-wider uppercase transition-transform duration-300 hover:scale-[1.03] cursor-default`}
               >
                 {pill}
@@ -137,7 +133,7 @@ export default function Projects() {
 
         {/* Section Heading */}
         <div className="w-full mb-16 text-left flex flex-col gap-4 border-b border-zinc-800 pb-6">
-          <h2 
+          <h2
             className="text-5xl md:text-[5.5rem] lg:text-[7rem] font-sans font-black tracking-tighter uppercase text-white select-none leading-none"
             style={{ letterSpacing: "-0.04em" }}
           >

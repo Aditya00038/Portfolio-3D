@@ -559,8 +559,8 @@ export default function ScrollyCanvas() {
                     View Resume
                   </ShimmerButton>
                 </a>
-                <Link 
-                  to="/#contact" 
+                <Link
+                  to="/#contact"
                   className="cursor-pointer"
                 >
                   <LiquidMetalButton label="Contact Me" />
@@ -573,7 +573,7 @@ export default function ScrollyCanvas() {
         {/* Keep CassettePlayer permanently mounted to ensure uninterrupted audio playback when scrolling */}
         <motion.div
           initial={{ opacity: 0, scale: 0.95 }}
-          animate={{ 
+          animate={{
             opacity: showIntroText ? 1 : 0,
             scale: showIntroText ? 1 : 0.9,
             pointerEvents: showIntroText ? "auto" : "none"
