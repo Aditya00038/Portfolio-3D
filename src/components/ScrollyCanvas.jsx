@@ -10,6 +10,7 @@ import ShimmerText from "./ui/shimmer-text";
 import ShineText from "./ui/shine-text";
 import CassettePlayer from "./CassettePlayer";
 import { FaGithub, FaLinkedinIn, FaInstagram, FaEnvelope } from 'react-icons/fa';
+import VariableFontHoverByLetter from "./ui/VariableFontHoverByLetter";
 
 const pad = (n) => String(n).padStart(3, '0');
 
@@ -513,7 +514,7 @@ export default function ScrollyCanvas() {
   };
 
   return (
-    <section ref={containerRef} className="relative w-full h-[500vh] bg-black">
+    <section ref={containerRef} className="relative w-full h-[500vh] bg-transparent">
       {loading && (
         <div className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-black text-white">
           <h3 className="mb-8 text-sm tracking-widest text-gray-400 uppercase">
@@ -529,7 +530,7 @@ export default function ScrollyCanvas() {
         </div>
       )}
 
-      <div className="sticky top-0 left-0 w-full h-screen overflow-hidden z-10 bg-black">
+      <div className="sticky top-0 left-0 w-full h-screen overflow-hidden z-10 bg-transparent">
         {/* The Transparent Canvas (z-10) */}
         <canvas
           ref={canvasRef}
@@ -546,9 +547,16 @@ export default function ScrollyCanvas() {
           >
             <div className="max-w-xl">
 
-              <h2 className="text-6xl md:text-8xl lg:text-[7rem] font-bold text-white mb-6 tracking-tighter leading-none uppercase" data-cursor="large">
-                HI, I'M ADITYA
-              </h2>
+              <div className="pointer-events-auto mb-6 text-6xl md:text-8xl lg:text-[7rem] font-bold text-white tracking-tighter leading-none uppercase" data-cursor="large">
+                <VariableFontHoverByLetter
+                  label="HI, I'M ADITYA"
+                  fromWeight={400}
+                  toWeight={900}
+                  staggerDuration={40}
+                  staggerFrom="first"
+                  color="#FFFFFF"
+                />
+              </div>
               <ShineText className="block text-xs md:text-sm font-semibold tracking-[0.2em] uppercase leading-[2.2]">
                 A CREATIVE DEVELOPER FOCUSED ON CLEAN UI,<br /> SMART SOLUTIONS AND REAL WORLD PROJECTS
               </ShineText>

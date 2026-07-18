@@ -1,84 +1,169 @@
 import React from 'react';
 import { FaHtml5, FaCss3Alt, FaReact, FaJava, FaGitAlt, FaGithub } from "react-icons/fa";
-import { SiJavascript, SiTailwindcss, SiNextdotjs, SiFramer, SiShadcnui, SiCplusplus, SiC, SiPython, SiFlask, SiFastapi, SiMysql, SiMongodb, SiFirebase, SiNumpy, SiPandas, SiJupyter } from "react-icons/si";
+import { SiJavascript, SiTailwindcss, SiNextdotjs, SiFramer, SiShadcnui, SiCplusplus, SiPython, SiMysql, SiMongodb, SiTypescript, SiIntellijidea } from "react-icons/si";
 import { VscVscode } from "react-icons/vsc";
+import { motion } from 'framer-motion';
 
-// Large inner tech icon size
-const iconClass = "w-8 h-8 md:w-10 md:h-10 transition-transform duration-300";
-
-const TOOLS = [
-  { name: 'React.js', icon: <FaReact className={`${iconClass} animate-[spin_15s_linear_infinite]`} color="#61DAFB" /> },
-  { name: 'JavaScript', icon: <SiJavascript className={iconClass} color="#F7DF1E" /> },
-  { name: 'Next.js', icon: <SiNextdotjs className={iconClass} color="#000000" /> },
-  { name: 'Framer Motion', icon: <SiFramer className={iconClass} color="#0055FF" /> },
-  { name: 'Tailwind CSS', icon: <SiTailwindcss className={iconClass} color="#38BDF8" /> },
-  { name: 'Shadcn UI', icon: <SiShadcnui className={iconClass} color="#000000" /> },
-  { name: 'HTML', icon: <FaHtml5 className={iconClass} color="#E34F26" /> },
-  { name: 'CSS', icon: <FaCss3Alt className={iconClass} color="#1572B6" /> },
-  { name: 'VS Code', icon: <VscVscode className={iconClass} color="#007ACC" /> },
-  { name: 'Git', icon: <FaGitAlt className={iconClass} color="#F05032" /> },
-  { name: 'GitHub', icon: <FaGithub className={iconClass} color="#000000" /> },
-  { name: 'Java', icon: <FaJava className={iconClass} color="#F89820" /> },
-  { name: 'C++', icon: <SiCplusplus className={iconClass} color="#00599C" /> },
-  { name: 'Python', icon: <SiPython className={iconClass} color="#3776AB" /> },
-  { name: 'MySQL', icon: <SiMysql className={iconClass} color="#00758F" /> },
-  { name: 'MongoDB', icon: <SiMongodb className={iconClass} color="#47A248" /> }
+const STACK_CATEGORIES = [
+  {
+    id: 'frontend',
+    title: 'FRONTEND',
+    skills: [
+      { name: 'TypeScript', icon: <SiTypescript className="w-8 h-8 md:w-9 md:h-9" color="#3178C6" /> },
+      { name: 'React', icon: <FaReact className="w-8 h-8 md:w-9 md:h-9 animate-[spin_15s_linear_infinite]" color="#61DAFB" /> },
+      { name: 'Next.Js', icon: <SiNextdotjs className="w-8 h-8 md:w-9 md:h-9" color="#ffffff" /> },
+      { name: 'Tailwind CSS', icon: <SiTailwindcss className="w-8 h-8 md:w-9 md:h-9" color="#38BDF8" /> },
+      { name: 'Framer Motion', icon: <SiFramer className="w-8 h-8 md:w-9 md:h-9" color="#0055FF" /> },
+      { name: 'Shadcn UI', icon: <SiShadcnui className="w-8 h-8 md:w-9 md:h-9" color="#ffffff" /> },
+      { name: 'HTML5', icon: <FaHtml5 className="w-8 h-8 md:w-9 md:h-9" color="#E34F26" /> },
+      { name: 'CSS3', icon: <FaCss3Alt className="w-8 h-8 md:w-9 md:h-9" color="#1572B6" /> }
+    ]
+  },
+  {
+    id: 'languages',
+    title: 'LANGUAGES',
+    skills: [
+      { name: 'JavaScript', icon: <SiJavascript className="w-8 h-8 md:w-9 md:h-9" color="#F7DF1E" /> },
+      { name: 'Python', icon: <SiPython className="w-8 h-8 md:w-9 md:h-9" color="#3776AB" /> },
+      { name: 'Java', icon: <FaJava className="w-8 h-8 md:w-9 md:h-9" color="#F89820" /> },
+      { name: 'C++', icon: <SiCplusplus className="w-8 h-8 md:w-9 md:h-9" color="#00599C" /> }
+    ]
+  },
+  {
+    id: 'database',
+    title: 'DATABASE',
+    skills: [
+      { name: 'MySQL', icon: <SiMysql className="w-8 h-8 md:w-9 md:h-9" color="#00758F" /> },
+      { name: 'MongoDB', icon: <SiMongodb className="w-8 h-8 md:w-9 md:h-9" color="#47A248" /> }
+    ]
+  },
+  {
+    id: 'tools',
+    title: 'DEV TOOLS',
+    skills: [
+      { name: 'Git', icon: <FaGitAlt className="w-8 h-8 md:w-9 md:h-9" color="#F05032" /> },
+      { name: 'VS Code', icon: <VscVscode className="w-8 h-8 md:w-9 md:h-9" color="#007ACC" /> },
+      { name: 'IntelliJ IDEA', icon: <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/intellij/intellij-original.svg" className="w-8 h-8 md:w-9 md:h-9 object-contain" alt="IntelliJ IDEA" /> }
+    ]
+  }
 ];
+
+// Staggered container animations
+const containerVariants = {
+  hidden: {},
+  visible: {
+    transition: {
+      staggerChildren: 0.05,
+    }
+  }
+};
+
+// spring pop-up animation for individual tech cards
+const itemVariants = {
+  hidden: { 
+    opacity: 0, 
+    scale: 0.6, 
+    y: 25 
+  },
+  visible: { 
+    opacity: 1, 
+    scale: 1, 
+    y: 0, 
+    transition: { 
+      type: "spring", 
+      stiffness: 120, 
+      damping: 12 
+    } 
+  }
+};
+
+// Slide-in fade-in animation for headers
+const headerVariants = {
+  hidden: { 
+    opacity: 0, 
+    x: -30 
+  },
+  visible: { 
+    opacity: 1, 
+    x: 0, 
+    transition: { 
+      duration: 0.8, 
+      ease: [0.16, 1, 0.3, 1] 
+    } 
+  }
+};
 
 export default function TechStack() {
   return (
     <section
       id="tools"
-      className="w-full py-28 bg-[#ececed] text-zinc-900 flex flex-col items-center justify-center rounded-[1rem] md:rounded-[1.5rem] relative overflow-hidden"
+      className="w-full pt-32 pb-24 md:pt-40 md:pb-32 bg-transparent text-white relative overflow-hidden"
     >
-      {/* Subtle grid background for premium texture */}
-      <div className="absolute inset-0 bg-[linear-gradient(to_right,#dfdfdf_1px,transparent_1px),linear-gradient(to_bottom,#dfdfdf_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_50%,#000_70%,transparent_100%)] opacity-40" />
+      {/* Import Oswald condensed Google Font */}
+      <style dangerouslySetInnerHTML={{
+        __html: `@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@700&display=swap');`
+      }} />
 
-      <div className="max-w-4xl mx-auto text-center flex flex-col items-center gap-8 px-6 relative z-10 w-full">
+      <div className="max-w-6xl mx-auto px-6 md:px-12 lg:px-20 relative z-10">
+        
+        {/* Section Header - bold uppercase matching site style */}
+        <div className="w-full mb-16 text-left flex flex-col gap-4 border-b border-zinc-800 pb-6">
+          <h2
+            className="text-5xl md:text-[5.5rem] lg:text-[7rem] font-sans font-black tracking-tighter uppercase text-white select-none leading-none"
+            style={{ letterSpacing: "-0.04em" }}
+          >
+            TECH STACK
+          </h2>
+        </div>
 
-        {/* Headline Row 1 */}
-        <h2
-          className="text-4xl md:text-6xl lg:text-7xl font-bold tracking-tight text-zinc-900 leading-none select-none"
-          style={{ letterSpacing: "-0.04em" }}
-        >
-          Tools & technologies
-        </h2>
-
-        {/* Row of iOS-style rounded tool tiles with static layout & simple hover states */}
-        <div className="flex flex-wrap justify-center items-center gap-4 my-6 w-full py-2">
-          {TOOLS.map((tool, idx) => (
-            <div
-              key={idx}
-              className="relative group cursor-pointer select-none"
-            >
-              {/* Tile - White rounded-2xl square */}
-              <div
-                className="w-14 h-14 md:w-16 md:h-16 bg-white border border-zinc-200/80 rounded-2xl flex items-center justify-center shadow-[0_8px_20px_rgba(0,0,0,0.03),0_1px_3px_rgba(0,0,0,0.01)] hover:scale-115 hover:-translate-y-1.5 hover:shadow-[0_16px_32px_rgba(0,0,0,0.06)] transition-all duration-300 ease-out relative z-10"
+        {/* Categories Stack List - Unified grid container for identical column alignments */}
+        <div className="grid grid-cols-1 md:grid-cols-[auto_1fr] gap-x-12 md:gap-x-16 lg:gap-x-24 gap-y-16 items-start">
+          {STACK_CATEGORIES.map((category) => (
+            <React.Fragment key={category.id}>
+              {/* Left Column: Category Name with scroll reveal */}
+              <motion.h3
+                variants={headerVariants}
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true, margin: "-100px" }}
+                className="text-4xl md:text-5xl lg:text-6xl font-bold text-zinc-600/70 hover:text-zinc-500/90 transition-colors duration-300 uppercase select-none md:min-w-[240px] leading-none"
+                style={{
+                  fontFamily: '"Oswald", "Impact", "Arial Narrow", sans-serif',
+                  letterSpacing: "0.03em",
+                }}
               >
-                {tool.icon}
-              </div>
+                {category.title}
+              </motion.h3>
 
-              {/* Floating Tooltip - White background with premium styling */}
-              <div
-                className="absolute top-[115%] left-1/2 -translate-x-1/2 bg-white text-zinc-800 text-[10px] md:text-xs font-sans font-semibold px-2.5 py-1.5 rounded-md shadow-lg border border-zinc-200 pointer-events-none opacity-0 scale-95 translate-y-1 group-hover:opacity-100 group-hover:scale-100 group-hover:translate-y-0 transition-all duration-200 z-30 whitespace-nowrap"
+              {/* Right Column: Skills Grid with staggered pop-up animation */}
+              <motion.div 
+                variants={containerVariants}
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true, margin: "-100px" }}
+                className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-12 gap-y-8 items-center w-full pt-2"
               >
-                {tool.name}
-              </div>
-            </div>
+                {category.skills.map((skill, skillIdx) => (
+                  <motion.div
+                    key={skillIdx}
+                    variants={itemVariants}
+                    whileHover={{ y: -3, scale: 1.03 }}
+                    transition={{ duration: 0.2 }}
+                    className="flex items-center gap-4.5 group cursor-pointer select-none"
+                  >
+                    <div className="w-9 h-9 md:w-10 md:h-10 flex items-center justify-center transition-transform duration-300 group-hover:scale-110">
+                      {skill.icon}
+                    </div>
+                    <span className="text-lg md:text-[1.18rem] font-medium text-zinc-300 group-hover:text-white transition-colors duration-300">
+                      {skill.name}
+                    </span>
+                  </motion.div>
+                ))}
+              </motion.div>
+            </React.Fragment>
           ))}
         </div>
 
-        {/* Headline Row 2 */}
-        <h2
-          className="text-4xl md:text-6xl lg:text-7xl font-bold tracking-tight text-zinc-900 leading-none select-none"
-          style={{ letterSpacing: "-0.04em" }}
-        >
-          I work with.
-        </h2>
-
-        <p className="text-xs md:text-sm text-zinc-500 font-mono uppercase tracking-[0.2em] mt-4 select-none">
-          Optimized for performance, responsiveness, and clean aesthetics
-        </p>
       </div>
     </section>
   );

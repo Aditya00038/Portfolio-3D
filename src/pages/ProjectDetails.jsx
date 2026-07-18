@@ -20,7 +20,7 @@ export default function ProjectDetails() {
   }
 
   return (
-    <div className="min-h-screen bg-black text-white font-sans pt-32 pb-24 overflow-x-hidden relative">
+    <div className="min-h-screen bg-transparent text-white font-sans pt-32 pb-24 overflow-x-hidden relative">
       {/* Background gradients for premium ambiance */}
       <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-blue-500/10 rounded-full blur-3xl pointer-events-none" />
       <div className="absolute bottom-0 right-1/4 w-[500px] h-[500px] bg-purple-500/10 rounded-full blur-3xl pointer-events-none" />
@@ -29,11 +29,11 @@ export default function ProjectDetails() {
 
         {/* Back Button */}
         <Link
-          to="/"
+          to="/#projects"
           className="inline-flex items-center gap-2 text-zinc-400 hover:text-white transition-colors duration-300 font-semibold text-sm mb-12 group cursor-pointer"
         >
           <FiArrowLeft className="transform group-hover:-translate-x-1 transition-transform" />
-          <span>Back to Home</span>
+          <span>Back to Projects</span>
         </Link>
 
         {/* Header Block */}

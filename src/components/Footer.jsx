@@ -90,7 +90,7 @@ export default function Footer() {
 
 
   return (
-    <footer className="w-full bg-black px-4 md:px-8 pt-16 md:pt-24 font-['Inter',sans-serif] relative z-30">
+    <footer className="w-full bg-transparent px-4 md:px-8 pt-16 md:pt-24 font-['Inter',sans-serif] relative z-30">
       {/* Import premium signature typography suite dynamically */}
       <style dangerouslySetInnerHTML={{
         __html: `

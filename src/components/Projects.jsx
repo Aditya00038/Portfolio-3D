@@ -125,7 +125,7 @@ export default function Projects() {
   return (
     <section
       id="projects"
-      className="w-full bg-black text-white py-24 relative overflow-hidden rounded-[2.5rem] md:rounded-[3.5rem]"
+      className="w-full bg-transparent text-white py-24 relative overflow-hidden rounded-[2.5rem] md:rounded-[3.5rem]"
     >
 
 

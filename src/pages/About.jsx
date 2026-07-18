@@ -57,7 +57,7 @@ export default function About() {
   };
 
   return (
-    <div className="w-full bg-black min-h-screen text-white relative overflow-hidden">
+    <div className="w-full bg-transparent min-h-screen text-white relative overflow-hidden">
       {/* Content layer: vertically and horizontally centered with top clearance for fixed navbar */}
       <div className="w-full flex flex-col justify-center items-center pt-32 md:pt-36 pb-12 px-6 md:px-12 relative z-20">
 

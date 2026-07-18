@@ -41,12 +41,14 @@ export default function ProfessionalJourney() {
 
   return (
     <div className="w-full max-w-4xl mx-auto mb-32 px-4 md:px-0 font-sans">
-      <h2 
-        className="text-4xl md:text-[2.5rem] font-bold tracking-tight text-white mb-10" 
-        style={{ letterSpacing: '-0.03em' }}
-      >
-        Experience
-      </h2>
+      <div className="w-full mb-10 text-left border-b border-zinc-800 pb-6">
+        <h2
+          className="text-5xl md:text-[5.5rem] lg:text-[7rem] font-sans font-black tracking-tighter uppercase text-white select-none leading-none"
+          style={{ letterSpacing: "-0.04em" }}
+        >
+          EXPERIENCE
+        </h2>
+      </div>
 
       <div className="flex flex-col gap-2">
         {experienceData.map((item) => {
