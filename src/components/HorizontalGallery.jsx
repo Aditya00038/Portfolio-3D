@@ -1,6 +1,7 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { useGSAP } from '@gsap/react';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -8,12 +9,12 @@ export default function HorizontalGallery() {
   const sectionRef = useRef(null);
   const triggerRef = useRef(null);
 
-  useEffect(() => {
+  useGSAP(() => {
     const pinWrap = triggerRef.current;
     if (!pinWrap) return;
 
     // Create the horizontal scrolling animation
-    const pin = gsap.to(pinWrap, {
+    gsap.to(pinWrap, {
       x: () => -(pinWrap.scrollWidth - window.innerWidth),
       ease: 'none',
       scrollTrigger: {
@@ -25,13 +26,7 @@ export default function HorizontalGallery() {
         invalidateOnRefresh: true,
       }
     });
-
-    // Cleanup triggers on component unmount
-    return () => {
-      pin.kill();
-      ScrollTrigger.getAll().forEach(t => t.kill());
-    };
-  }, []);
+  }, { scope: sectionRef });
 
   // Set list of gallery files (images and videos) from the Gallery folder
   const mediaItems = [

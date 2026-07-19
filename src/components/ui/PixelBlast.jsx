@@ -326,6 +326,7 @@ const PixelBlast = ({
   noiseAmount = 0
 }) => {
   const containerRef = useRef(null);
+  const canvasRef = useRef(null);
   const visibilityRef = useRef({ visible: true });
   const speedRef = useRef(speed);
 
@@ -334,7 +335,8 @@ const PixelBlast = ({
 
   useEffect(() => {
     const container = containerRef.current;
-    if (!container) return;
+    const canvasEl = canvasRef.current;
+    if (!container || !canvasEl) return;
     speedRef.current = speed;
 
     const needsReinitKeys = ['antialias', 'liquid', 'noiseAmount'];
@@ -366,13 +368,12 @@ const PixelBlast = ({
         t.composer?.dispose();
         t.renderer.dispose();
         t.renderer.forceContextLoss();
-        if (t.renderer.domElement.parentElement === container) {
-          container.removeChild(t.renderer.domElement);
-        }
+        // Do NOT removeChild — React owns the canvas element
         threeRef.current = null;
       }
 
-      const canvas = document.createElement('canvas');
+      // Use the canvas React rendered in JSX — don't create one imperatively
+      const canvas = canvasEl;
       let glContext = null;
       try {
         glContext = canvas.getContext('webgl2') || canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
@@ -399,10 +400,9 @@ const PixelBlast = ({
         return;
       }
 
-      renderer.domElement.style.width = '100%';
-      renderer.domElement.style.height = '100%';
+      // Canvas sizing is handled via CSS (width/height 100%)
       renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
-      container.appendChild(renderer.domElement);
+      // Do NOT appendChild — React already owns canvasEl in the DOM
 
       if (transparent) renderer.setClearAlpha(0);
       else renderer.setClearColor(0x000000, 1);
@@ -640,7 +640,7 @@ const PixelBlast = ({
         const t = threeRef.current;
         if (t.onPointerDownHandler) window.removeEventListener('pointerdown', t.onPointerDownHandler);
         if (t.onPointerMoveHandler) window.removeEventListener('pointermove', t.onPointerMoveHandler);
-        
+
         if (mustReinit) {
           t.resizeObserver?.disconnect();
           cancelAnimationFrame(t.raf);
@@ -649,9 +649,7 @@ const PixelBlast = ({
           t.composer?.dispose();
           t.renderer.dispose();
           t.renderer.forceContextLoss();
-          if (t.renderer.domElement.parentElement === container) {
-            container.removeChild(t.renderer.domElement);
-          }
+          // Do NOT removeChild — React owns the canvas element
           threeRef.current = null;
         }
       }
@@ -685,7 +683,13 @@ const PixelBlast = ({
       className={`pixel-blast-container ${className ?? ''}`}
       style={style}
       aria-label="PixelBlast interactive background"
-    />
+    >
+      {/* Canvas is declared here so React owns the DOM node — never use appendChild/removeChild */}
+      <canvas
+        ref={canvasRef}
+        style={{ width: '100%', height: '100%', display: 'block' }}
+      />
+    </div>
   );
 };
 

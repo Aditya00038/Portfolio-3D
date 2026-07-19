@@ -4,6 +4,7 @@ import BentoGrid from '../components/BentoGrid';
 import Footer from '../components/Footer';
 import PhotoStack from '../components/ui/PhotoStack';
 import HorizontalGallery from '../components/HorizontalGallery';
+import KineticGrid from '../components/ui/KineticGrid';
 
 const photosList = [
   {
@@ -58,15 +59,28 @@ export default function About() {
 
   return (
     <div className="w-full bg-transparent min-h-screen text-white relative overflow-hidden">
-      {/* Content layer: vertically and horizontally centered with top clearance for fixed navbar */}
-      <div className="w-full flex flex-col justify-center items-center pt-32 md:pt-36 pb-12 px-6 md:px-12 relative z-20">
+      {/* Intro section: contains Kinetic Grid as an absolute background */}
+      <div className="w-full relative pt-32 md:pt-36 pb-16 px-6 md:px-12 flex flex-col items-center justify-center overflow-hidden z-20">
+        {/* Background Kinetic Grid */}
+        <div className="absolute inset-0 z-0 pointer-events-none">
+          <KineticGrid
+            background="transparent"
+            dotColor="#ffffff"
+            lineColor="#80acff"
+            trailColor="#2664eb"
+            spacing={30}
+            radius={400}
+            strength={4}
+            trail={true}
+          />
+        </div>
 
         {/* Main wrapper holding the 2 columns (centered vertically relative to each other) */}
         <motion.div
           variants={containerVariants}
           initial="hidden"
           animate="visible"
-          className="max-w-[950px] w-full flex flex-col md:flex-row gap-10 md:gap-16 items-center justify-between mb-16"
+          className="max-w-[950px] w-full flex flex-col md:flex-row gap-10 md:gap-16 items-center justify-between relative z-10"
         >
           {/* Left Column: Text description */}
           <div className="flex-1 w-full flex flex-col items-start justify-center">
@@ -105,8 +119,10 @@ export default function About() {
             />
           </motion.div>
         </motion.div>
+      </div>
 
-        {/* Bento Grid */}
+      {/* Bento Grid Section */}
+      <div className="w-full flex flex-col justify-center items-center pb-12 px-6 md:px-12 relative z-20">
         <BentoGrid />
       </div>
 
