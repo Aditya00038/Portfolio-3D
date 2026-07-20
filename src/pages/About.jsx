@@ -68,7 +68,7 @@ export default function About() {
             dotColor="#ffffff"
             lineColor="#80acff"
             trailColor="#2664eb"
-            spacing={30}
+            spacing={65}
             radius={400}
             strength={4}
             trail={true}

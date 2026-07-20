@@ -131,6 +131,21 @@ export default function KineticGrid(props) {
         }
 
         const setMouse = (clientX, clientY) => {
+            // Check if cursor is hovering over text elements
+            if (typeof document !== "undefined") {
+                const target = document.elementFromPoint(clientX, clientY)
+                const TEXT_TAGS = ['P','H1','H2','H3','H4','H5','H6','SPAN','A','LI','LABEL','BUTTON','STRONG','EM']
+                const tagName = target?.tagName?.toUpperCase() || ''
+                const isOverText = TEXT_TAGS.includes(tagName) || (target?.closest ? !!target.closest('p, h1, h2, h3, h4, h5, h6, span, a, li, button, label') : false)
+                
+                if (isOverText) {
+                    mouseRef.current.active = false
+                    mouseRef.current.x = -9999
+                    mouseRef.current.y = -9999
+                    return
+                }
+            }
+
             const r = canvas.getBoundingClientRect()
             const mx = clientX - r.left
             const my = clientY - r.top
@@ -315,7 +330,7 @@ const COMPONENT_DEFAULTS = {
     lineColor: "#80ACFF",
     trail: true,
     trailColor: "#2664EB",
-    spacing: 30,
+    spacing: 60,
     radius: 400,
     strength: 4,
 }

@@ -1,288 +1,264 @@
-import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { FiArrowRight, FiMail } from 'react-icons/fi';
-import { FaGithub, FaLinkedinIn, FaInstagram } from 'react-icons/fa';
-import styled from 'styled-components';
-import { useLocation } from 'react-router-dom';
+import React, { useState } from 'react';
+import { motion } from 'framer-motion';
+import { FiCopy, FiCheck } from 'react-icons/fi';
+import { FaGithub, FaLinkedinIn, FaInstagram, FaTwitter } from 'react-icons/fa';
 
-export default function Footer() {
-  const [showContact, setShowContact] = useState(false);
-  const [localTime, setLocalTime] = useState('');
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    message: ''
-  });
+/* ─── constants ─── */
+const EMAIL = 'adityasuryawanshi038@gmail.com';
+const RESUME_URL = '/Aditya Resume.pdf';
 
-  const location = useLocation();
+const SOCIALS = [
+  { icon: FaLinkedinIn,  href: 'https://linkedin.com/in/aditya00038',            label: 'LinkedIn',  color: '#0A66C2' },
+  { icon: FaTwitter,     href: 'https://twitter.com/',                            label: 'Twitter',   color: '#1D9BF0' },
+  { icon: FaGithub,      href: 'https://github.com/Aditya00038',                  label: 'GitHub',    color: '#e4e4e7' },
+  { icon: FaInstagram,   href: 'https://instagram.com/aditya._.suryawanshi',      label: 'Instagram', color: '#E1306C' },
+];
 
-  useEffect(() => {
-    if (location.hash === '#contact') {
-      setShowContact(true);
-      setTimeout(() => {
-        const element = document.getElementById('contact-form-section');
-        if (element) {
-          element.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }
-      }, 150);
-    }
-  }, [location.hash]);
-
-  // Pune, India Live Ticking Clock Standard Hook
-  useEffect(() => {
-    const updateTime = () => {
-      const now = new Date();
-      const options = {
-        timeZone: 'Asia/Kolkata',
-        hour: '2-digit',
-        minute: '2-digit',
-        second: '2-digit',
-        hour12: true
-      };
-      const timeString = new Intl.DateTimeFormat('en-US', options).format(now);
-      setLocalTime(timeString);
-    };
-
-    updateTime();
-    const interval = setInterval(updateTime, 1000);
-    return () => clearInterval(interval);
-  }, []);
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log("Contact Form Submitted:", formData);
-    alert(`Thank you, ${formData.name}! Your message has been sent successfully.`);
-    setFormData({
-      name: '',
-      email: '',
-      message: ''
+/* ─── Copy Email Button ─── */
+function CopyEmailBtn() {
+  const [copied, setCopied] = useState(false);
+  const copy = () => {
+    navigator.clipboard.writeText(EMAIL).then(() => {
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
     });
-    setShowContact(false);
-    if (window.location.hash === '#contact') {
-      window.history.pushState(null, '', window.location.pathname);
-    }
   };
-
-  // Toggle contact drawer and visually redirect the user by smooth scrolling directly to the form
-  const toggleContact = () => {
-    const willShow = !showContact;
-    setShowContact(willShow);
-
-    if (willShow) {
-      setTimeout(() => {
-        const element = document.getElementById('contact-form-section');
-        if (element) {
-          element.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }
-      }, 120); // slight delay to let Framer Motion mount the drawer
-    } else {
-      if (window.location.hash === '#contact') {
-        window.history.pushState(null, '', window.location.pathname);
-      }
-    }
-  };
-
-
-
   return (
-    <footer className="w-full bg-transparent px-4 md:px-8 pt-16 md:pt-24 font-['Inter',sans-serif] relative z-30">
-      {/* Import premium signature typography suite dynamically */}
-      <style dangerouslySetInnerHTML={{
-        __html: `
-        @import url('https://fonts.googleapis.com/css2?family=Great+Vibes&family=Alex+Brush&family=Herr+Von+Muellerhoff&family=Sacramento&display=swap');
-      `}} />
-
-      <div className="max-w-7xl mx-auto flex flex-col gap-4">
-
-        {/* Top Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-[1.5fr_1fr] gap-4">
-
-          {/* Left Card */}
-          <div className="bg-[#111111] rounded-[2rem] p-8 md:p-12 flex flex-col justify-between min-h-[400px]">
-            <div>
-              <p className="text-xs text-zinc-500 tracking-widest font-bold uppercase mb-8">Footer</p>
-              <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6">Made it this far?</h2>
-              <p className="text-lg md:text-xl text-zinc-400 font-medium max-w-xl leading-relaxed">
-                If you're interested in collaborating on projects, open source, or networking, let's get in touch.
-              </p>
-            </div>
-
-            {/* Aditya Suryawanshi Cursive Signature styled exactly like reference image */}
-            <div className="mt-12 mb-6 select-none">
-              <div
-                className="text-[#f43f5e] text-4xl md:text-[4.8rem] lg:text-[5.2rem] w-fit flex flex-col items-center transform -rotate-3 origin-left tracking-normal leading-[0.75] font-normal"
-                style={{
-                  fontFamily: "'Alex Brush', cursive",
-                  textShadow: "0 0 35px rgba(244,63,94,0.35)"
-                }}
-              >
-                <span className="block relative z-10">Aditya</span>
-                <span className="block -mt-3 md:-mt-5 relative z-0">Suryawanshi</span>
-              </div>
-            </div>
-          </div>
-
-          {/* Right Column */}
-          <div className="flex flex-col gap-4 min-h-[400px]">
-
-            {/* Call to Action Card (Toggles Contact Drawer and scrolls to it) */}
-            <div
-              onClick={toggleContact}
-              className="group flex-1 bg-[#3ba2f6] hover:bg-[#2a8add] transition-colors rounded-[2rem] p-8 md:p-12 flex flex-col justify-between cursor-pointer select-none"
-            >
-              <p className="text-xs text-black/80 tracking-widest font-bold uppercase">Call to Action</p>
-              <div className="flex items-center justify-between mt-12">
-                <h3 className="text-4xl md:text-5xl font-semibold text-black">
-                  {showContact ? 'Close contact' : 'Get in touch'}
-                </h3>
-                <FiArrowRight className={`w-8 h-8 text-black transform transition-all duration-300 ${showContact ? 'rotate-90' : 'group-hover:translate-x-2'}`} />
-              </div>
-            </div>
-
-            {/* Social Card */}
-            <div className="bg-[#18181b] rounded-[2rem] p-8 md:p-12 flex flex-col justify-between">
-              <p className="text-xs text-zinc-500 tracking-widest font-bold uppercase mb-8">Social</p>
-              <div className="flex flex-row items-center justify-between gap-4 flex-wrap">
-                <div className="flex items-center gap-6 text-zinc-400">
-                  <a href="https://github.com/Aditya00038" target="_blank" rel="noreferrer" className="hover:text-white transition-colors"><FaGithub className="w-6 h-6" /></a>
-                  <a href="https://linkedin.com/in/aditya00038" target="_blank" rel="noreferrer" className="hover:text-white transition-colors"><FaLinkedinIn className="w-6 h-6" /></a>
-                  <a href="https://instagram.com/aditya._.suryawanshi" target="_blank" rel="noreferrer" className="hover:text-white transition-colors"><FaInstagram className="w-6 h-6" /></a>
-                  <a href="mailto:adityasuryawanshi038@gmail.com" className="hover:text-white transition-colors"><FiMail className="w-6 h-6" /></a>
-                </div>
-              </div>
-            </div>
-
-          </div>
-        </div>
-
-        {/* Expandable Contact Drawer - Center stage styled perfectly to match reference */}
-        <AnimatePresence initial={false}>
-          {showContact && (
-            <motion.div
-              id="contact-form-section"
-              initial={{ height: 0, opacity: 0 }}
-              animate={{ height: 'auto', opacity: 1 }}
-              exit={{ height: 0, opacity: 0 }}
-              transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-              className="overflow-hidden w-full bg-[#0a0a0c] rounded-[2rem] border border-white/5 mt-4 p-8 md:p-12 relative"
-            >
-              <div className="w-full max-w-6xl mx-auto flex flex-col pt-4">
-
-                <div className="w-full mb-16 flex justify-center">
-
-                  {/* Contact Form */}
-                  <form onSubmit={handleSubmit} className="flex flex-col gap-6 w-full max-w-xl">
-
-                    <div className="flex flex-col gap-2">
-                      <label className="text-xs text-zinc-500 font-bold uppercase tracking-wider">Name</label>
-                      <input
-                        type="text"
-                        name="name"
-                        placeholder="Your Name"
-                        value={formData.name}
-                        onChange={handleChange}
-                        className="w-full bg-[#161618] border border-zinc-800/80 rounded-xl px-4 py-3.5 text-white placeholder:text-zinc-600 focus:outline-none focus:border-zinc-700 transition-colors"
-                        required
-                      />
-                    </div>
-
-                    <div className="flex flex-col gap-2">
-                      <label className="text-xs text-zinc-500 font-bold uppercase tracking-wider">Email</label>
-                      <input
-                        type="email"
-                        name="email"
-                        placeholder="awesome-brand@email.com"
-                        value={formData.email}
-                        onChange={handleChange}
-                        className="w-full bg-[#161618] border border-zinc-800/80 rounded-xl px-4 py-3.5 text-white placeholder:text-zinc-600 focus:outline-none focus:border-zinc-700 transition-colors"
-                        required
-                      />
-                    </div>
-
-                    <div className="flex flex-col gap-2">
-                      <label className="text-xs text-zinc-500 font-bold uppercase tracking-wider">Message</label>
-                      <textarea
-                        rows="5"
-                        name="message"
-                        placeholder="Please write your project brief"
-                        value={formData.message}
-                        onChange={handleChange}
-                        className="w-full bg-[#161618] border border-zinc-800/80 rounded-xl px-4 py-3.5 text-white placeholder:text-zinc-600 focus:outline-none focus:border-zinc-700 transition-colors resize-none"
-                        required
-                      ></textarea>
-                    </div>
-
-                    <button
-                      type="submit"
-                      className="w-full mt-2 bg-[#27272a] hover:bg-[#3f3f46] text-white font-bold py-4 rounded-xl transition-all tracking-wider text-xs uppercase cursor-pointer"
-                    >
-                      Submit
-                    </button>
-
-                  </form>
-
-                </div>
-
-                {/* Center stage Digital Clock */}
-                <div className="flex flex-col items-center mt-8 pt-10 border-t border-zinc-900/60 select-none">
-                  <span className="text-[10px] font-bold tracking-[0.35em] text-[#00f2fe] uppercase">
-                    LOCAL TIME
-                  </span>
-                  <span className="text-[11px] font-bold tracking-[0.2em] text-zinc-500 uppercase mt-2">
-                    [ PUNE, INDIA ]
-                  </span>
-                  <h3
-                    className="text-5xl md:text-7xl lg:text-8xl font-mono font-bold text-white tracking-widest leading-none mt-6 select-none"
-                    style={{ textShadow: "0 0 30px rgba(0,242,254,0.15)" }}
-                  >
-                    {localTime}
-                  </h3>
-                </div>
-
-                {/* Subtitle Rate Tag */}
-                <p className="text-[10px] font-bold tracking-[0.2em] text-zinc-600 select-none text-center mt-12">
-                  The services start from ₹2000 onwards
-                </p>
-
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
-
-        {/* Version of the Sites (Timeline) */}
-        <div className="mt-24 w-full">
-          <p className="text-xs text-white tracking-widest font-bold uppercase mb-8">Version of the sites</p>
-
-          {/* Ruler Line */}
-          <div className="w-full flex flex-col">
-            <div
-              className="w-full h-3 border-b border-zinc-800"
-              style={{ background: 'repeating-linear-gradient(to right, #3f3f46 0, #3f3f46 1px, transparent 1px, transparent 16px)' }}
-            ></div>
-
-            {/* Years */}
-            <div className="flex mt-6 justify-between w-full text-zinc-500 font-mono text-sm">
-              <div className="px-4 py-1.5 border border-zinc-500 rounded-lg text-white font-semibold cursor-default">
-                2026
-              </div>
-              <a href="https://aditya-portfolio-6sybe6fpt-adityas-projects-9c9aa8cb.vercel.app/" target="_blank" rel="noreferrer" className="px-4 py-1.5 hover:text-zinc-300 transition-colors cursor-pointer block">
-                2025
-              </a>
-              <a href="https://2024-portfolio-beige.vercel.app/" target="_blank" rel="noreferrer" className="px-4 py-1.5 hover:text-zinc-300 transition-colors cursor-pointer block">
-                2024
-              </a>
-            </div>
-          </div>
-        </div>
-
-      </div>
-    </footer>
+    <button
+      onClick={copy}
+      style={{
+        width: '100%',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        gap: '8px',
+        padding: '13px 28px',
+        borderRadius: '8px',
+        border: '1px solid rgba(255,255,255,0.2)',
+        background: 'transparent',
+        color: '#e4e4e7',
+        fontSize: '0.95rem',
+        fontWeight: 500,
+        cursor: 'pointer',
+        transition: 'background 0.2s, border-color 0.2s',
+        fontFamily: 'inherit',
+        letterSpacing: '0.01em',
+      }}
+      onMouseEnter={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.07)'; e.currentTarget.style.borderColor = 'rgba(255,255,255,0.35)'; }}
+      onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.borderColor = 'rgba(255,255,255,0.2)'; }}
+    >
+      {copied ? <FiCheck size={15} /> : <FiCopy size={15} />}
+      {copied ? 'Copied!' : 'Copy Email'}
+    </button>
   );
 }
 
+/* ─── Version of Sites ─── */
+function VersionOfSites() {
+  return (
+    <div style={{ padding: '0 clamp(1.5rem, 5vw, 5rem) clamp(2.5rem, 5vw, 4rem)' }}>
+      <p style={{
+        fontSize: '0.63rem', fontWeight: 700, letterSpacing: '0.18em',
+        color: '#3f3f46', textTransform: 'uppercase', margin: '0 0 1rem',
+      }}>
+        Version of the sites
+      </p>
+      {/* Tick ruler */}
+      <div style={{
+        width: '100%', height: '10px',
+        borderBottom: '1px solid #27272a',
+        background: 'repeating-linear-gradient(to right, #3f3f46 0, #3f3f46 1px, transparent 1px, transparent 16px)',
+        marginBottom: '0.9rem',
+      }} />
+      {/* Year chips */}
+      <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
+        <span style={{
+          padding: '5px 14px', border: '1px solid #52525b', borderRadius: '6px',
+          color: '#fff', fontWeight: 600, fontSize: '0.82rem', fontFamily: 'monospace',
+        }}>2026</span>
+        <a href="https://aditya-portfolio-6sybe6fpt-adityas-projects-9c9aa8cb.vercel.app/"
+          target="_blank" rel="noreferrer"
+          style={{ padding: '5px 14px', color: '#52525b', fontWeight: 500, fontSize: '0.82rem', fontFamily: 'monospace', textDecoration: 'none', transition: 'color 0.18s' }}
+          onMouseEnter={e => e.currentTarget.style.color = '#a1a1aa'}
+          onMouseLeave={e => e.currentTarget.style.color = '#52525b'}
+        >2025</a>
+        <a href="https://2024-portfolio-beige.vercel.app/"
+          target="_blank" rel="noreferrer"
+          style={{ padding: '5px 14px', color: '#52525b', fontWeight: 500, fontSize: '0.82rem', fontFamily: 'monospace', textDecoration: 'none', transition: 'color 0.18s' }}
+          onMouseEnter={e => e.currentTarget.style.color = '#a1a1aa'}
+          onMouseLeave={e => e.currentTarget.style.color = '#52525b'}
+        >2024</a>
+      </div>
+    </div>
+  );
+}
 
+/* ─── Main Footer ─── */
+export default function Footer() {
+  return (
+    <footer style={{
+      width: '100%',
+      background: 'linear-gradient(to bottom, transparent, #0a0a0a 80px)',
+      color: '#fff',
+      fontFamily: "'Inter', 'Segoe UI', system-ui, sans-serif",
+      position: 'relative',
+      zIndex: 30,
+    }}>
+      <style>{`@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');`}</style>
+
+      {/* ── TOP HERO SECTION ── */}
+      <div style={{
+        padding: 'clamp(4rem, 8vw, 6rem) clamp(1.5rem, 5vw, 5rem) clamp(2rem, 4vw, 3rem)',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        gap: '2rem',
+        flexWrap: 'wrap',
+      }}>
+        {/* Left: Headline */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.7, ease: [0.22, 0.61, 0.36, 1] }}
+          style={{ flex: '1 1 320px' }}
+        >
+          <h2 style={{
+            margin: '0 0 0.35rem',
+            fontSize: 'clamp(1.8rem, 4vw, 3rem)',
+            fontWeight: 700,
+            letterSpacing: '-0.03em',
+            lineHeight: 1.15,
+            color: '#a8a8a8',
+          }}>
+            Have an{' '}
+            <span style={{ color: '#f4f4f5' }}>idea in mind?</span>
+          </h2>
+          <h2 style={{
+            margin: '0 0 1rem',
+            fontSize: 'clamp(1.8rem, 4vw, 3rem)',
+            fontWeight: 700,
+            letterSpacing: '-0.03em',
+            lineHeight: 1.15,
+            color: '#d4a85a',
+          }}>
+            Let&apos;s Talk!
+          </h2>
+          <p style={{
+            margin: 0,
+            fontSize: 'clamp(0.85rem, 1.6vw, 1rem)',
+            color: '#52525b',
+            letterSpacing: '0.01em',
+          }}>
+            &amp; create something meaningful together
+          </p>
+        </motion.div>
+
+        {/* Right: Buttons stacked */}
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6, delay: 0.12, ease: [0.22, 0.61, 0.36, 1] }}
+          style={{ display: 'flex', flexDirection: 'column', gap: '12px', minWidth: '170px', width: '200px' }}
+        >
+          {/* View Resume — filled blue */}
+          <a
+            href={RESUME_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              padding: '13px 28px',
+              borderRadius: '8px',
+              background: '#2563eb',
+              color: '#fff',
+              fontSize: '0.95rem',
+              fontWeight: 600,
+              textDecoration: 'none',
+              transition: 'background 0.2s',
+              letterSpacing: '0.01em',
+              textAlign: 'center',
+            }}
+            onMouseEnter={e => e.currentTarget.style.background = '#1d4ed8'}
+            onMouseLeave={e => e.currentTarget.style.background = '#2563eb'}
+          >
+            View Resume
+          </a>
+
+          {/* Copy Email — outlined */}
+          <CopyEmailBtn />
+        </motion.div>
+      </div>
+
+      {/* ── DIVIDER ── */}
+      <div style={{ height: '1px', background: 'rgba(255,255,255,0.08)', margin: '0 clamp(1.5rem, 5vw, 5rem)' }} />
+
+      {/* ── SOCIAL ICONS + COPYRIGHT ── */}
+      <div style={{
+        padding: 'clamp(1.8rem, 3.5vw, 2.5rem) clamp(1.5rem, 5vw, 5rem)',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        flexWrap: 'wrap',
+        gap: '1.5rem',
+      }}>
+        {/* Social icons */}
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.55, ease: [0.22, 0.61, 0.36, 1] }}
+          style={{ display: 'flex', flexDirection: 'column', gap: '1.2rem' }}
+        >
+          <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
+            {SOCIALS.map(({ icon: Icon, href, label, color }) => (
+              <a
+                key={label}
+                href={href}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={label}
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  width: '44px',
+                  height: '44px',
+                  borderRadius: '10px',
+                  background: '#18181b',
+                  border: '1px solid rgba(255,255,255,0.08)',
+                  color: '#71717a',
+                  transition: 'background 0.2s, color 0.2s, border-color 0.2s',
+                  textDecoration: 'none',
+                }}
+                onMouseEnter={e => {
+                  e.currentTarget.style.color = color;
+                  e.currentTarget.style.background = 'rgba(255,255,255,0.05)';
+                  e.currentTarget.style.borderColor = 'rgba(255,255,255,0.18)';
+                }}
+                onMouseLeave={e => {
+                  e.currentTarget.style.color = '#71717a';
+                  e.currentTarget.style.background = '#18181b';
+                  e.currentTarget.style.borderColor = 'rgba(255,255,255,0.08)';
+                }}
+              >
+                <Icon size={18} />
+              </a>
+            ))}
+          </div>
+
+          {/* Copyright */}
+          <span style={{ fontSize: '0.8rem', color: '#3f3f46', letterSpacing: '0.01em' }}>
+            ©{new Date().getFullYear()}, Aditya Suryawanshi
+          </span>
+        </motion.div>
+      </div>
+
+      {/* ── VERSION OF SITES ── */}
+      <VersionOfSites />
+    </footer>
+  );
+}

@@ -1,111 +1,110 @@
 import React, { useEffect, useState } from 'react';
-import { motion, useMotionValue, useSpring } from 'framer-motion';
+import { useMotionValue, useSpring } from 'framer-motion';
+
+const TEXT_TAGS = new Set(['P','H1','H2','H3','H4','H5','H6','SPAN','A','LI','LABEL',
+  'BUTTON','TD','TH','BLOCKQUOTE','CODE','PRE','STRONG','EM','TIME','MARK','SMALL']);
+const MEDIA_TAGS = new Set(['IMG','VIDEO','SVG','CANVAS']);
 
 export default function CustomCursor() {
   const [cursorState, setCursorState] = useState('default');
   const [isVisible, setIsVisible] = useState(false);
 
-  // Use motion values for ultra-smooth rendering outside React's render cycle
-  const cursorX = useMotionValue(-100);
-  const cursorY = useMotionValue(-100);
+  const cursorX = useMotionValue(-200);
+  const cursorY = useMotionValue(-200);
 
-  // Apply spring physics for that buttery smooth tracking
   const springConfig = { damping: 25, stiffness: 300, mass: 0.5 };
   const smoothX = useSpring(cursorX, springConfig);
   const smoothY = useSpring(cursorY, springConfig);
 
   useEffect(() => {
-    // Only disable custom cursor on touch-only devices with NO fine pointer at all (e.g. mobile phones)
-    if (window.matchMedia('(pointer: coarse)').matches && !window.matchMedia('(any-pointer: fine)').matches) {
-      return;
-    }
+    if (window.matchMedia('(pointer: coarse)').matches &&
+        !window.matchMedia('(any-pointer: fine)').matches) return;
 
     const moveMouse = (e) => {
       if (!isVisible) {
         setIsVisible(true);
         document.body.classList.add('custom-cursor-active');
       }
-
-      // Center the cursor exactly on the pointer tip
       cursorX.set(e.clientX);
       cursorY.set(e.clientY);
 
-      // Check what we are hovering over
       const target = e.target;
-      
-      // Determine cursor state based on explicit class or data attribute
-      const isHiddenCursor = target && target.closest ? target.closest('[data-cursor="hidden"]') : null;
-      const isLargeCursor = target && target.closest ? target.closest('.massive-text, [data-cursor="large"]') : null;
-      
-      if (isHiddenCursor) {
-        setCursorState('hidden');
-      } else if (isLargeCursor) {
-        setCursorState('large');
-      } else {
-        setCursorState('default');
-      }
+      const tag = target?.tagName?.toUpperCase() || '';
+
+      const isHidden   = !!target?.closest?.('[data-cursor="hidden"]');
+      const isLarge    = !!target?.closest?.('.massive-text, [data-cursor="large"]');
+      const isOverText = TEXT_TAGS.has(tag) || !!target?.closest?.('p,h1,h2,h3,h4,h5,h6,span,a,li,button,label,strong,em');
+      const isOverMedia= MEDIA_TAGS.has(tag);
+
+      if (isHidden || isOverText || isOverMedia) setCursorState('hidden');
+      else if (isLarge) setCursorState('large');
+      else setCursorState('default');
     };
 
-    const handleMouseLeave = () => {
-      setIsVisible(false);
-      document.body.classList.remove('custom-cursor-active');
-    };
-    
-    const handleMouseEnter = () => {
-      setIsVisible(true);
-      document.body.classList.add('custom-cursor-active');
-    };
+    const onLeave = () => { setIsVisible(false); document.body.classList.remove('custom-cursor-active'); };
+    const onEnter = () => { setIsVisible(true);  document.body.classList.add('custom-cursor-active'); };
 
     window.addEventListener('mousemove', moveMouse);
-    document.addEventListener('mouseleave', handleMouseLeave);
-    document.addEventListener('mouseenter', handleMouseEnter);
-
+    document.addEventListener('mouseleave', onLeave);
+    document.addEventListener('mouseenter', onEnter);
     return () => {
       window.removeEventListener('mousemove', moveMouse);
-      document.removeEventListener('mouseleave', handleMouseLeave);
-      document.removeEventListener('mouseenter', handleMouseEnter);
+      document.removeEventListener('mouseleave', onLeave);
+      document.removeEventListener('mouseenter', onEnter);
       document.body.classList.remove('custom-cursor-active');
     };
   }, [cursorX, cursorY, isVisible]);
 
-  // Define the sizes for our different states
-  const variants = {
-    default: {
-      width: 20,
-      height: 20,
-      x: "-50%",
-      y: "-50%",
-      opacity: 1
-    },
-    large: {
-      width: 160,
-      height: 160,
-      x: "-50%",
-      y: "-50%",
-      opacity: 1
-    },
-    hidden: {
-      width: 0,
-      height: 0,
-      x: "-50%",
-      y: "-50%",
-      opacity: 0
-    }
-  };
-
   if (!isVisible) return null;
 
+  /* Use a native div — not framer-motion — so we can INSTANTLY hide opacity
+     when over text without any spring/animation delay */
+  const isHidden = cursorState === 'hidden';
+  const isLarge  = cursorState === 'large';
+  const size     = isLarge ? 160 : 20;
+
+  return (
+    <>
+      {/* Smooth spring-tracked position shell */}
+      <SmoothCursorDot
+        smoothX={smoothX}
+        smoothY={smoothY}
+        size={size}
+        hidden={isHidden}
+        large={isLarge}
+      />
+    </>
+  );
+}
+
+/* Inner component reads spring values via useTransform so it stays in the
+   animation loop but the OPACITY is a plain CSS property — instant toggle */
+import { motion } from 'framer-motion';
+
+function SmoothCursorDot({ smoothX, smoothY, size, hidden, large }) {
   return (
     <motion.div
-      className="fixed top-0 left-0 bg-white rounded-full pointer-events-none z-[9999]"
       style={{
-        left: smoothX,
-        top: smoothY,
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        x: smoothX,
+        y: smoothY,
+        translateX: '-50%',
+        translateY: '-50%',
+        width: size,
+        height: size,
+        borderRadius: '50%',
+        background: '#fff',
         mixBlendMode: 'difference',
+        pointerEvents: 'none',
+        zIndex: 9999,
+        /* INSTANT opacity — no spring delay when entering/leaving text */
+        opacity: hidden ? 0 : 1,
+        transition: hidden
+          ? 'opacity 0s, width 0.25s cubic-bezier(.22,.61,.36,1), height 0.25s cubic-bezier(.22,.61,.36,1)'
+          : 'opacity 0.08s, width 0.3s cubic-bezier(.22,.61,.36,1), height 0.3s cubic-bezier(.22,.61,.36,1)',
       }}
-      variants={variants}
-      animate={cursorState}
-      transition={{ type: "spring", stiffness: 400, damping: 28, mass: 0.8 }}
     />
   );
 }
