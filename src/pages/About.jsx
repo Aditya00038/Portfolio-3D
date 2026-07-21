@@ -60,14 +60,16 @@ export default function About() {
   return (
     <div className="w-full bg-transparent min-h-screen text-white relative overflow-hidden">
       {/* Intro section: contains Kinetic Grid as an absolute background */}
-      <div className="w-full relative pt-32 md:pt-36 pb-16 px-6 md:px-12 flex flex-col items-center justify-center overflow-hidden z-20">
+      <div className="w-full relative pt-44 md:pt-56 pb-20 px-6 md:px-12 flex flex-col items-center justify-center overflow-hidden z-20">
         {/* Background Kinetic Grid */}
         <div className="absolute inset-0 z-0 pointer-events-none">
           <KineticGrid
             background="transparent"
             dotColor="#ffffff"
-            lineColor="#80acff"
-            trailColor="#2664eb"
+            lineColor="#ffffff"
+            activeLineColor="#38bdf8"
+            activeDotColor="#38bdf8"
+            trailColor="#38bdf8"
             spacing={65}
             radius={400}
             strength={4}
@@ -90,17 +92,11 @@ export default function About() {
               className="space-y-4 text-zinc-400 text-[1.05rem] md:text-[1.15rem] leading-[1.75] md:leading-[1.85] font-light"
               style={{ fontFamily: "ui-sans-serif, system-ui, -apple-system, Inter, sans-serif" }}
             >
+              <h1 className="text-3xl md:text-5xl lg:text-6xl font-bold font-mono text-white tracking-tight mt-0 pt-0 mb-6 leading-none">
+                Hi, I'm Aditya Suryawanshi
+              </h1>
               <p>
-                I'm Aditya Suryawanshi — a Computer Engineering student at MIT Academy of Engineering, Pune.
-              </p>
-              <p>
-                I don't just write code. I think about the person on the other side — what they need, what slows them down, and how software can quietly make that better.
-              </p>
-              <p>
-                Web apps, AI, backend systems — I work across the stack, but the thread that connects it all is a simple question: does this actually help someone?
-              </p>
-              <p>
-                I'm hands-on by nature. I learn by doing, grow by collaborating, and find the most satisfaction when an idea I once sketched out is finally running in production.
+                A Computer Engineering student at MIT Academy of Engineering, Pune. I don't just write code. I think about the person on the other side — what they need, what slows them down, and how software can quietly make that better. Web apps, AI, backend systems — I work across the stack, but the thread that connects it all is a simple question: does this actually help someone? I'm hands-on by nature. I learn by doing, grow by collaborating, and find the most satisfaction when an idea I once sketched out is finally running in production.
               </p>
             </motion.div>
           </div>

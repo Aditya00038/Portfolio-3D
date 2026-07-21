@@ -16,8 +16,10 @@ export default function KineticGrid(props) {
     const {
         background = "#000000",
         dotColor = "#FFFFFF",
-        lineColor = "#2563EB",
-        trailColor = "#2664EB",
+        lineColor = "#FFFFFF",
+        activeLineColor = "#38bdf8",
+        activeDotColor = "#38bdf8",
+        trailColor = "#38bdf8",
         spacing = 50,
         radius = 200,
         strength = 4,
@@ -78,9 +80,9 @@ export default function KineticGrid(props) {
         // fills the whole component instead of a top-left patch.
         const drawStatic = () => {
             ctx.clearRect(0, 0, W, H)
-            ctx.globalAlpha = 0.14
+            ctx.globalAlpha = 0.05
             ctx.strokeStyle = lineColor
-            ctx.lineWidth = 0.75
+            ctx.lineWidth = 0.5
             for (let c = 0; c < cols.length; c++) {
                 for (let rIdx = 0; rIdx < cols[c].length; rIdx++) {
                     const d = cols[c][rIdx]
@@ -100,11 +102,11 @@ export default function KineticGrid(props) {
                     }
                 }
             }
-            ctx.globalAlpha = 0.4
+            ctx.globalAlpha = 0.15
             ctx.fillStyle = dotColor
             for (const d of dots) {
                 ctx.beginPath()
-                ctx.arc(d.hx, d.hy, 1.2, 0, 2 * Math.PI)
+                ctx.arc(d.hx, d.hy, 1.0, 0, 2 * Math.PI)
                 ctx.fill()
             }
             ctx.globalAlpha = 1
@@ -131,22 +133,35 @@ export default function KineticGrid(props) {
         }
 
         const setMouse = (clientX, clientY) => {
-            // Check if cursor is hovering over text elements
+            const r = canvas.getBoundingClientRect()
+
+            // Deactivate if mouse is outside the canvas bounding box
+            if (
+                clientX < r.left ||
+                clientX > r.right ||
+                clientY < r.top ||
+                clientY > r.bottom
+            ) {
+                mouseRef.current.active = false
+                mouseRef.current.x = -9999
+                mouseRef.current.y = -9999
+                return
+            }
+
+            // Deactivate if cursor is hovering over text, cards, photos, buttons, or non-background elements
             if (typeof document !== "undefined") {
                 const target = document.elementFromPoint(clientX, clientY)
-                const TEXT_TAGS = ['P','H1','H2','H3','H4','H5','H6','SPAN','A','LI','LABEL','BUTTON','STRONG','EM']
-                const tagName = target?.tagName?.toUpperCase() || ''
-                const isOverText = TEXT_TAGS.includes(tagName) || (target?.closest ? !!target.closest('p, h1, h2, h3, h4, h5, h6, span, a, li, button, label') : false)
-                
-                if (isOverText) {
-                    mouseRef.current.active = false
-                    mouseRef.current.x = -9999
-                    mouseRef.current.y = -9999
-                    return
+                if (target) {
+                    const isOverElement = target.closest('p, h1, h2, h3, h4, h5, h6, span, a, button, img, li, label, input, textarea, [data-cursor], .group, header, nav, footer')
+                    if (isOverElement) {
+                        mouseRef.current.active = false
+                        mouseRef.current.x = -9999
+                        mouseRef.current.y = -9999
+                        return
+                    }
                 }
             }
 
-            const r = canvas.getBoundingClientRect()
             const mx = clientX - r.left
             const my = clientY - r.top
             mouseRef.current.x = mx
@@ -171,6 +186,7 @@ export default function KineticGrid(props) {
 
         window.addEventListener("mousemove", onMove)
         window.addEventListener("mouseleave", onLeave)
+        window.addEventListener("scroll", onLeave, { passive: true })
         window.addEventListener("touchmove", onTouch, { passive: true })
         window.addEventListener("touchend", onLeave)
 
@@ -199,35 +215,55 @@ export default function KineticGrid(props) {
                 d.y += d.vy
             }
 
-            // Grid mesh lines (brighten near the cursor).
+            // Grid mesh lines (brighten & turn blue near the cursor).
             for (let c = 0; c < cols.length; c++) {
                 for (let rIdx = 0; rIdx < cols[c].length; rIdx++) {
                     const d = cols[c][rIdx]
                     const right = cols[c + 1]?.[rIdx]
                     const down = cols[c]?.[rIdx + 1]
-                    const prox = m.active
-                        ? Math.max(
-                              0,
-                              1 -
-                                  Math.sqrt(
-                                      (m.x - d.x) ** 2 + (m.y - d.y) ** 2
-                                  ) /
-                                      R
-                          )
+                    const dProx = m.active
+                        ? Math.max(0, 1 - Math.sqrt((m.x - d.x) ** 2 + (m.y - d.y) ** 2) / R)
                         : 0
+
                     if (right) {
-                        ctx.globalAlpha = 0.06 + prox * 0.7
-                        ctx.strokeStyle = lineColor
-                        ctx.lineWidth = 0.5 + prox * 1.5
+                        const midX = (d.x + right.x) / 2
+                        const midY = (d.y + right.y) / 2
+                        const rProx = m.active
+                            ? Math.max(0, 1 - Math.sqrt((m.x - midX) ** 2 + (m.y - midY) ** 2) / R)
+                            : 0
+                        const prox = Math.max(dProx, rProx)
+
+                        if (prox > 0.02) {
+                            ctx.globalAlpha = 0.2 + prox * 0.8
+                            ctx.strokeStyle = activeLineColor
+                            ctx.lineWidth = 0.8 + prox * 1.6
+                        } else {
+                            ctx.globalAlpha = 0.05
+                            ctx.strokeStyle = lineColor
+                            ctx.lineWidth = 0.5
+                        }
                         ctx.beginPath()
                         ctx.moveTo(d.x, d.y)
                         ctx.lineTo(right.x, right.y)
                         ctx.stroke()
                     }
                     if (down) {
-                        ctx.globalAlpha = 0.06 + prox * 0.7
-                        ctx.strokeStyle = lineColor
-                        ctx.lineWidth = 0.5 + prox * 1.5
+                        const midX = (d.x + down.x) / 2
+                        const midY = (d.y + down.y) / 2
+                        const dProxLine = m.active
+                            ? Math.max(0, 1 - Math.sqrt((m.x - midX) ** 2 + (m.y - midY) ** 2) / R)
+                            : 0
+                        const prox = Math.max(dProx, dProxLine)
+
+                        if (prox > 0.02) {
+                            ctx.globalAlpha = 0.2 + prox * 0.8
+                            ctx.strokeStyle = activeLineColor
+                            ctx.lineWidth = 0.8 + prox * 1.6
+                        } else {
+                            ctx.globalAlpha = 0.05
+                            ctx.strokeStyle = lineColor
+                            ctx.lineWidth = 0.5
+                        }
                         ctx.beginPath()
                         ctx.moveTo(d.x, d.y)
                         ctx.lineTo(down.x, down.y)
@@ -239,16 +275,21 @@ export default function KineticGrid(props) {
             // Dots.
             for (const d of dots) {
                 const prox = m.active
-                    ? Math.max(
-                          0,
-                          1 - Math.sqrt((m.x - d.x) ** 2 + (m.y - d.y) ** 2) / R
-                      )
+                    ? Math.max(0, 1 - Math.sqrt((m.x - d.x) ** 2 + (m.y - d.y) ** 2) / R)
                     : 0
-                ctx.globalAlpha = 0.22 + prox * 0.78
-                ctx.fillStyle = dotColor
-                ctx.beginPath()
-                ctx.arc(d.x, d.y, 0.8 + prox * 2.2, 0, 2 * Math.PI)
-                ctx.fill()
+                if (prox > 0.02) {
+                    ctx.globalAlpha = 0.35 + prox * 0.65
+                    ctx.fillStyle = activeDotColor
+                    ctx.beginPath()
+                    ctx.arc(d.x, d.y, 1.2 + prox * 2.0, 0, 2 * Math.PI)
+                    ctx.fill()
+                } else {
+                    ctx.globalAlpha = 0.15
+                    ctx.fillStyle = dotColor
+                    ctx.beginPath()
+                    ctx.arc(d.x, d.y, 1.0, 0, 2 * Math.PI)
+                    ctx.fill()
+                }
             }
 
             // Cursor trail line — visible on plain mouse move, fades out.
@@ -282,6 +323,7 @@ export default function KineticGrid(props) {
             ro?.disconnect()
             window.removeEventListener("mousemove", onMove)
             window.removeEventListener("mouseleave", onLeave)
+            window.removeEventListener("scroll", onLeave)
             window.removeEventListener("touchmove", onTouch)
             window.removeEventListener("touchend", onLeave)
         }

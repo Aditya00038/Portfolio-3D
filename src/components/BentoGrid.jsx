@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Clock, Languages, Gamepad2 } from 'lucide-react';
-import { FaReact, FaNodeJs } from 'react-icons/fa';
-import { SiTailwindcss, SiPython, SiMysql, SiMongodb } from 'react-icons/si';
+import { Clock, MapPin, Gamepad2 } from 'lucide-react';
 
 const TypewriterText = ({ words }) => {
   const [index, setIndex] = useState(0);
@@ -44,35 +42,10 @@ const TypewriterText = ({ words }) => {
 
 export default function BentoGrid() {
   const [time, setTime] = useState(new Date());
-  const [weather, setWeather] = useState({ temp: 26, description: "Light rain shower" });
 
   useEffect(() => {
     const timer = setInterval(() => setTime(new Date()), 1000);
     return () => clearInterval(timer);
-  }, []);
-
-  // Fetch weather for Pune
-  useEffect(() => {
-    const fetchWeather = async () => {
-      try {
-        const res = await fetch('https://api.open-meteo.com/v1/forecast?latitude=18.5204&longitude=73.8567&current_weather=true');
-        const data = await res.json();
-        if (data && data.current_weather) {
-          const temp = Math.round(data.current_weather.temperature);
-          const code = data.current_weather.weathercode;
-          let desc = "Clear";
-          if (code === 1 || code === 2 || code === 3) desc = "Partly cloudy";
-          else if (code >= 45 && code <= 48) desc = "Foggy";
-          else if (code >= 51 && code <= 67) desc = "Rain shower";
-          else if (code >= 71 && code <= 77) desc = "Snow";
-          else if (code >= 95) desc = "Thunderstorm";
-          setWeather({ temp, description: desc });
-        }
-      } catch (error) {
-        console.error("Failed to fetch weather", error);
-      }
-    };
-    fetchWeather();
   }, []);
 
   // Format time for Pune (UTC+5:30)
@@ -162,67 +135,42 @@ export default function BentoGrid() {
           </div>
         </motion.div>
 
-        {/* Col 1, Row 2: Languages (Positioned below Local Time) */}
+        {/* Col 1, Row 2: Location / Pune (Replaces Languages card) */}
         <motion.div 
           variants={itemVariants} 
-          className="bg-[#161616] rounded-3xl p-5 flex flex-col h-[170px] border border-white/5 relative overflow-hidden group select-none"
+          className="bg-[#161616] rounded-3xl p-5 flex flex-col justify-between h-[170px] border border-white/5 relative overflow-hidden group select-none"
         >
-          <div className="flex items-center text-zinc-400 gap-2 mb-4 text-sm font-bold">
-            <Languages size={16} className="text-zinc-400" />
-            <span>Languages</span>
+          {/* Background image covering the box */}
+          <div className="absolute inset-0 z-0 overflow-hidden">
+            <img 
+              src="/Gallery/pune.png"
+              alt="Pune City"
+              onError={(e) => {
+                if (!e.target.dataset.triedJpg) {
+                  e.target.dataset.triedJpg = 'true';
+                  e.target.src = '/Gallery/pune.jpg';
+                } else if (!e.target.dataset.triedJpeg) {
+                  e.target.dataset.triedJpeg = 'true';
+                  e.target.src = '/Gallery/pune.jpeg';
+                }
+              }}
+              className="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:scale-105 group-hover:opacity-80 transition-all duration-500"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-black/20" />
           </div>
-          
-          {/* Scattered Interactive Pills exactly matching the user's design style */}
-          <div className="relative w-full h-full">
-            <motion.div 
-              initial={{ rotate: -6 }}
-              whileHover={{ scale: 1.08, rotate: 0, zIndex: 10 }}
-              transition={{ type: "spring", stiffness: 300, damping: 15 }}
-              className="absolute bg-white text-zinc-950 border border-zinc-200/60 shadow-[0_4px_12px_rgba(0,0,0,0.04)] px-3 py-1.5 rounded-full text-xs font-semibold cursor-pointer"
-              style={{ top: '2%', left: '4%' }}
-            >
-              Marathi
-            </motion.div>
-            
-            <motion.div 
-              initial={{ rotate: 5 }}
-              whileHover={{ scale: 1.08, rotate: 0, zIndex: 10 }}
-              transition={{ type: "spring", stiffness: 300, damping: 15 }}
-              className="absolute bg-white text-zinc-950 border border-zinc-200/60 shadow-[0_4px_12px_rgba(0,0,0,0.04)] px-3 py-1.5 rounded-full text-xs font-semibold cursor-pointer"
-              style={{ top: '0%', right: '4%' }}
-            >
-              English
-            </motion.div>
-            
-            <motion.div 
-              initial={{ rotate: -3 }}
-              whileHover={{ scale: 1.08, rotate: 0, zIndex: 10 }}
-              transition={{ type: "spring", stiffness: 300, damping: 15 }}
-              className="absolute bg-white text-zinc-950 border border-zinc-200/60 shadow-[0_4px_12px_rgba(0,0,0,0.04)] px-3.5 py-1.5 rounded-full text-xs font-semibold cursor-pointer"
-              style={{ top: '28%', left: '34%' }}
-            >
-              Hindi
-            </motion.div>
-            
-            <motion.div 
-              initial={{ rotate: 4 }}
-              whileHover={{ scale: 1.08, rotate: 0, zIndex: 10 }}
-              transition={{ type: "spring", stiffness: 300, damping: 15 }}
-              className="absolute bg-white text-zinc-500 border border-zinc-200/60 shadow-[0_4px_12px_rgba(0,0,0,0.04)] px-3 py-1 rounded-full text-[10px] font-bold tracking-wide uppercase cursor-pointer"
-              style={{ bottom: '10%', left: '6%' }}
-            >
-              Native
-            </motion.div>
-            
-            <motion.div 
-              initial={{ rotate: -5 }}
-              whileHover={{ scale: 1.08, rotate: 0, zIndex: 10 }}
-              transition={{ type: "spring", stiffness: 300, damping: 15 }}
-              className="absolute bg-white text-zinc-500 border border-zinc-200/60 shadow-[0_4px_12px_rgba(0,0,0,0.04)] px-3 py-1 rounded-full text-[10px] font-bold tracking-wide uppercase cursor-pointer"
-              style={{ bottom: '12%', right: '6%' }}
-            >
-              Fluent
-            </motion.div>
+
+          <div className="relative z-10 flex items-center text-zinc-300 gap-2 text-sm font-medium">
+            <MapPin size={16} className="text-blue-400" />
+            <span>Location</span>
+          </div>
+
+          <div className="relative z-10 mt-auto">
+            <h3 className="text-xl font-bold text-white tracking-tight">
+              Pune, India
+            </h3>
+            <p className="text-zinc-300 text-xs mt-0.5 font-medium">
+              I live in Pune — studying CS at MITAOE.
+            </p>
           </div>
         </motion.div>
 
@@ -230,5 +178,3 @@ export default function BentoGrid() {
     </div>
   );
 }
-
-

@@ -80,7 +80,7 @@ export default function Navbar() {
   }, []);
 
   return (
-    <div className="fixed top-0 left-0 w-full z-[100] pointer-events-none translate-y-0 opacity-100 transition-all duration-300">
+    <div className="fixed top-0 left-0 w-full z-[100] pointer-events-none translate-y-0 opacity-100 transition-all duration-300 bg-transparent">
       <div className="relative w-full h-full flex items-center justify-between px-8 md:px-16 lg:px-24 pt-8">
         {/* Left Side: Logo (Changes color dynamically based on background theme) */}
         <motion.div layoutId="navbar-logo" className="pointer-events-auto z-[100] flex items-center">
