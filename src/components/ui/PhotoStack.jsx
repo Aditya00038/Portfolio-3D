@@ -89,21 +89,6 @@ export default function PhotoStack({
               draggable={false}
               src={photo.src}
             />
-            {(photo.name || photo.role) && (
-              <figcaption
-                className={cn(
-                  "absolute inset-x-0 bottom-0 flex flex-col gap-0.5 bg-gradient-to-t from-black/90 via-black/50 to-transparent p-4 text-white transition-opacity duration-300",
-                  !isFront && "opacity-0 pointer-events-none"
-                )}
-              >
-                {photo.name && (
-                  <span className="font-semibold text-sm tracking-tight">{photo.name}</span>
-                )}
-                {photo.role && (
-                  <span className="text-xs opacity-75 font-light">{photo.role}</span>
-                )}
-              </figcaption>
-            )}
             {pos > 0 && (
               <span
                 aria-hidden

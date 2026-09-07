@@ -6,133 +6,76 @@ const INITIAL_ITEMS = [
   {
     id: 1,
     type: 'image',
-    src: '/Gallery/tech_workspace_lego.png',
-    title: 'Technic Audi',
-    rotation: -12,
-    className: 'w-56 md:w-76 lg:w-84 top-[-6%] left-[-2%] md:left-[0%]',
-    dragConstraints: { left: -100, right: 450, top: -100, bottom: 400 },
+    src: '/Gallery/me6.jpeg',
+    title: 'Aditya Portrait',
+    rotation: -6,
+    className: 'w-44 md:w-56 lg:w-64 top-2 left-2 md:top-4 md:left-4',
+    imgStyle: { aspectRatio: '1 / 1.58', objectPosition: 'top' },
   },
   {
     id: 2,
     type: 'image',
     src: '/Gallery/me.png',
-    title: 'Presentation',
-    rotation: -4,
-    className: 'w-44 md:w-60 lg:w-64 top-[-10%] left-[22%] md:left-[24%]',
-    dragConstraints: { left: -200, right: 350, top: -80, bottom: 450 },
+    title: 'Aditya Suryawanshi',
+    rotation: -7,
+    className: 'w-44 md:w-56 lg:w-64 top-[52%] left-2 md:top-[54%] md:left-4',
   },
   {
     id: 3,
     type: 'image',
-    src: '/Gallery/me2.png',
-    title: 'Flight Selfie',
-    rotation: 8,
-    className: 'w-44 md:w-60 lg:w-64 top-[-8%] right-[20%] md:right-[22%]',
-    dragConstraints: { left: -350, right: 200, top: -80, bottom: 450 },
+    src: '/Gallery/me4.png',
+    title: 'Aditya Shot',
+    rotation: 5,
+    className: 'w-44 md:w-56 lg:w-64 top-2 left-[24%] md:top-4 md:left-[25%]',
   },
   {
     id: 4,
     type: 'image',
-    src: '/Gallery/place2.png',
-    title: 'Scooter',
-    rotation: -5,
-    className: 'w-44 md:w-56 lg:w-60 top-[-6%] right-[-3%] md:right-[-2%]',
-    dragConstraints: { left: -450, right: 90, top: -90, bottom: 400 },
+    src: '/Gallery/me5.png',
+    title: 'Aditya Shot 2',
+    rotation: -6,
+    className: 'w-44 md:w-56 lg:w-64 top-2 right-[24%] md:top-4 md:right-[25%]',
   },
   {
     id: 5,
-    type: 'spotify',
-    title: 'Aria Math',
-    artist: 'C418 · Minecraft',
-    src: '/Musics/Aria Math from Minecraft.mp3',
-    cover: '/Gallery/me.png',
-    rotation: -6,
-    className: 'w-60 md:w-80 lg:w-84 top-[32%] left-[-4%] md:left-[-2%]',
-    dragConstraints: { left: -120, right: 500, top: -200, bottom: 200 },
+    type: 'image',
+    src: '/Gallery/me2.png',
+    title: 'Flight Selfie',
+    rotation: 8,
+    className: 'w-44 md:w-56 lg:w-64 top-2 right-2 md:top-4 md:right-4',
   },
   {
     id: 6,
     type: 'image',
-    src: '/Gallery/travel_view_sunset.png',
-    title: 'Lego F1',
-    rotation: 10,
-    className: 'w-44 md:w-60 lg:w-68 top-[28%] right-[-4%] md:right-[-2%]',
-    dragConstraints: { left: -500, right: 120, top: -200, bottom: 200 },
-  },
-  {
-    id: 7,
-    type: 'video',
-    src: '/Gallery/place4.mp4',
-    title: 'Skydiving',
-    rotation: -14,
-    className: 'w-48 md:w-64 lg:w-72 bottom-[14%] left-[-5%] md:left-[-3%]',
-    dragConstraints: { left: -120, right: 450, top: -350, bottom: 100 },
-  },
-  {
-    id: 8,
-    type: 'image',
     src: '/Gallery/me3.png',
     title: 'Group Selfie',
     rotation: 6,
-    className: 'w-44 md:w-56 lg:w-60 bottom-[-10%] left-[1%] md:left-[2%]',
-    dragConstraints: { left: -80, right: 350, top: -450, bottom: 90 },
+    className: 'w-44 md:w-56 lg:w-64 top-[52%] right-2 md:top-[54%] md:right-4',
+  },
+  {
+    id: 7,
+    type: 'image',
+    src: '/Gallery/place.png',
+    title: 'Toy in Hand',
+    rotation: -4,
+    className: 'w-36 md:w-48 lg:w-54 bottom-2 left-[18%] md:bottom-3 md:left-[22%]',
+  },
+  {
+    id: 8,
+    type: 'video',
+    src: '/Gallery/place4.mp4',
+    title: 'Skydiving Video',
+    rotation: 2,
+    className: 'w-44 md:w-60 lg:w-68 bottom-2 left-1/2 -translate-x-1/2 md:bottom-3',
   },
   {
     id: 9,
     type: 'image',
-    src: '/project_thumbnails/parivartan.jpeg',
-    title: 'Zoom Call',
-    rotation: -4,
-    className: 'w-44 md:w-56 lg:w-60 bottom-[-12%] left-[20%] md:left-[22%]',
-    dragConstraints: { left: -180, right: 300, top: -450, bottom: 90 },
-  },
-  {
-    id: 10,
-    type: 'image',
-    src: '/Gallery/place.png',
-    title: 'Toy in Hand',
+    src: '/Gallery/place2.png',
+    title: 'Scooter Ride',
     rotation: 5,
-    className: 'w-40 md:w-52 lg:w-56 bottom-[-6%] left-[37%] md:left-[39%]',
-    dragConstraints: { left: -250, right: 250, top: -450, bottom: 90 },
+    className: 'w-36 md:w-48 lg:w-54 bottom-2 right-[18%] md:bottom-3 md:right-[22%]',
   },
-  {
-    id: 11,
-    type: 'image',
-    src: '/project_thumbnails/dhansathi_mockup.jpeg',
-    title: 'Office Ceiling',
-    rotation: -6,
-    className: 'w-44 md:w-56 lg:w-60 bottom-[-10%] left-[51%] md:left-[53%]',
-    dragConstraints: { left: -300, right: 180, top: -450, bottom: 90 },
-  },
-  {
-    id: 12,
-    type: 'image',
-    src: '/project_thumbnails/Glyvora.png',
-    title: 'Microsoft Wall',
-    rotation: 8,
-    className: 'w-44 md:w-56 lg:w-60 bottom-[-10%] right-[16%] md:right-[18%]',
-    dragConstraints: { left: -350, right: 120, top: -450, bottom: 90 },
-  },
-  {
-    id: 13,
-    type: 'image',
-    src: '/project_thumbnails/ChemStock.png',
-    title: 'Room View',
-    rotation: -5,
-    className: 'w-44 md:w-56 lg:w-60 bottom-[-12%] right-[-3%] md:right-[-2%]',
-    dragConstraints: { left: -450, right: 90, top: -450, bottom: 90 },
-  },
-  {
-    id: 14,
-    type: 'spotify',
-    title: 'Welcome to Los Santos',
-    artist: 'Oh No · GTA V Soundtrack',
-    src: '/Musics/GTA V - Welcome to Los Santos Soundtrack.webm',
-    cover: '/Gallery/place.png',
-    rotation: -7,
-    className: 'w-60 md:w-80 lg:w-84 bottom-[18%] right-[4%] md:right-[6%]',
-    dragConstraints: { left: -500, right: 120, top: -350, bottom: 100 },
-  }
 ];
 
 export default function HorizontalGallery() {
@@ -141,12 +84,12 @@ export default function HorizontalGallery() {
   const audioRef = useRef(null);
 
   const [zIndices, setZIndices] = useState(
-    INITIAL_ITEMS.reduce((acc, item, idx) => ({ ...acc, [item.id]: idx + 20 }), {})
+    INITIAL_ITEMS.reduce((acc, item, idx) => ({ ...acc, [item.id]: idx + 5 }), {})
   );
-  const [maxZ, setMaxZ] = useState(INITIAL_ITEMS.length + 30);
+  const [maxZ, setMaxZ] = useState(INITIAL_ITEMS.length + 10);
 
   const bringToFront = (id) => {
-    const nextZ = maxZ + 1;
+    const nextZ = Math.min(40, maxZ + 1);
     setMaxZ(nextZ);
     setZIndices((prev) => ({ ...prev, [id]: nextZ }));
   };
@@ -170,13 +113,16 @@ export default function HorizontalGallery() {
   return (
     <section
       ref={containerRef}
-      className="w-full relative h-[650px] md:h-[750px] lg:h-[820px] bg-black overflow-hidden select-none py-10 px-4 border-t border-zinc-900 cursor-default"
+      className="w-full relative h-[680px] md:h-[780px] lg:h-[860px] bg-black overflow-hidden select-none py-10 px-4 border-t border-b border-zinc-800/80 cursor-default"
     >
+      {/* Ambient Blue Radial Glow */}
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_60%_at_50%_50%,rgba(56,189,248,0.05)_0%,transparent_70%)] pointer-events-none" />
+
       {/* Background Grid Pattern */}
       <div className="absolute inset-0 bg-[linear-gradient(to_right,#18181b_1px,transparent_1px),linear-gradient(to_bottom,#18181b_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_50%,#000_70%,transparent_100%)] opacity-40 pointer-events-none" />
 
       {/* Center Hero Content (pointer-events-none so cards underneath are 100% clickable/draggable) */}
-      <div className="relative z-10 max-w-xl mx-auto flex flex-col items-center text-center justify-center h-full pointer-events-none pb-4">
+      <div className="relative z-50 max-w-xl mx-auto flex flex-col items-center text-center justify-center h-full pointer-events-none pb-4">
         {/* Cursive overlay + Big Title */}
         <div className="relative mb-3">
           <span
@@ -187,15 +133,6 @@ export default function HorizontalGallery() {
           </span>
           <h2 className="text-5xl md:text-7xl lg:text-8xl font-black font-sans text-white tracking-tight pt-3 relative pointer-events-none">
             Instagram<span className="text-blue-500">.</span>
-            {/* Pushpin decorative elements near title */}
-            <div className="absolute -right-8 bottom-2 hidden md:flex items-center gap-1 opacity-90 pointer-events-none">
-              <svg className="w-5 h-5 text-blue-400 transform rotate-45" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M16 12V4h1V2H7v2h1v8l-2 2v2h5.2v6h1.6v-6H18v-2l-2-2z" />
-              </svg>
-              <svg className="w-4 h-4 text-blue-500 transform -rotate-12" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M16 12V4h1V2H7v2h1v8l-2 2v2h5.2v6h1.6v-6H18v-2l-2-2z" />
-              </svg>
-            </div>
           </h2>
         </div>
 
@@ -204,14 +141,9 @@ export default function HorizontalGallery() {
           <span>[ Drag object to move ]</span>
         </div>
 
-        {/* Subtitle */}
-        <p className="text-zinc-400 text-xs md:text-sm max-w-md leading-relaxed mb-6 pointer-events-none">
-          My digital sketchbook. A space for unfinished thoughts and late-night experiments.
-        </p>
-
         {/* CTA Button */}
         <a
-          href="https://instagram.com/aditya.suryawanshi038"
+          href="https://www.instagram.com/_aditya_038/"
           target="_blank"
           rel="noopener noreferrer"
           className="inline-flex items-center gap-2 bg-white hover:bg-zinc-200 text-black font-bold text-xs md:text-sm px-8 py-3.5 rounded-full transition-all duration-300 shadow-2xl hover:scale-105 no-underline cursor-pointer pointer-events-auto"
@@ -226,10 +158,10 @@ export default function HorizontalGallery() {
         <motion.div
           key={item.id}
           drag
-          dragConstraints={item.dragConstraints}
-          dragElastic={0.05}
+          dragConstraints={containerRef}
+          dragElastic={0.12}
           dragMomentum={true}
-          dragTransition={{ bounceStiffness: 400, bounceDamping: 30 }}
+          dragTransition={{ bounceStiffness: 400, bounceDamping: 25 }}
           onDragStart={() => bringToFront(item.id)}
           onPointerDown={() => bringToFront(item.id)}
           onMouseDown={() => bringToFront(item.id)}
@@ -237,31 +169,32 @@ export default function HorizontalGallery() {
           initial={{ rotate: item.rotation, scale: 0.9, opacity: 0 }}
           animate={{ rotate: item.rotation, scale: 1, opacity: 1 }}
           transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-          whileDrag={{ scale: 1.07, rotate: 0, zIndex: 999 }}
-          whileHover={{ scale: 1.03 }}
+          whileDrag={{ scale: 1.08, rotate: 0, zIndex: 45, filter: 'brightness(1.06)' }}
+          whileHover={{ scale: 1.04, y: -4 }}
           className={`absolute cursor-grab active:cursor-grabbing ${item.className} will-change-transform transform-gpu`}
-          style={{ zIndex: zIndices[item.id] || 20 }}
+          style={{ zIndex: zIndices[item.id] || 5 }}
         >
           {item.type === 'image' && (
-            <div className="relative bg-zinc-950 p-2.5 md:p-3 rounded-2xl md:rounded-[2rem] border border-zinc-800/80 shadow-[0_25px_60px_rgba(0,0,0,0.9)] backdrop-blur-md group">
+            <div className="relative rounded-2xl md:rounded-3xl shadow-[0_20px_60px_rgba(0,0,0,0.9)] border border-white/5 transition-colors duration-300 hover:border-white/20 overflow-hidden group">
               <img
                 src={item.src}
                 alt={item.title}
-                className="w-full h-auto object-cover rounded-xl md:rounded-[1.5rem] select-none pointer-events-none"
+                className="w-full h-auto object-cover rounded-2xl md:rounded-3xl select-none pointer-events-none"
+                style={item.imgStyle || {}}
                 draggable={false}
               />
             </div>
           )}
 
           {item.type === 'video' && (
-            <div className="relative bg-zinc-950 p-2.5 md:p-3 rounded-2xl md:rounded-[2rem] border border-zinc-800/80 shadow-[0_25px_60px_rgba(0,0,0,0.9)] backdrop-blur-md">
+            <div className="relative rounded-2xl md:rounded-3xl shadow-[0_20px_50px_rgba(0,0,0,0.85)] overflow-hidden">
               <video
                 src={item.src}
                 autoPlay
                 loop
                 muted
                 playsInline
-                className="w-full h-auto object-cover rounded-xl md:rounded-[1.5rem] select-none pointer-events-none"
+                className="w-full h-auto object-cover rounded-2xl md:rounded-3xl select-none pointer-events-none"
               />
             </div>
           )}

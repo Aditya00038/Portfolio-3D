@@ -58,8 +58,8 @@ export default function BentoGrid() {
 
   const bentoVariants = {
     hidden: { opacity: 0, y: 20 },
-    visible: { 
-      opacity: 1, 
+    visible: {
+      opacity: 1,
       y: 0,
       transition: { duration: 0.6, staggerChildren: 0.1 }
     }
@@ -72,7 +72,7 @@ export default function BentoGrid() {
 
   return (
     <div className="w-full max-w-[950px] mx-auto mt-32 mb-24 font-sans z-20 relative px-6 md:px-0">
-      <motion.h2 
+      <motion.h2
         initial={{ opacity: 0, y: 10 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
@@ -88,7 +88,7 @@ export default function BentoGrid() {
         ]} />
       </motion.h2>
 
-      <motion.div 
+      <motion.div
         variants={bentoVariants}
         initial="hidden"
         whileInView="visible"
@@ -115,7 +115,7 @@ export default function BentoGrid() {
         <motion.div variants={itemVariants} className="md:col-span-2 md:row-span-2 bg-[#161616] rounded-3xl p-6 h-[356px] border border-white/5 relative overflow-hidden group">
           {/* Background video covering the box */}
           <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
-            <video 
+            <video
               src="/videos/cod-portfolio.mp4"
               autoPlay
               muted
@@ -125,7 +125,7 @@ export default function BentoGrid() {
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent pointer-events-none" />
           </div>
-          
+
           <div className="relative z-10 h-full flex flex-col justify-end pointer-events-none">
             <div className="flex items-center text-zinc-300 gap-2 mb-1 text-sm font-medium">
               <Gamepad2 size={16} />
@@ -136,41 +136,31 @@ export default function BentoGrid() {
         </motion.div>
 
         {/* Col 1, Row 2: Location / Pune (Replaces Languages card) */}
-        <motion.div 
-          variants={itemVariants} 
+        <motion.div
+          variants={itemVariants}
           className="bg-[#161616] rounded-3xl p-5 flex flex-col justify-between h-[170px] border border-white/5 relative overflow-hidden group select-none"
         >
-          {/* Background image covering the box */}
-          <div className="absolute inset-0 z-0 overflow-hidden">
-            <img 
-              src="/Gallery/pune.png"
-              alt="Pune City"
-              onError={(e) => {
-                if (!e.target.dataset.triedJpg) {
-                  e.target.dataset.triedJpg = 'true';
-                  e.target.src = '/Gallery/pune.jpg';
-                } else if (!e.target.dataset.triedJpeg) {
-                  e.target.dataset.triedJpeg = 'true';
-                  e.target.src = '/Gallery/pune.jpeg';
-                }
-              }}
-              className="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:scale-105 group-hover:opacity-80 transition-all duration-500"
+          {/* Background video covering the box */}
+          <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
+            <video
+              src="/videos/Pune.mp4"
+              autoPlay
+              muted
+              loop
+              playsInline
+              className="absolute inset-0 w-full h-full object-cover opacity-90 group-hover:scale-105 group-hover:opacity-100 transition-all duration-500 pointer-events-none"
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-black/20" />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/30 pointer-events-none" />
           </div>
 
-          <div className="relative z-10 flex items-center text-zinc-300 gap-2 text-sm font-medium">
-            <MapPin size={16} className="text-blue-400" />
-            <span>Location</span>
-          </div>
-
-          <div className="relative z-10 mt-auto">
+          <div className="relative z-10 mt-auto flex flex-col items-start gap-0.5">
+            <div className="flex items-center text-zinc-300 gap-1.5 text-xs font-medium uppercase tracking-wider">
+              <MapPin size={14} className="text-blue-400" />
+              <span>Location</span>
+            </div>
             <h3 className="text-xl font-bold text-white tracking-tight">
-              Pune, India
+              Pune
             </h3>
-            <p className="text-zinc-300 text-xs mt-0.5 font-medium">
-              I live in Pune — studying CS at MITAOE.
-            </p>
           </div>
         </motion.div>
 

@@ -562,11 +562,9 @@ export default function ScrollyCanvas() {
               </ShineText>
 
               <div className="mt-8 flex flex-wrap gap-4 pointer-events-auto items-center">
-                <a href="/Aditya%20Resume.pdf" target="_blank" rel="noreferrer" className="block">
-                  <ShimmerButton>
-                    View Resume
-                  </ShimmerButton>
-                </a>
+                <ShimmerButton onClick={() => window.open('/Aditya-Resume.pdf', '_blank', 'noopener,noreferrer')}>
+                  View Resume
+                </ShimmerButton>
                 <Link
                   to="/#contact"
                   className="cursor-pointer"
@@ -671,12 +669,12 @@ export default function ScrollyCanvas() {
                       Icon: <FaGithub size={22} />,
                     },
                     {
-                      link: "https://linkedin.com",
+                      link: "https://www.linkedin.com/in/aditya-suryawanshi-20b60930a/",
                       target: "_blank",
                       Icon: <FaLinkedinIn size={22} />,
                     },
                     {
-                      link: "https://instagram.com",
+                      link: "https://www.instagram.com/_aditya_038/",
                       target: "_blank",
                       Icon: <FaInstagram size={22} />,
                     },

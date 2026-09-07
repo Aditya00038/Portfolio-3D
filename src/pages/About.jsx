@@ -9,24 +9,45 @@ import KineticGrid from '../components/ui/KineticGrid';
 const photosList = [
   {
     id: 'photo-1',
-    src: '/extra_images/me.png',
-    alt: 'Aditya Suryawanshi - Beach Portrait',
+    src: '/Gallery/me.png',
+    alt: 'Aditya Suryawanshi',
     name: 'Aditya Suryawanshi',
     role: 'Computer Engineering Student'
   },
   {
     id: 'photo-2',
-    src: 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=600&auto=format&fit=crop',
-    alt: 'MIT Academy of Engineering, Pune',
-    name: 'Engineering & Code',
-    role: 'MIT AOE, Pune'
+    src: '/Gallery/me6.jpeg',
+    alt: 'Aditya Suryawanshi',
+    name: 'Aditya Suryawanshi',
+    role: 'Full Stack Systems'
   },
   {
     id: 'photo-3',
-    src: 'https://images.unsplash.com/photo-1498050108023-c5249f4df085?q=80&w=600&auto=format&fit=crop',
-    alt: 'Full Stack Web Developer',
-    name: 'Full Stack Systems',
-    role: 'React, Node, Python'
+    src: '/Gallery/me2.png',
+    alt: 'Aditya Suryawanshi',
+    name: 'Aditya Suryawanshi',
+    role: 'AI & Web Engineer'
+  },
+  {
+    id: 'photo-4',
+    src: '/Gallery/me3.png',
+    alt: 'Aditya Suryawanshi',
+    name: 'Aditya Suryawanshi',
+    role: 'Collaborator & Builder'
+  },
+  {
+    id: 'photo-5',
+    src: '/Gallery/me4.png',
+    alt: 'Aditya Suryawanshi',
+    name: 'Aditya Suryawanshi',
+    role: 'Problem Solver'
+  },
+  {
+    id: 'photo-6',
+    src: '/Gallery/me5.png',
+    alt: 'Aditya Suryawanshi',
+    name: 'Aditya Suryawanshi',
+    role: 'Tech Enthusiast'
   }
 ];
 

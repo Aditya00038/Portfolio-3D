@@ -3,9 +3,9 @@ import React, { createContext, useContext, useState, useEffect, useRef } from 'r
 const AudioContext = createContext(null);
 
 export const playlist = [
-  { id: 0, title: 'Aria Math (Minecraft)', url: '/Musics/Aria Math from Minecraft.mp3', duration: 310 },
+  { id: 0, title: 'GTA V Soundtrack', url: '/Musics/GTA V - Welcome to Los Santos Soundtrack.webm', duration: 180 },
   { id: 1, title: 'GTA IV Theme Song', url: '/Musics/GTA IV - Theme Song .webm', duration: 170 },
-  { id: 2, title: 'GTA V Soundtrack', url: '/Musics/GTA V - Welcome to Los Santos Soundtrack.webm', duration: 180 }
+  { id: 2, title: 'Aria Math (Minecraft)', url: '/Musics/Aria Math from Minecraft.mp3', duration: 310 }
 ];
 
 export function AudioProvider({ children }) {

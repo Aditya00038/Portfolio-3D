@@ -54,7 +54,7 @@ export default function ContactFooter() {
                         <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
                         <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
                       </svg>
-                      <a href="https://instagram.com" target="_blank" rel="noreferrer" className="text-zinc-800 text-lg font-medium hover:underline">
+                      <a href="https://www.instagram.com/_aditya_038/" target="_blank" rel="noreferrer" className="text-zinc-800 text-lg font-medium hover:underline">
                         Aditya.
                       </a>
                     </div>
@@ -134,14 +134,14 @@ export default function ContactFooter() {
         {/* Top Row */}
         <div className="flex flex-col md:flex-row justify-end items-start md:items-center w-full max-w-7xl mx-auto gap-6">
           <div className="flex items-center gap-6">
-            <a href="https://instagram.com" target="_blank" rel="noreferrer" className="hover:text-zinc-300 transition-colors" aria-label="Instagram">
+            <a href="https://www.instagram.com/_aditya_038/" target="_blank" rel="noreferrer" className="hover:text-zinc-300 transition-colors" aria-label="Instagram">
               <svg className="w-7 h-7" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
                 <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
                 <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
               </svg>
             </a>
-            <a href="https://linkedin.com" target="_blank" rel="noreferrer" className="hover:text-zinc-300 transition-colors" aria-label="LinkedIn">
+            <a href="https://www.linkedin.com/in/aditya-suryawanshi-20b60930a/" target="_blank" rel="noreferrer" className="hover:text-zinc-300 transition-colors" aria-label="LinkedIn">
               <svg className="w-7 h-7" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path>
                 <rect x="2" y="9" width="4" height="12"></rect>

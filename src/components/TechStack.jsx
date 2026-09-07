@@ -9,7 +9,6 @@ const STACK_CATEGORIES = [
     id: 'frontend',
     title: 'FRONTEND',
     skills: [
-      { name: 'TypeScript', icon: <SiTypescript className="w-8 h-8 md:w-9 md:h-9" color="#3178C6" /> },
       { name: 'React', icon: <FaReact className="w-8 h-8 md:w-9 md:h-9 animate-[spin_15s_linear_infinite]" color="#61DAFB" /> },
       { name: 'Next.Js', icon: <SiNextdotjs className="w-8 h-8 md:w-9 md:h-9" color="#ffffff" /> },
       { name: 'Tailwind CSS', icon: <SiTailwindcss className="w-8 h-8 md:w-9 md:h-9" color="#38BDF8" /> },
@@ -23,6 +22,7 @@ const STACK_CATEGORIES = [
     id: 'languages',
     title: 'LANGUAGES',
     skills: [
+      { name: 'TypeScript', icon: <SiTypescript className="w-8 h-8 md:w-9 md:h-9" color="#3178C6" /> },
       { name: 'JavaScript', icon: <SiJavascript className="w-8 h-8 md:w-9 md:h-9" color="#F7DF1E" /> },
       { name: 'Python', icon: <SiPython className="w-8 h-8 md:w-9 md:h-9" color="#3776AB" /> },
       { name: 'Java', icon: <FaJava className="w-8 h-8 md:w-9 md:h-9" color="#F89820" /> },
